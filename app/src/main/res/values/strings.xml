@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">KeepFit</string>
+    <string name="goal_of_day">Goal Of The Day</string>
+    <string name="empty_goal_of_day">Tap the button in the bottom to add a new goal!</string>
+    <string name="goal_of_day_steps">Steps - </string>
+    <string name="forward_slash">/</string>
+
+    <string name="add_steps">Add Steps</string>
+    <string name="update_steps">Update</string>
+
+    <!-- Add New Goal -->
+    <string name="new_goal">New Goal</string>
+    <string name="goal_name">Name</string>
+    <string name="goal_steps">Steps</string>
+    <string name="add_goal">Add</string>
+
+    <string name="placeholder">Stuff Here!</string>
+    <string name="action_settings">Settings</string>
+</resources>
