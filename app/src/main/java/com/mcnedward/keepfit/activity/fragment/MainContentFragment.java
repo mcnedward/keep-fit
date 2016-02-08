@@ -17,6 +17,7 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.GoalListAdapter;
+import com.mcnedward.keepfit.utils.KeepFitDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ import java.util.List;
 public class MainContentFragment extends Fragment {
 
     private static Context context;
+
+    private KeepFitDatabase database;
 
     private ListView goalList;
     private View stepCounter;
@@ -56,6 +59,8 @@ public class MainContentFragment extends Fragment {
 
     private void initialize(View view) {
         context = view.getContext();
+        database = new KeepFitDatabase(context);
+
         stepCounter = view.findViewById(R.id.step_counter);
         Extension.setRippleBackground(stepCounter, context);
         final Activity activity = getActivity();
@@ -103,12 +108,8 @@ public class MainContentFragment extends Fragment {
     }
 
     private void fillGoalList() {
-        List<Goal> goals = new ArrayList<>();
-        for (int x = 1; x < 21; x++) {
-            int numberOfSteps = 100 * x;
-            Goal goal = new Goal(numberOfSteps  + " Step Goal", numberOfSteps);
-            goals.add(goal);
-        }
+        List<Goal> goals = database.getAllGoals();
+        if (goals.isEmpty()) return;
         updateGoalOfDay(goals.get(0));
         adapter.addGoals(goals);
     }

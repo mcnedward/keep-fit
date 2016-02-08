@@ -13,6 +13,7 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.GoalListAdapter;
+import com.mcnedward.keepfit.utils.KeepFitDatabase;
 
 /**
  * Created by Edward on 1/31/2016.
@@ -20,6 +21,7 @@ import com.mcnedward.keepfit.utils.GoalListAdapter;
 public class GoalView extends RelativeLayout {
 
     private Context context;
+    private KeepFitDatabase database;
     private Goal goal;
     private GoalListAdapter adapter;
 
@@ -29,6 +31,7 @@ public class GoalView extends RelativeLayout {
 
     public GoalView(Goal goal, Context context) {
         super(context);
+        database = new KeepFitDatabase(context);
         this.goal = goal;
         this.context = context;
         initialize();
@@ -63,6 +66,7 @@ public class GoalView extends RelativeLayout {
             @Override
             public void onClick(View view) {
                 if (adapter != null) {
+                    database.delete(goal);
                     adapter.deleteGoal(goal);
                     Toast.makeText(context, "Deleted " + goal.getName(), Toast.LENGTH_SHORT).show();
                 }

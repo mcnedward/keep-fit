@@ -15,11 +15,15 @@ import android.widget.Toast;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.fragment.MainContentFragment;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.utils.KeepFitDatabase;
 
 /**
  * Created by Edward on 1/31/2016.
  */
 public class EditGoalActivity extends AppCompatActivity {
+    private final static String TAG = "EditGoalActivity";
+
+    private KeepFitDatabase database;
 
     private TextView editGoalTitle;
     private EditText editGoalName;
@@ -32,6 +36,8 @@ public class EditGoalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_goal);
+
+        database = new KeepFitDatabase(this);
 
         editGoal = (Goal) getIntent().getSerializableExtra("goal");
         isEdit = getIntent().getBooleanExtra("isEdit", true);
@@ -80,6 +86,8 @@ public class EditGoalActivity extends AppCompatActivity {
         editGoal.setName(goalName);
         editGoal.setStepGoal(Integer.valueOf(goalSteps));
 
+        database.update(editGoal);
+
         MainContentFragment.editGoal(editGoal);
         Toast.makeText(this, "Updated " + originalGoalName + " to " + goalName + "!", Toast.LENGTH_SHORT).show();
 
@@ -107,6 +115,8 @@ public class EditGoalActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+
+        database.insert(goal);
     }
 
     @Override

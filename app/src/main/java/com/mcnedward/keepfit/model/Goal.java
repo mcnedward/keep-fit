@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class Goal implements Serializable {
     private static int goalId = 0;
 
-    private final int id;
+    private int id;
     private String name;
     private int stepAmount;
     private int stepGoal;
@@ -23,6 +23,8 @@ public class Goal implements Serializable {
         this.name = name;
         this.stepGoal = stepGoal;
     }
+
+    public void setId(int id) { this.id = id; };
 
     public int getId() {
         return id;
