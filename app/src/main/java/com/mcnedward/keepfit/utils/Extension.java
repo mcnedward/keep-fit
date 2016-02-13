@@ -15,6 +15,9 @@ import com.mcnedward.keepfit.activity.EditGoalActivity;
 import com.mcnedward.keepfit.activity.StepCounterPopup;
 import com.mcnedward.keepfit.model.Goal;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by Edward on 1/31/2016.
  */
@@ -61,7 +64,7 @@ public class Extension {
         activity.startActivity(intent);
     }
 
-    public static void startAlbumPopup(final Goal goal, final Activity activity) {
+    public static void startStepCounterPopup(final Goal goal, final Activity activity) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -69,9 +72,13 @@ public class Extension {
                 intent.putExtra("goal", goal);
                 activity.startActivity(intent);
             }
-        }, 500);
+        }, 300);
     }
 
+    public static String getTimestamp() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        return simpleDateFormat.format(new Date());
+    }
 
 }
 

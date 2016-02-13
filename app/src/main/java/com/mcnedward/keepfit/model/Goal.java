@@ -5,16 +5,16 @@ import java.io.Serializable;
 /**
  * Created by Edward on 1/31/2016.
  */
-public class Goal implements Serializable {
-    private static int goalId = 0;
-
-    private int id;
+public class Goal extends BaseEntity {
     private String name;
     private int stepAmount;
     private int stepGoal;
+    private boolean isGoalOfDay;
+    private String createdOn;
+    private String updatedOn;
 
     public Goal() {
-        id = goalId++;
+        super();
         stepAmount = 0;
     }
 
@@ -22,12 +22,6 @@ public class Goal implements Serializable {
         this();
         this.name = name;
         this.stepGoal = stepGoal;
-    }
-
-    public void setId(int id) { this.id = id; };
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {
@@ -52,5 +46,29 @@ public class Goal implements Serializable {
 
     public void setStepGoal(int stepGoal) {
         this.stepGoal = stepGoal;
+    }
+
+    public boolean isGoalOfDay() {
+        return isGoalOfDay;
+    }
+
+    public void setIsGoalOfDay(boolean isGoalOfDay) {
+        this.isGoalOfDay = isGoalOfDay;
+    }
+
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public String getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(String updatedOn) {
+        this.updatedOn = updatedOn;
     }
 }

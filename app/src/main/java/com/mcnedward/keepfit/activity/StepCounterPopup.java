@@ -11,13 +11,17 @@ import android.widget.ImageView;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.fragment.MainContentFragment;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
+import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 
 /**
  * Created by Edward on 1/31/2016.
  */
 public class StepCounterPopup extends Activity {
     private final static String TAG = "StepCounterPopup";
+
+    private GoalRepository repository;
 
     private Goal goal;
     private int stepAmount = 10;
@@ -30,6 +34,7 @@ public class StepCounterPopup extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.step_counter_popup_item);
+        repository = new GoalRepository(this);
         goal = (Goal) getIntent().getSerializableExtra("goal");
         initialize();
         initializeWindow();
@@ -81,7 +86,13 @@ public class StepCounterPopup extends Activity {
 
     private void updateSteps() {
         int steps = Integer.parseInt(editStepCounter.getText().toString());
-        MainContentFragment.updateStepCounter(steps);
+        goal.setStepAmount(steps);
+        try {
+            repository.update(goal);
+        } catch (EntityDoesNotExistException e) {
+            e.printStackTrace();
+        }
+        MainContentFragment.updateStepCounter(goal);
         finish();
     }
 

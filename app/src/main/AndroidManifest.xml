@@ -22,7 +22,8 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".activity.EditGoalActivity" />
-        <activity android:name=".activity.StepCounterPopup" />
+        <activity android:name=".activity.StepCounterPopup"
+            android:theme="@style/AppTheme.PopupWindow"/>
     </application>
 
 </manifest>

@@ -79,11 +79,11 @@
 
     </RelativeLayout>
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/Black" />
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:id="@+id/step_progress_bar"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal" />
 
     <ListView
         android:id="@+id/goal_list"

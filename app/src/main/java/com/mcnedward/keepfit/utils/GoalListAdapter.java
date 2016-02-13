@@ -57,7 +57,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
     public void editGoal(Goal goal) {
         int index = -1;
         for (int x = 0; x < groups.size(); x++) {
-            if (groups.get(x).getId() == goal.getId()) {
+            if (groups.get(x).getId().equals(goal.getId())) {
                 index = x;
                 break;
             }
@@ -90,6 +90,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
 
     public void setGroups(List<Goal> groups) {
         this.groups = groups;
+        notifyDataSetChanged();
     }
 
     public void reset() {

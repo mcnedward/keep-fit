@@ -1,8 +1,9 @@
 package com.mcnedward.keepfit.utils.loader;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 
+import com.mcnedward.keepfit.repository.GoalRepository;
+import com.mcnedward.keepfit.repository.IRepository;
 import com.mcnedward.keepfit.model.Goal;
 
 import java.util.List;
@@ -10,18 +11,31 @@ import java.util.List;
 /**
  * Created by Edward on 1/31/2016.
  */
-public class GoalDataLoader extends AsyncTaskLoader<Goal> {
+public class GoalDataLoader extends BaseDataLoader<Goal, List<Goal>> {
     private final static String TAG = "GoalDataLoader";
 
-    private List<Goal> dataList;
+    private IRepository<Goal> dataSource;
 
     public GoalDataLoader(Context context) {
         super(context);
+        this.dataSource = new GoalRepository(context);
     }
 
     @Override
-    public Goal loadInBackground() {
-        return null;
+    protected List<Goal> buildDataList() {
+        return dataSource.read();
+    }
+
+    public void insert(Goal goal) {
+        new InsertTask<>(this, goal, dataSource).execute();
+    }
+
+    public void delete(Goal goal) {
+        new DeleteTask<>(this, goal, dataSource).execute();
+    }
+
+    public void update(Goal goal) {
+        new UpdateTask<>(this, goal, dataSource).execute();
     }
 
 }

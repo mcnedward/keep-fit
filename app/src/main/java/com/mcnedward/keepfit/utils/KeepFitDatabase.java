@@ -9,13 +9,12 @@ import com.mcnedward.keepfit.model.Goal;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 
 /**
  * Created by Edward on 2/8/2016.
  */
 public class KeepFitDatabase {
-    private final static String TAG = "KeepFitDatabse";
+    private final static String TAG = "KeepFitDatabase";
 
     private DatabaseHelper helper;
     private SQLiteDatabase database;
@@ -65,7 +64,7 @@ public class KeepFitDatabase {
         open();
         database.beginTransaction();
         try {
-            database.delete(helper.GOAL_TABLE, helper.GOAL_ID + " = ?",
+            database.delete(helper.GOAL_TABLE, helper.ID + " = ?",
                     new String[]{String.valueOf(goal.getId())});
         } finally {
             database.endTransaction();
@@ -82,7 +81,7 @@ public class KeepFitDatabase {
             values.put(helper.STEP_AMOUNT, goal.getStepAmount());
             values.put(helper.STEP_GOAL, goal.getStepGoal());
 
-            database.update(helper.GOAL_TABLE, values, helper.GOAL_ID + " = ?",
+            database.update(helper.GOAL_TABLE, values, helper.ID + " = ?",
                     new String[]{String.valueOf(goal.getId())});
         } finally {
             database.endTransaction();
@@ -95,11 +94,11 @@ public class KeepFitDatabase {
         open();
         database.beginTransaction();
         try {
-            Cursor cursor = database.query(helper.GOAL_TABLE, new String[] { helper.GOAL_ID, helper.GOAL, helper.STEP_AMOUNT, helper.STEP_GOAL},
+            Cursor cursor = database.query(helper.GOAL_TABLE, new String[] { helper.ID, helper.GOAL, helper.STEP_AMOUNT, helper.STEP_GOAL},
                     null, null, null, null, helper.GOAL);
             while (cursor.moveToNext()) {
                 Goal goal = new Goal();
-                goal.setId(cursor.getInt(cursor.getColumnIndexOrThrow(helper.GOAL_ID)));
+                goal.setId(cursor.getLong(cursor.getColumnIndexOrThrow(helper.ID)));
                 goal.setName(cursor.getString(cursor.getColumnIndexOrThrow(helper.GOAL)));
                 goal.setStepAmount(cursor.getInt(cursor.getColumnIndexOrThrow(helper.STEP_AMOUNT)));
                 goal.setStepGoal(cursor.getInt(cursor.getColumnIndexOrThrow(helper.STEP_GOAL)));
@@ -117,11 +116,11 @@ public class KeepFitDatabase {
         database.beginTransaction();
         Goal goal = null;
         try {
-            Cursor cursor = database.query(helper.GOAL_TABLE, new String[] { helper.GOAL_ID, helper.GOAL, helper.STEP_AMOUNT, helper.STEP_GOAL},
-                    helper.GOAL_ID + " = ?", new String[] { String.valueOf(id)}, null, null, null);
+            Cursor cursor = database.query(helper.GOAL_TABLE, new String[] { helper.ID, helper.GOAL, helper.STEP_AMOUNT, helper.STEP_GOAL},
+                    helper.ID + " = ?", new String[] { String.valueOf(id)}, null, null, null);
             if (cursor.moveToNext()) {
                 goal = new Goal();
-                goal.setId(cursor.getInt(cursor.getColumnIndexOrThrow(helper.GOAL_ID)));
+                goal.setId(cursor.getLong(cursor.getColumnIndexOrThrow(helper.ID)));
                 goal.setName(cursor.getString(cursor.getColumnIndexOrThrow(helper.GOAL)));
                 goal.setStepAmount(cursor.getInt(cursor.getColumnIndexOrThrow(helper.STEP_AMOUNT)));
                 goal.setStepGoal(cursor.getInt(cursor.getColumnIndexOrThrow(helper.STEP_GOAL)));
@@ -138,11 +137,11 @@ public class KeepFitDatabase {
         database.beginTransaction();
         Goal goal = null;
         try {
-            Cursor cursor = database.query(helper.GOAL_TABLE, new String[] { helper.GOAL_ID, helper.GOAL, helper.STEP_AMOUNT, helper.STEP_GOAL},
+            Cursor cursor = database.query(helper.GOAL_TABLE, new String[] { helper.ID, helper.GOAL, helper.STEP_AMOUNT, helper.STEP_GOAL},
                     helper.GOAL + " LIKE ?", new String[] { goalName}, null, null, null);
             if (cursor.moveToNext()) {
                 goal = new Goal();
-                goal.setId(cursor.getInt(cursor.getColumnIndexOrThrow(helper.GOAL_ID)));
+                goal.setId(cursor.getLong(cursor.getColumnIndexOrThrow(helper.ID)));
                 goal.setName(cursor.getString(cursor.getColumnIndexOrThrow(helper.GOAL)));
                 goal.setStepAmount(cursor.getInt(cursor.getColumnIndexOrThrow(helper.STEP_AMOUNT)));
                 goal.setStepGoal(cursor.getInt(cursor.getColumnIndexOrThrow(helper.STEP_GOAL)));

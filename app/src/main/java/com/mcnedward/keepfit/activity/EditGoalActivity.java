@@ -15,7 +15,9 @@ import android.widget.Toast;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.fragment.MainContentFragment;
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.utils.KeepFitDatabase;
+import com.mcnedward.keepfit.repository.GoalRepository;
+import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
+import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 
 /**
  * Created by Edward on 1/31/2016.
@@ -23,11 +25,11 @@ import com.mcnedward.keepfit.utils.KeepFitDatabase;
 public class EditGoalActivity extends AppCompatActivity {
     private final static String TAG = "EditGoalActivity";
 
-    private KeepFitDatabase database;
-
     private TextView editGoalTitle;
     private EditText editGoalName;
     private EditText editGoalSteps;
+
+    private GoalRepository repository;
 
     private Goal editGoal;
     private boolean isEdit;
@@ -37,8 +39,7 @@ public class EditGoalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_goal);
 
-        database = new KeepFitDatabase(this);
-
+        repository = new GoalRepository(this);
         editGoal = (Goal) getIntent().getSerializableExtra("goal");
         isEdit = getIntent().getBooleanExtra("isEdit", true);
 
@@ -86,9 +87,13 @@ public class EditGoalActivity extends AppCompatActivity {
         editGoal.setName(goalName);
         editGoal.setStepGoal(Integer.valueOf(goalSteps));
 
-        database.update(editGoal);
-
+        try {
+            repository.update(editGoal);
+        } catch (EntityDoesNotExistException e) {
+            e.printStackTrace();
+        }
         MainContentFragment.editGoal(editGoal);
+
         Toast.makeText(this, "Updated " + originalGoalName + " to " + goalName + "!", Toast.LENGTH_SHORT).show();
 
         finish();
@@ -103,8 +108,13 @@ public class EditGoalActivity extends AppCompatActivity {
             return;
         }
         Goal goal = new Goal(goalName, Integer.valueOf(goalSteps));
-        MainContentFragment.addGoal(goal);
 
+        try {
+            repository.save(goal);
+        } catch (EntityAlreadyExistsException e) {
+            e.printStackTrace();
+        }
+        MainContentFragment.addGoal(goal);
         Toast.makeText(this, "Added " + goalName + "!", Toast.LENGTH_SHORT).show();
 
         editGoalName.setText("");
@@ -115,8 +125,6 @@ public class EditGoalActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-
-        database.insert(goal);
     }
 
     @Override
