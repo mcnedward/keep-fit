@@ -1,4 +1,4 @@
-package com.mcnedward.keepfit.utils.loader;
+package com.mcnedward.keepfit.repository.loader;
 
 /**
  * Created by Edward on 2/13/2016.

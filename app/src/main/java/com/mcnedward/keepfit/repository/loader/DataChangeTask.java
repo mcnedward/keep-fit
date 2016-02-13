@@ -1,4 +1,4 @@
-package com.mcnedward.keepfit.utils.loader;
+package com.mcnedward.keepfit.repository.loader;
 
 import android.os.AsyncTask;
 import android.support.v4.content.Loader;

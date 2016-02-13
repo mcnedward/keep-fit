@@ -143,29 +143,47 @@ public abstract class Repository<T extends BaseEntity> implements IRepository<T>
      *
      * @return A list of all entities in this data source.
      */
-    public List<T> read() {
+    public List<T> retrieve() {
         return read(null, null, null, null, null);
     }
 
     /**
      * Queries the data table based on the options passed in.
      *
-     * @param selection     The filter of which rows to return (WHERE clause), with arguments passed in as "?"
-     * @param selectionArgs The arguments for the WHERE clause
+     * @param whereClause   The filter of which rows to return (WHERE clause), with arguments passed in as "?"
+     * @param whereArgs     The arguments for the WHERE clause
      * @param groupBy       How to group rows
      * @param having        Which rows to include in the cursor results
      * @param orderBy       The order of the results to return
      * @return A list of data from the table
      */
-    public List<T> read(String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
+    protected List<T> read(String whereClause, String[] whereArgs, String groupBy, String having, String orderBy) {
         List<T> data = new ArrayList<>();
         Cursor cursor = null;
-        database.beginTransaction();
         try {
-            cursor = database.query(getTableName(), getAllColumns(), selection, selectionArgs, groupBy, having, orderBy);
+            database.beginTransaction();
+            cursor = database.query(getTableName(), getAllColumns(), whereClause, whereArgs, groupBy, having, orderBy);
             while (cursor.moveToNext()) {
                 data.add(generateObjectFromCursor(cursor));
             }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+            database.endTransaction();
+        }
+        return data;
+    }
+
+    protected List<T> readDistinct(String whereClause, String[] whereArgs, String groupBy, String having, String orderBy, String limit) {
+        List<T> data = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            database.beginTransaction();
+            cursor = database.query(true, getTableName(), getAllColumns(), whereClause, whereArgs, groupBy, having, orderBy, limit);
+            while (cursor.moveToNext()) {
+                data.add(generateObjectFromCursor(cursor));
+            }
+            database.setTransactionSuccessful();
         } finally {
             if (cursor != null)
                 cursor.close();

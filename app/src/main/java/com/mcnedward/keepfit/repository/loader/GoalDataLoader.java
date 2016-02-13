@@ -1,4 +1,4 @@
-package com.mcnedward.keepfit.utils.loader;
+package com.mcnedward.keepfit.repository.loader;
 
 import android.content.Context;
 
@@ -23,7 +23,7 @@ public class GoalDataLoader extends BaseDataLoader<Goal, List<Goal>> {
 
     @Override
     protected List<Goal> buildDataList() {
-        return dataSource.read();
+        return dataSource.retrieve();
     }
 
     public void insert(Goal goal) {

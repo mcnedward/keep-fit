@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.EditGoalActivity;
+import com.mcnedward.keepfit.activity.HistoryActivity;
 import com.mcnedward.keepfit.activity.StepCounterPopup;
 import com.mcnedward.keepfit.model.Goal;
 
@@ -61,6 +62,11 @@ public class Extension {
         Intent intent = new Intent(activity, EditGoalActivity.class);
         intent.putExtra("goal", goal);
         intent.putExtra("isEdit", isEdit);
+        activity.startActivity(intent);
+    }
+
+    public static void startHistoryActivity(Activity activity) {
+        Intent intent = new Intent(activity, HistoryActivity.class);
         activity.startActivity(intent);
     }
 

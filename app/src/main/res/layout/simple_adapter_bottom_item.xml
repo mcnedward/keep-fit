@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/goal_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/GhostWhite">
+
+    <TextView
+        android:id="@+id/goal_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:padding="18dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@string/placeholder"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/step_progress_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@+id/goal_name"
+        android:padding="15dp" />
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/step_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/step_progress_text"
+        android:layout_centerInParent="true"
+        android:paddingRight="10dp"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal" />
+
+</RelativeLayout>

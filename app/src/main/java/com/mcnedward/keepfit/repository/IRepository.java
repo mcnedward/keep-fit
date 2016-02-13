@@ -20,8 +20,5 @@ public interface IRepository<T> {
 
     boolean delete(T entity) throws EntityDoesNotExistException;
 
-    List<T> read();
-
-    List<T> read(String selection, String[] selectionArgs,
-                 String groupBy, String having, String orderBy);
+    List<T> retrieve();
 }

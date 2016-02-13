@@ -14,7 +14,6 @@ import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.GoalListAdapter;
-import com.mcnedward.keepfit.utils.KeepFitDatabase;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 
 /**

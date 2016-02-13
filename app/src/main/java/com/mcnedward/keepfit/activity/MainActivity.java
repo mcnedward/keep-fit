@@ -1,8 +1,6 @@
 package com.mcnedward.keepfit.activity;
 
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
@@ -16,12 +14,12 @@ import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
-import com.mcnedward.keepfit.utils.KeepFitDatabase;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
-    private KeepFitDatabase database;
+    private GoalRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +32,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private void initialize() {
         initializeFAB();
-        database = new KeepFitDatabase(this);
+        repository = new GoalRepository(this);
+//        repository.fillOldDateTestData();
     }
 
     /**
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Goal goal = database.getGoal(query);
+        Goal goal = repository.getGoalByName(query);
         if (goal != null)
             Toast.makeText(this, String.format("FOUND GOAL %s with id %s!", goal.getName(), goal.getId()), Toast.LENGTH_SHORT).show();
         else
@@ -93,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_history) {
+            Extension.startHistoryActivity(this);
             return true;
         }
 

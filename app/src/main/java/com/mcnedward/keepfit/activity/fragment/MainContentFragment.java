@@ -20,7 +20,7 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.GoalListAdapter;
-import com.mcnedward.keepfit.utils.loader.GoalDataLoader;
+import com.mcnedward.keepfit.repository.loader.GoalDataLoader;
 
 import java.util.ArrayList;
 import java.util.List;
