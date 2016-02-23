@@ -23,7 +23,7 @@ import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
  * Created by Edward on 1/31/2016.
  */
 public class EditGoalActivity extends AppCompatActivity {
-    private final static String TAG = "EditGoalActivity";
+    private static final String TAG = "EditGoalActivity";
 
     private TextView editGoalTitle;
     private EditText editGoalName;

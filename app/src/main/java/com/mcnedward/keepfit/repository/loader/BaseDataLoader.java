@@ -15,7 +15,7 @@ import java.util.List;
  * Created by Edward on 2/13/2016.
  */
 public abstract class BaseDataLoader<T, E extends List<T>> extends AsyncTaskLoader<E> implements IDataLoader<T> {
-    private final static String TAG = "BaseDataLoader";
+    private static final String TAG = "BaseDataLoader";
 
     protected E mDataList = null;
 

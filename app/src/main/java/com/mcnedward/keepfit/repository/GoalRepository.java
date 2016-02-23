@@ -13,10 +13,7 @@ import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -24,7 +21,7 @@ import java.util.Random;
  * Created by Edward on 2/8/2016.
  */
 public class GoalRepository extends Repository<Goal> implements IGoalRepository {
-    private final static String TAG = "GoalRepository";
+    private static final String TAG = "GoalRepository";
 
     HistoryRepository historyRepository;
 

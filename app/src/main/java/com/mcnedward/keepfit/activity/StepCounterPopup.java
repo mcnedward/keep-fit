@@ -19,7 +19,7 @@ import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
  * Created by Edward on 1/31/2016.
  */
 public class StepCounterPopup extends Activity {
-    private final static String TAG = "StepCounterPopup";
+    private static final String TAG = "StepCounterPopup";
 
     private GoalRepository repository;
 

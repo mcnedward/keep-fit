@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class GoalView extends RelativeLayout {
     private TextView txtGoalName;
     private ImageView imgGoalEdit;
     private ImageView imgGoalDelete;
+    private ProgressBar progressBar;
 
     public GoalView(Goal goal, Context context) {
         super(context);
@@ -78,11 +80,15 @@ public class GoalView extends RelativeLayout {
                 }
             }
         });
+
+        progressBar = (ProgressBar) findViewById(R.id.step_progress_bar);
     }
 
     public void update(Goal goal, GoalListAdapter adapter) {
         this.goal = goal;
         this.adapter = adapter;
         txtGoalName.setText(goal.getName());
+        progressBar.setProgress(goal.getStepAmount());
+        progressBar.setMax(goal.getStepGoal());
     }
 }

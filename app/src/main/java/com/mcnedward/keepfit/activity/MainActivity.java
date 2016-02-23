@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
+import com.mcnedward.keepfit.activity.fragment.BaseFragment;
 import com.mcnedward.keepfit.activity.fragment.GoalOfDayFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
-    private final static String TAG = "MainActivity";
+    private static final String TAG = "MainActivity";
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
@@ -45,30 +46,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     private void initialize() {
-        initializeFAB();
         // Set up the ViewPager with the sections adapter.
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(0);
+        viewPager.setOffscreenPageLimit(2);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         goalRepository = new GoalRepository(this);
-    }
-
-    /**
-     * Create the Floating Action Button
-     */
-    private void initializeFAB() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        final Activity activity = this;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Extension.startEditGoalActivity(null, false, activity);
-            }
-        });
     }
 
     /**
@@ -78,18 +64,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public class SectionsPagerAdapter extends FragmentPagerAdapter implements
             ViewPager.OnPageChangeListener {
 
-        final private static int PAGE_COUNT = 1;
-        private List<String> fragmentNames;
+        final private static int PAGE_COUNT = 3;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
-            fragmentNames = new ArrayList<>();
-            fragmentNames.add("Goal of the Day");
         }
 
         @Override
         public Fragment getItem(int position) {
-            return new GoalOfDayFragment();
+            return BaseFragment.newInstance(BaseFragment.FragmentCode.values()[position]);
         }
 
         @Override
@@ -99,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return fragmentNames.get(position);
+            return BaseFragment.FragmentCode.values()[position].title();
         }
 
         @Override
@@ -156,6 +139,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_edit) {
+            if (item.isChecked()) {
+                item.setChecked(false);
+                GoalOfDayFragment.toggleEditable(false);
+            }
+            else {
+                item.setChecked(true);
+                GoalOfDayFragment.toggleEditable(true);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

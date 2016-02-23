@@ -13,9 +13,10 @@
     tools:context=".activity.MainActivity">
 
     <RelativeLayout
+        android:id="@+id/content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/content">
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/goal_of_day_name"
@@ -54,31 +55,56 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:orientation="vertical"
             android:padding="10dp">
 
-            <EditText
-                android:id="@+id/goal_of_day_step_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:background="@android:color/transparent"
-                android:text="0"
-                android:textSize="30dp" />
-
             <TextView
+                android:id="@+id/goal_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:text="@string/forward_slash"
-                android:textSize="30dp" />
+                android:padding="10dp"
+                android:text="@string/goal_date"
+                android:textSize="18dp" />
 
-            <TextView
-                android:id="@+id/goal_of_day_step_goal"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/goal_of_day_step_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:inputType="number"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="0"
+                    android:textSize="30dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/forward_slash"
+                    android:textSize="30dp" />
+
+                <TextView
+                    android:id="@+id/goal_of_day_step_goal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:text="0"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_edit_goal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="30dp" />
+                android:layout_centerHorizontal="true"
+                android:text="@string/update_steps" />
         </LinearLayout>
 
         <ImageView
@@ -89,28 +115,63 @@
             android:layout_toRightOf="@+id/step_counter"
             android:padding="10dp"
             android:src="@android:drawable/ic_menu_add" />
+
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/message"
-        android:visibility="gone"
         android:layout_alignParentBottom="true"
+        android:orientation="vertical"
         android:paddingBottom="15dp"
         android:paddingTop="15dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <ListView
+            android:id="@+id/goal_list"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/no_goals_add_one"
-            android:textSize="16dp" />
+            android:layout_above="@+id/linearLayout"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:nestedScrollingEnabled="true"
+            android:transcriptMode="disabled" />
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/arrow" />
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center|bottom">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/no_goals_add_one"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/no_goals_choose_one"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/arrow"
+                android:layout_gravity="center"/>
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

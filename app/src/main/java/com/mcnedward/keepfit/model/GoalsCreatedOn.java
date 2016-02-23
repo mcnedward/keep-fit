@@ -1,6 +1,7 @@
 package com.mcnedward.keepfit.model;
 
 import com.mcnedward.keepfit.utils.Comparator.GoalNameComparator;
+import com.mcnedward.keepfit.utils.Extension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +25,8 @@ public class GoalsCreatedOn {
     }
 
     public String getCreatedOn() {
-        return createdOn;
+        // TODO CHANGE THIS!!!!!
+        return Extension.getPrettyDate(createdOn);
     }
 
     public List<Goal> getGoals() {

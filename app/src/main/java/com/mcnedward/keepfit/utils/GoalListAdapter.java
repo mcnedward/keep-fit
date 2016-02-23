@@ -17,7 +17,7 @@ import java.util.List;
  * Created by Edward on 1/31/2016.
  */
 public class GoalListAdapter extends ArrayAdapter<Goal> {
-    private final static String TAG = "GoalListAdapter";
+    private static final String TAG = "GoalListAdapter";
 
     private List<Goal> groups;
     protected Context context;

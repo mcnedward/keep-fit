@@ -17,9 +17,9 @@ import java.util.List;
  * Created by Edward on 2/8/2016.
  */
 public abstract class Repository<T extends BaseEntity> implements IRepository<T> {
-    private final static String TAG = "Repository";
+    private static final String TAG = "Repository";
 
-    private final static String WHERE_ID_CLAUSE = "Id = ?";
+    private static final String WHERE_ID_CLAUSE = "Id = ?";
     private DatabaseHelper helper;
     protected SQLiteDatabase database;
 

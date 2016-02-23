@@ -12,6 +12,10 @@ public class History extends BaseEntity {
 
     }
 
+    public History(String date) {
+        this.date = date;
+    }
+
     public History(String date, Goal goal) {
         this.date = date;
         this.goal = goal;

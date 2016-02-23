@@ -25,6 +25,8 @@
         <activity android:name=".activity.HistoryActivity" />
         <activity android:name=".activity.StepCounterPopup"
             android:theme="@style/AppTheme.PopupWindow"/>
+        <activity android:name=".activity.AddGoalPopup"
+            android:theme="@style/AppTheme.PopupWindow"/>
     </application>
 
 </manifest>

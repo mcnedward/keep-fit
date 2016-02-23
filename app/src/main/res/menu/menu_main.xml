@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.MainActivity">
 
-    <item android:id="@+id/action_search"
-        android:title="@string/action_search"
+    <item
+        android:id="@+id/action_search"
         android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="collapseActionView|ifRoom"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        android:title="@string/action_search"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
 
     <item
         android:id="@+id/action_settings"
@@ -15,10 +16,12 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_edit"
-        android:orderInCategory="200"
-        android:title="@string/action_edit"
-        app:showAsAction="never" />
+    <group android:checkableBehavior="all">
+        <item
+            android:id="@+id/action_edit"
+            android:orderInCategory="200"
+            android:title="@string/action_edit"
+            app:showAsAction="never" />
+    </group>
 
 </menu>

@@ -10,17 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.repository.loader.GoalDataLoader;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.GoalListAdapter;
-import com.mcnedward.keepfit.repository.loader.GoalDataLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ import java.util.Random;
  * Created by Edward on 1/31/2016.
  */
 public class MainContentFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Goal>> {
-    private final static String TAG = "MainContentFragment";
+    private static final String TAG = "MainContentFragment";
     public static final int LOADER_ID = new Random().nextInt(1000);
 
     private static Context context;
@@ -80,8 +77,8 @@ public class MainContentFragment extends Fragment implements LoaderManager.Loade
         stepCounter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (goalOfDay != null)
-                    Extension.startStepCounterPopup(goalOfDay, activity);
+//                if (goalOfDay != null)
+//                    Extension.startStepCounterPopup(goalOfDay, activity);
             }
         });
 

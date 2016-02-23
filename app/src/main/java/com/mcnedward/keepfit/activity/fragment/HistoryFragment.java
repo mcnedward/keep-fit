@@ -1,7 +1,10 @@
-package com.mcnedward.keepfit.activity;
+package com.mcnedward.keepfit.activity.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.mcnedward.keepfit.R;
@@ -14,25 +17,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Edward on 2/13/2016.
+ * Created by Edward on 2/23/2016.
  */
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryFragment extends BaseFragment {
     private static final String TAG = "HistoryActivity";
 
+    private Context context;
     private GoalRepository repository;
     private GoalHistoryAdapter expListAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_history);
-        repository = new GoalRepository(this);
-        initialize();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
+        initialize(view);
+        return view;
     }
 
-    private void initialize() {
-        ExpandableListView expListView = (ExpandableListView) findViewById(R.id.history_expandable_list);
-        expListAdapter = new GoalHistoryAdapter(this);
+    private void initialize(View view) {
+        context = view.getContext();
+        repository = new GoalRepository(context);
+
+        ExpandableListView expListView = (ExpandableListView) view.findViewById(R.id.history_expandable_list);
+        expListAdapter = new GoalHistoryAdapter(context);
         // TODO Put this in AsyncTaskLoader!
         List<GoalsCreatedOn> goalsCreatedOn = repository.getGoalDates();
         List<String> history = new ArrayList<>();

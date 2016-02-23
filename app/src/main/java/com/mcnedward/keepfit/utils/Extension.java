@@ -11,19 +11,22 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.mcnedward.keepfit.R;
+import com.mcnedward.keepfit.activity.AddGoalPopup;
 import com.mcnedward.keepfit.activity.EditGoalActivity;
 import com.mcnedward.keepfit.activity.HistoryActivity;
 import com.mcnedward.keepfit.activity.StepCounterPopup;
 import com.mcnedward.keepfit.model.Goal;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by Edward on 1/31/2016.
  */
 public class Extension {
-    private final static String TAG = "Extension";
+    private static final String TAG = "Extension";
 
     /**
      * Creates a new RippleDrawable for a ripple effect on a View.
@@ -70,20 +73,24 @@ public class Extension {
         activity.startActivity(intent);
     }
 
-    public static void startStepCounterPopup(final Goal goal, final Activity activity) {
+    public static void startAddGoalPopup(final Goal goal, final Activity activity) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(activity, StepCounterPopup.class);
+                Intent intent = new Intent(activity, AddGoalPopup.class);
                 intent.putExtra("goal", goal);
-                activity.startActivity(intent);
+                activity.startActivityForResult(intent, ActivityCode.ADD_GOAL_POPUP);
             }
         }, 300);
     }
 
     public static String getTimestamp() {
+        return getTimestamp(new Date());
+    }
+
+    public static String getTimestamp(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        return simpleDateFormat.format(new Date());
+        return simpleDateFormat.format(date);
     }
 
     public static String getDateStamp() {
@@ -92,8 +99,41 @@ public class Extension {
     }
 
     public static String getDateDBFormat(String date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-        return simpleDateFormat.format(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String d = null;
+        try {
+            Date theDate = simpleDateFormat.parse(date);
+            SimpleDateFormat f = new SimpleDateFormat("yyyyMMdd");
+            d = f.format(theDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+
+    public static String getPrettyDate(String date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String d = null;
+        try {
+            Date theDate = simpleDateFormat.parse(date);
+            SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+            d = f.format(theDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+
+    public static Calendar getCalendar(String date) {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            Date theDate = simpleDateFormat.parse(date);
+            calendar.setTime(theDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return calendar;
     }
 
 }

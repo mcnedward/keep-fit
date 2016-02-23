@@ -11,7 +11,7 @@ import android.util.Log;
  * Some help taken from: http://www.androiddesignpatterns.com/2012/05/correctly-managing-your-sqlite-database.html
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private final static String TAG = "DatabaseHelper";
+    private static final String TAG = "DatabaseHelper";
 
     private static DatabaseHelper sInstance;
 
@@ -21,20 +21,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final int DB_VERSION = 10;
 
     // Tables
-    public final static String GOAL_TABLE = "Goals";
-    public final static String HISTORY_TABLE = "Histories";
+    public static final String GOAL_TABLE = "Goals";
+    public static final String HISTORY_TABLE = "Histories";
     // Id column, which should be the same across all tables
-    public final static String ID = "Id";
+    public static final String ID = "Id";
     // Goal table
-    public final static String G_GOAL = "Name";
-    public final static String G_STEP_AMOUNT = "StepAmount";
-    public final static String G_STEP_GOAL = "StepGoal";
-    public final static String G_IS_GOAL_OF_DAY = "IsGoalOfDay";
-    public final static String G_CREATED_ON = "CreatedOn";
-    public final static String G_UPDATED_ON = "UpdatedOn";
+    public static final String G_GOAL = "Name";
+    public static final String G_STEP_AMOUNT = "StepAmount";
+    public static final String G_STEP_GOAL = "StepGoal";
+    public static final String G_IS_GOAL_OF_DAY = "IsGoalOfDay";
+    public static final String G_CREATED_ON = "CreatedOn";
+    public static final String G_UPDATED_ON = "UpdatedOn";
     // History table
-    public final static String H_DATE = "Date";
-    public final static String H_GOAL_OF_DAY_ID = "GoalOfDayId";
+    public static final String H_DATE = "Date";
+    public static final String H_GOAL_OF_DAY_ID = "GoalOfDayId";
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

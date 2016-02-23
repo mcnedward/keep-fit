@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Edward on 2/13/2016.
  */
 public class GoalHistoryAdapter extends BaseExpandableListAdapter {
-    private final static String TAG = "GoalHistoryAdapter";
+    private static final String TAG = "GoalHistoryAdapter";
 
     private Context context;
     private List<String> historyList;

@@ -4,16 +4,18 @@
     <string name="empty_goal_of_day">Tap the button in the bottom to add a new goal!</string>
     <string name="goal_of_day_steps">Steps - </string>
     <string name="forward_slash">/</string>
-    <string name="no_goals_add_one">You have no goals! Add one here</string>
+    <string name="no_goals_add_one">No current goal! Add one here</string>
+    <string name="no_goals_choose_one">Or choose one from the list</string>
 
     <string name="add_steps">Add Steps</string>
+    <string name="goal_date">Date: </string>
     <string name="update_steps">Update</string>
 
     <!-- Add New Goal -->
     <string name="new_goal">New Goal</string>
     <string name="goal_name">Name</string>
     <string name="goal_steps">Steps</string>
-    <string name="add_goal">Add</string>
+    <string name="add_goal">Add Goal</string>
 
     <string name="placeholder">Stuff Here!</string>
     <string name="action_search">Search</string>

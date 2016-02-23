@@ -12,7 +12,7 @@ import java.util.List;
  * Created by Edward on 1/31/2016.
  */
 public class GoalDataLoader extends BaseDataLoader<Goal, List<Goal>> {
-    private final static String TAG = "GoalDataLoader";
+    private static final String TAG = "GoalDataLoader";
 
     private IRepository<Goal> dataSource;
 
