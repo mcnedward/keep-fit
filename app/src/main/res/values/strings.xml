@@ -4,6 +4,7 @@
     <string name="empty_goal_of_day">Tap the button in the bottom to add a new goal!</string>
     <string name="goal_of_day_steps">Steps - </string>
     <string name="forward_slash">/</string>
+    <string name="no_goals_add_one">You have no goals! Add one here</string>
 
     <string name="add_steps">Add Steps</string>
     <string name="update_steps">Update</string>
@@ -18,5 +19,5 @@
     <string name="action_search">Search</string>
     <string name="search_hint">Find Goal By Name</string>
     <string name="action_settings">Settings</string>
-    <string name="action_history">History</string>
+    <string name="action_edit">Edit</string>
 </resources>

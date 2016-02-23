@@ -16,9 +16,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_history"
+        android:id="@+id/action_edit"
         android:orderInCategory="200"
-        android:title="@string/action_history"
+        android:title="@string/action_edit"
         app:showAsAction="never" />
 
 </menu>

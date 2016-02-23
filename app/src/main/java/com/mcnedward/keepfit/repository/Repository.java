@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.mcnedward.keepfit.model.BaseEntity;
-import com.mcnedward.keepfit.utils.DatabaseHelper;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 
@@ -25,13 +24,13 @@ public abstract class Repository<T extends BaseEntity> implements IRepository<T>
     protected SQLiteDatabase database;
 
     public Repository(Context context) {
-        helper = new DatabaseHelper(context);
+        helper = DatabaseHelper.getInstance(context);
         open();
     }
 
     public T get(int id) {
         List<T> dataList = read(WHERE_ID_CLAUSE, new String[]{String.valueOf(id)}, null, null, null);
-        return dataList.get(0);
+        return !dataList.isEmpty() ? dataList.get(0) : null;
     }
 
     public T get(String... args) {

@@ -1,15 +1,13 @@
 package com.mcnedward.keepfit.model;
 
-import java.io.Serializable;
-
 /**
  * Created by Edward on 1/31/2016.
  */
 public class Goal extends BaseEntity {
+
     private String name;
     private int stepAmount;
     private int stepGoal;
-    private boolean isGoalOfDay;
     private String createdOn;
     private String updatedOn;
 
@@ -46,14 +44,6 @@ public class Goal extends BaseEntity {
 
     public void setStepGoal(int stepGoal) {
         this.stepGoal = stepGoal;
-    }
-
-    public boolean isGoalOfDay() {
-        return isGoalOfDay;
-    }
-
-    public void setIsGoalOfDay(boolean isGoalOfDay) {
-        this.isGoalOfDay = isGoalOfDay;
     }
 
     public String getCreatedOn() {

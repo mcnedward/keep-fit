@@ -3,7 +3,12 @@ package com.mcnedward.keepfit.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -13,13 +18,22 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
+import com.mcnedward.keepfit.activity.fragment.GoalOfDayFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
+import com.mcnedward.keepfit.repository.loader.IGoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+import java.util.ArrayList;
+import java.util.List;
 
-    private GoalRepository repository;
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+    private final static String TAG = "MainActivity";
+
+    private SectionsPagerAdapter sectionsPagerAdapter;
+    private ViewPager viewPager;
+
+    private IGoalRepository goalRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +46,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private void initialize() {
         initializeFAB();
-        repository = new GoalRepository(this);
-//        repository.fillOldDateTestData();
+        // Set up the ViewPager with the sections adapter.
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager = (ViewPager) findViewById(R.id.container);
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(0);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        goalRepository = new GoalRepository(this);
     }
 
     /**
@@ -48,6 +69,54 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 Extension.startEditGoalActivity(null, false, activity);
             }
         });
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter implements
+            ViewPager.OnPageChangeListener {
+
+        final private static int PAGE_COUNT = 1;
+        private List<String> fragmentNames;
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+            fragmentNames = new ArrayList<>();
+            fragmentNames.add("Goal of the Day");
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return new GoalOfDayFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentNames.get(position);
+        }
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+
     }
 
     @Override
@@ -69,9 +138,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        Goal goal = repository.getGoalByName(query);
+        Goal goal = goalRepository.getGoalByName(query);
         if (goal != null)
-            Toast.makeText(this, String.format("FOUND GOAL %s with id %s!", goal.getName(), goal.getId()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, String.format("FOUND G_GOAL %s with id %s!", goal.getName(), goal.getId()), Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(this, "Could not find a goal with the name " + query + "...", Toast.LENGTH_SHORT).show();
         return false;
@@ -85,22 +154,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-        if (id == R.id.action_history) {
-            Extension.startHistoryActivity(this);
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
-
-
 }

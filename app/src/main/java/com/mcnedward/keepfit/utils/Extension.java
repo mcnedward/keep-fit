@@ -82,8 +82,18 @@ public class Extension {
     }
 
     public static String getTimestamp() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         return simpleDateFormat.format(new Date());
+    }
+
+    public static String getDateStamp() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        return simpleDateFormat.format(new Date());
+    }
+
+    public static String getDateDBFormat(String date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+        return simpleDateFormat.format(date);
     }
 
 }

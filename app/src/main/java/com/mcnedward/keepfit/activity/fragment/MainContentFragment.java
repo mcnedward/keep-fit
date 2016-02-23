@@ -47,7 +47,7 @@ public class MainContentFragment extends Fragment implements LoaderManager.Loade
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.main_content_fragment, container);
+        View view = null;// inflater.inflate(R.layout.main_content_fragment, container);
         initialize(view);
         return view;
     }
@@ -89,7 +89,6 @@ public class MainContentFragment extends Fragment implements LoaderManager.Loade
         goalOfDayStepAmount = (TextView) view.findViewById(R.id.goal_of_day_step_amount);
         goalOfDayStepGoal = (TextView) view.findViewById(R.id.goal_of_day_step_goal);
 
-        initializeGoalList(view);
         initializeLoader();
 
         progressBar = (ProgressBar) view.findViewById(R.id.step_progress_bar);
@@ -103,26 +102,6 @@ public class MainContentFragment extends Fragment implements LoaderManager.Loade
         goalOfDayStepGoal.setText(String.valueOf(goalOfDay.getStepGoal()));
         progressBar.setMax(goalOfDay.getStepGoal());
         progressBar.setProgress(goalOfDay.getStepAmount());
-    }
-
-    private void initializeGoalList(View view) {
-        adapter = new GoalListAdapter(getContext());
-        ListView goalList = (ListView) view.findViewById(R.id.goal_list);
-
-        goalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), "Long tap to set this as the active goal!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        goalList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                updateGoalOfDay(adapter.getItem(i));
-                return true;
-            }
-        });
-        goalList.setAdapter(adapter);
     }
 
     private void initializeLoader() {
@@ -143,14 +122,6 @@ public class MainContentFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoadFinished(Loader<List<Goal>> loader, List<Goal> data) {
         adapter.setGroups(data);
-        Goal goalOfDay = null;
-        for (Goal goal : data)
-            if (goal.isGoalOfDay()) {
-                goalOfDay = goal;
-                break;
-            }
-        if (goalOfDay != null)
-            updateGoalOfDay(goalOfDay);
     }
 
     @Override
