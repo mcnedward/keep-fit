@@ -1,10 +1,8 @@
 package com.mcnedward.keepfit.model;
 
-import com.mcnedward.keepfit.utils.Comparator.GoalNameComparator;
 import com.mcnedward.keepfit.utils.Extension;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

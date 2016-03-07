@@ -1,4 +1,4 @@
-package com.mcnedward.keepfit.repository.loader;
+package com.mcnedward.keepfit.repository;
 
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.model.GoalsCreatedOn;
@@ -12,6 +12,6 @@ import java.util.List;
 public interface IGoalRepository extends IRepository<Goal> {
 
     Goal getGoalByName(String goalName);
-    List<GoalsCreatedOn> getGoalDates();
+    Goal getGoalOfTheDay();
 
 }

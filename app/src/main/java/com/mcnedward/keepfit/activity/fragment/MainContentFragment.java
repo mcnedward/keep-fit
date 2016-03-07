@@ -29,7 +29,7 @@ import java.util.Random;
 public class MainContentFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Goal>> {
     private static final String TAG = "MainContentFragment";
     public static final int LOADER_ID = new Random().nextInt(1000);
-
+    // TODO DELETE THIS?
     private static Context context;
 
     private View stepCounter;

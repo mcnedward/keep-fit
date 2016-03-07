@@ -34,13 +34,12 @@ public class HistoryActivity extends AppCompatActivity {
         ExpandableListView expListView = (ExpandableListView) findViewById(R.id.history_expandable_list);
         expListAdapter = new GoalHistoryAdapter(this);
         // TODO Put this in AsyncTaskLoader!
-        List<GoalsCreatedOn> goalsCreatedOn = repository.getGoalDates();
         List<String> history = new ArrayList<>();
         List<List<Goal>> goals = new ArrayList<>();
-        for (GoalsCreatedOn gco : goalsCreatedOn) {
-            history.add(gco.getCreatedOn());
-            goals.add(gco.getGoals());
-        }
+//        for (GoalsCreatedOn gco : goalsCreatedOn) {
+//            history.add(gco.getCreatedOn());
+//            goals.add(gco.getGoals());
+//        }
         expListAdapter.setUp(history, goals);
         expListView.setAdapter(expListAdapter);
     }

@@ -26,6 +26,7 @@ public class HistoryFragment extends BaseFragment {
     private GoalRepository repository;
     private GoalHistoryAdapter expListAdapter;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
@@ -40,13 +41,12 @@ public class HistoryFragment extends BaseFragment {
         ExpandableListView expListView = (ExpandableListView) view.findViewById(R.id.history_expandable_list);
         expListAdapter = new GoalHistoryAdapter(context);
         // TODO Put this in AsyncTaskLoader!
-        List<GoalsCreatedOn> goalsCreatedOn = repository.getGoalDates();
         List<String> history = new ArrayList<>();
         List<List<Goal>> goals = new ArrayList<>();
-        for (GoalsCreatedOn gco : goalsCreatedOn) {
-            history.add(gco.getCreatedOn());
-            goals.add(gco.getGoals());
-        }
+//        for (GoalsCreatedOn gco : goalsCreatedOn) {
+//            history.add(gco.getCreatedOn());
+//            goals.add(gco.getGoals());
+//        }
         expListAdapter.setUp(history, goals);
         expListView.setAdapter(expListAdapter);
     }

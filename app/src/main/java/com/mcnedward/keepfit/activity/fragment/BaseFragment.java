@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 /**
  * Created by Edward on 2/23/2016.
  */
-public class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
     public enum FragmentCode {
         GOAL_OF_THE_DAY(1, "Goal Of The Day"),

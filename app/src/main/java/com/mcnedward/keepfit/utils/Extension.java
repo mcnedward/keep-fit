@@ -98,17 +98,9 @@ public class Extension {
         return simpleDateFormat.format(new Date());
     }
 
-    public static String getDateDBFormat(String date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        String d = null;
-        try {
-            Date theDate = simpleDateFormat.parse(date);
-            SimpleDateFormat f = new SimpleDateFormat("yyyyMMdd");
-            d = f.format(theDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return d;
+    public static String getPrettyDate(Date date) {
+        String timestamp = getTimestamp(date);
+        return getPrettyDate(timestamp);
     }
 
     public static String getPrettyDate(String date) {

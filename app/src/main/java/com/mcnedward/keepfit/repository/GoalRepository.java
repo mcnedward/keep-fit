@@ -6,9 +6,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.model.GoalsCreatedOn;
 import com.mcnedward.keepfit.model.History;
-import com.mcnedward.keepfit.repository.loader.IGoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
@@ -23,65 +21,52 @@ import java.util.Random;
 public class GoalRepository extends Repository<Goal> implements IGoalRepository {
     private static final String TAG = "GoalRepository";
 
-    HistoryRepository historyRepository;
-
     public GoalRepository(Context context) {
         super(context);
-        historyRepository = new HistoryRepository(context, this);
     }
 
     @Override
     public Goal save(Goal goal) throws EntityAlreadyExistsException {
-        String timestamp = Extension.getTimestamp();
         String datestamp = Extension.getDateStamp();
-        goal.setCreatedOn(timestamp);
-        goal.setUpdatedOn(timestamp);
+        goal.setCreatedOn(datestamp);
         goal = super.save(goal);
-        History history = historyRepository.getHistoryForDate(datestamp);
-        if (history == null) {
-            history = new History(datestamp, goal);
-            historyRepository.save(history);
-        }
-        history.setGoal(goal);
-        try {
-            historyRepository.update(history);
-        } catch (EntityDoesNotExistException e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
-        }
         return goal;
     }
 
-    @Override
-    public boolean update(Goal goal) throws EntityDoesNotExistException {
-        goal.setUpdatedOn(Extension.getTimestamp());
-        return super.update(goal);
-    }
-
     public Goal getGoalByName(String goalName) {
-        return read(DatabaseHelper.G_GOAL + " = ?", new String[] {goalName}, null, null, null).get(0);
+        return read(DatabaseHelper.G_GOAL + " = ?", new String[]{goalName}, null, null, null).get(0);
     }
 
-    public List<GoalsCreatedOn> getGoalDates() {
-        List<GoalsCreatedOn> goalsCreatedOn = new ArrayList<>();
-        // Get the distinct goal dates
-        List<Goal> goalDates = readDistinct(null, null, DatabaseHelper.G_CREATED_ON, null, null, null);
-        List<String> dates = new ArrayList<>();
-        for (Goal goal : goalDates)
-            dates.add(goal.getCreatedOn());
-        // Sort all of the goals by date
-        List<Goal> goals = retrieve();
-        for (String date : dates) {
-            GoalsCreatedOn gco = new GoalsCreatedOn(date);
-            for (Goal goal : goals) {
-                if (goal.getCreatedOn().equals(date)) {
-                    gco.add(goal);
-                }
-            }
-            goalsCreatedOn.add(gco);
-        }
-        return goalsCreatedOn;
+    public Goal getGoalOfTheDay() {
+        String datestamp = Extension.getDateStamp();
+        List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{datestamp}, null, null, null);
+        if (!goals.isEmpty())
+            for (Goal goal : goals)
+                if (goal.isGoalOfDay())
+                    return goal;
+        return null;
     }
+
+//    public List<GoalsCreatedOn> getGoalDates() {
+//        List<GoalsCreatedOn> goalsCreatedOn = new ArrayList<>();
+//        // Get the distinct goal dates
+//        List<Goal> goalDates = readDistinct(null, null, DatabaseHelper.G_CREATED_ON, null, null, null);
+//        List<String> dates = new ArrayList<>();
+//        for (Goal goal : goalDates)
+//            dates.add(goal.getCreatedOn());
+//        // Sort all of the goals by date
+//        List<Goal> goals = retrieve();
+//        for (String date : dates) {
+//            GoalsCreatedOn gco = new GoalsCreatedOn(date);
+//            for (Goal goal : goals) {
+//                if (goal.getCreatedOn().equals(date)) {
+//                    gco.add(goal);
+//                }
+//            }
+//            goalsCreatedOn.add(gco);
+//        }
+//        return goalsCreatedOn;
+//    }
 
     public void fillOldDateTestData() {
         List<String> timestamps = new ArrayList<>();
@@ -99,7 +84,6 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
                 goal.setName("Goal " + i);
                 goal.setStepAmount(stepAmount);
                 goal.setStepGoal(stepGoal);
-                goal.setCreatedOn(timestamp);
                 try {
                     super.save(goal);
                 } catch (EntityAlreadyExistsException e) {
@@ -110,7 +94,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     @Override
     public String[] getAllColumns() {
-        return new String[] {DatabaseHelper.ID, DatabaseHelper.G_GOAL, DatabaseHelper.G_STEP_AMOUNT, DatabaseHelper.G_STEP_GOAL, DatabaseHelper.G_IS_GOAL_OF_DAY, DatabaseHelper.G_CREATED_ON, DatabaseHelper.G_UPDATED_ON};
+        return new String[]{DatabaseHelper.ID, DatabaseHelper.G_GOAL, DatabaseHelper.G_STEP_AMOUNT, DatabaseHelper.G_STEP_GOAL, DatabaseHelper.G_IS_GOAL_OF_DAY, DatabaseHelper.G_CREATED_ON};
     }
 
     @Override
@@ -121,7 +105,6 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         goal.setStepAmount(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_AMOUNT)));
         goal.setStepGoal(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_GOAL)));
         goal.setCreatedOn(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_CREATED_ON)));
-        goal.setUpdatedOn(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_UPDATED_ON)));
         return goal;
     }
 
@@ -133,7 +116,6 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         values.put(DatabaseHelper.G_STEP_AMOUNT, entity.getStepAmount());
         values.put(DatabaseHelper.G_STEP_GOAL, entity.getStepGoal());
         values.put(DatabaseHelper.G_CREATED_ON, entity.getCreatedOn());
-        values.put(DatabaseHelper.G_UPDATED_ON, entity.getUpdatedOn());
         return values;
     }
 

@@ -1,8 +1,7 @@
 package com.mcnedward.keepfit.activity;
 
-import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +13,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
@@ -22,19 +21,19 @@ import com.mcnedward.keepfit.activity.fragment.BaseFragment;
 import com.mcnedward.keepfit.activity.fragment.GoalOfDayFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
-import com.mcnedward.keepfit.repository.loader.IGoalRepository;
-import com.mcnedward.keepfit.utils.Extension;
+import com.mcnedward.keepfit.repository.IGoalRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private static final String TAG = "MainActivity";
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
+    private MenuItem calendarItem;
 
     private IGoalRepository goalRepository;
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +54,29 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         goalRepository = new GoalRepository(this);
+    }
+
+    private void initializeCalendarButton(MenuItem item) {
+        calendar = Calendar.getInstance();
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          int dayOfMonth) {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        GoalOfDayFragment.toggleCalendarChange(calendar);
+                    }
+                };
+                new DatePickerDialog(MainActivity.this, date, calendar
+                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                return true;
+            }
+        });
     }
 
     /**
@@ -106,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
+        calendarItem = menu.findItem(R.id.action_calendar);
+        initializeCalendarButton(calendarItem);
         // Associate searchable configuration with the SearchView
 //        SearchManager searchManager =
 //                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -138,17 +161,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_edit) {
             if (item.isChecked()) {
                 item.setChecked(false);
-                GoalOfDayFragment.toggleEditable(false);
-            }
-            else {
+                calendarItem.setVisible(false);
+                GoalOfDayFragment.toggleEditMode(false, null);
+            } else {
                 item.setChecked(true);
-                GoalOfDayFragment.toggleEditable(true);
+                calendarItem.setVisible(true);
+                GoalOfDayFragment.toggleEditMode(true, calendar);
             }
             return true;
         }

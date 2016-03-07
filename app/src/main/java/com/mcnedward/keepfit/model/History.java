@@ -1,12 +1,14 @@
 package com.mcnedward.keepfit.model;
 
+import java.util.List;
+
 /**
  * Created by Edward on 2/23/2016.
  */
 public class History extends BaseEntity {
 
     private String date;
-    private Goal goal;
+    private List<Goal> goals;
 
     public History() {
 
@@ -16,9 +18,25 @@ public class History extends BaseEntity {
         this.date = date;
     }
 
+    public History(String date, List<Goal> goals) {
+        this(date);
+        this.goals = goals;
+    }
+
     public History(String date, Goal goal) {
-        this.date = date;
-        this.goal = goal;
+        this(date);
+        addGoal(goal);
+    }
+
+    public void addGoal(Goal goal) {
+        goals.add(goal);
+    }
+
+    public Goal getGoalOfDay() {
+        for (Goal goal : goals)
+            if (goal.isGoalOfDay())
+                return goal;
+        return null;
     }
 
     public String getDate() {
@@ -29,11 +47,11 @@ public class History extends BaseEntity {
         this.date = date;
     }
 
-    public Goal getGoal() {
-        return goal;
+    public List<Goal> getGoals() {
+        return goals;
     }
 
-    public void setGoal(Goal goal) {
-        this.goal = goal;
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
     }
 }

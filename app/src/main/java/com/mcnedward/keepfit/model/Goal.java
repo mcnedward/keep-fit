@@ -8,8 +8,8 @@ public class Goal extends BaseEntity {
     private String name;
     private int stepAmount;
     private int stepGoal;
+    private boolean isGoalOfDay;
     private String createdOn;
-    private String updatedOn;
 
     public Goal() {
         super();
@@ -46,19 +46,19 @@ public class Goal extends BaseEntity {
         this.stepGoal = stepGoal;
     }
 
+    public boolean isGoalOfDay() {
+        return isGoalOfDay;
+    }
+
+    public void setIsGoalOfDay(boolean isGoalOfDay) {
+        this.isGoalOfDay = isGoalOfDay;
+    }
+
     public String getCreatedOn() {
         return createdOn;
     }
 
     public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
-    }
-
-    public String getUpdatedOn() {
-        return updatedOn;
-    }
-
-    public void setUpdatedOn(String updatedOn) {
-        this.updatedOn = updatedOn;
     }
 }

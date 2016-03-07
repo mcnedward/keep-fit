@@ -18,11 +18,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database name
     public static String DB_NAME = "Goal.db";
     // Database version - increment this number to upgrade the database
-    public static final int DB_VERSION = 10;
+    public static final int DB_VERSION = 13;
 
     // Tables
     public static final String GOAL_TABLE = "Goals";
-    public static final String HISTORY_TABLE = "Histories";
     // Id column, which should be the same across all tables
     public static final String ID = "Id";
     // Goal table
@@ -31,10 +30,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String G_STEP_GOAL = "StepGoal";
     public static final String G_IS_GOAL_OF_DAY = "IsGoalOfDay";
     public static final String G_CREATED_ON = "CreatedOn";
-    public static final String G_UPDATED_ON = "UpdatedOn";
-    // History table
-    public static final String H_DATE = "Date";
-    public static final String H_GOAL_OF_DAY_ID = "GoalOfDayId";
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -53,12 +48,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createGoalTable = String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "%s TEXT, %s INTEGER, %s INTEGER, %s INTEGER, %s TEXT, %s TEXT)", GOAL_TABLE, ID, G_GOAL, G_STEP_AMOUNT, G_STEP_GOAL, G_IS_GOAL_OF_DAY, G_CREATED_ON, G_UPDATED_ON);
-        String createHistoryTable = String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "%s TEXT, %s INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s))",
-                HISTORY_TABLE, ID, H_DATE, H_GOAL_OF_DAY_ID, H_GOAL_OF_DAY_ID, G_GOAL, ID);
+                "%s TEXT, %s INTEGER, %s INTEGER, %s INTEGER, %s TEXT)", GOAL_TABLE, ID, G_GOAL, G_STEP_AMOUNT, G_STEP_GOAL, G_IS_GOAL_OF_DAY, G_CREATED_ON);
         sqLiteDatabase.execSQL(createGoalTable);
-        sqLiteDatabase.execSQL(createHistoryTable);
     }
 
     @Override
@@ -70,6 +61,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void dropTables(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + GOAL_TABLE);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + HISTORY_TABLE);
     }
 }

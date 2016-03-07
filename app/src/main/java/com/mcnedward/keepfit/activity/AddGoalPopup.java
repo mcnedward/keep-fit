@@ -7,20 +7,15 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
-import com.mcnedward.keepfit.activity.fragment.MainContentFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Code;
-import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
-import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
+import com.mcnedward.keepfit.view.AddGoalView;
 
 /**
  * Created by Edward on 1/31/2016.
@@ -37,7 +32,7 @@ public class AddGoalPopup extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.popup_add_goal);
+        setContentView(new AddGoalView(this));
         repository = new GoalRepository(this);
         goal = (Goal) getIntent().getSerializableExtra("goal");
         initialize();
