@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
@@ -35,21 +36,14 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         return goal;
     }
 
+    @Override
     public Goal getGoalByName(String goalName) {
         return read(DatabaseHelper.G_GOAL + " = ?", new String[]{goalName}, null, null, null).get(0);
     }
 
+    @Override
     public Goal getGoalOfDay() {
         String dateStamp = Extension.getDatabaseDateStamp();
-        return getGoalOfDayWithDateStamp(dateStamp);
-    }
-
-    public Goal getGoalOfDay(String date) {
-        String dateStamp = Extension.getDatabaseDateFromPrettyDate(date);
-        return getGoalOfDayWithDateStamp(dateStamp);
-    }
-
-    private Goal getGoalOfDayWithDateStamp(String dateStamp) {
         List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{dateStamp}, null, null, null);
         if (!goals.isEmpty())
             for (Goal goal : goals)
@@ -58,17 +52,27 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         return null;
     }
 
+    @Override
     public void setGoalOfDay(Goal goal) {
         Goal currentGoal = getGoalOfDay();
-        if (currentGoal.getStepAmount() > goal.getStepAmount())
-            goal.setStepAmount(currentGoal.getStepAmount());
-        updateGoalOfDay(currentGoal, false);
+        if (currentGoal != null) {
+            if (currentGoal.getStepAmount() > goal.getStepAmount())
+                goal.setStepAmount(currentGoal.getStepAmount());
+            updateGoalOfDay(currentGoal, false);
+        }
         updateGoalOfDay(goal, true);
     }
 
     @Override
     public List<Goal> getGoalHistory() {
         return readDistinct(DatabaseHelper.G_IS_GOAL_OF_DAY + " = 1", null, DatabaseHelper.G_CREATED_ON, null, DatabaseHelper.G_CREATED_ON, null);
+    }
+
+    @Override
+    public List<Goal> getGoalsForDay() {
+        String dateStamp = Extension.getDatabaseDateStamp();
+        List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{dateStamp}, null, null, null);
+        return goals;
     }
 
     private void updateGoalOfDay(Goal goal, boolean isGoalOfDay) {

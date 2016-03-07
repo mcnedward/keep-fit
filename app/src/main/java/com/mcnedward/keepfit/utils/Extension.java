@@ -13,7 +13,7 @@ import android.view.View;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.AddGoalPopup;
 import com.mcnedward.keepfit.activity.EditGoalActivity;
-import com.mcnedward.keepfit.activity.HistoryActivity;
+import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.enums.Action;
 
@@ -70,11 +70,6 @@ public class Extension {
 
     /***** Starting activity *****/
 
-    public static void startHistoryActivity(Activity activity) {
-        Intent intent = new Intent(activity, HistoryActivity.class);
-        activity.startActivity(intent);
-    }
-
     public static void startAddGoalPopup(final Activity activity) {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -128,20 +123,44 @@ public class Extension {
     private static String PRETTY_DATE = "dd/MM/yyyy";
     private static String DATABASE_DATE = "yyyyMMdd";
 
+    /**
+     * Gets a date stamp in the database format (yyyyyMMdd). If the app is in Edit Mode, then this datestamp will use the MainActivity's calendar.
+     * @return The date stamp in database format.
+     */
     public static String getDatabaseDateStamp() {
+        Date date;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATABASE_DATE);
-        return simpleDateFormat.format(new Date());
+        if (MainActivity.IS_EDIT_MODE)
+            date = MainActivity.CALENDAR.getTime();
+        else
+            date = new Date();
+        return simpleDateFormat.format(date);
     }
 
-    public static String getPrettyDate(String date) {
-        return convertDate(date, DATABASE_DATE, PRETTY_DATE);
-    }
-
+    /**
+     * Get the specified date in the pretty date format (dd/MM/yyyy).
+     * @param date The date to convert to pretty date format.
+     * @return The date.
+     */
     public static String getCalendarPrettyDate(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(PRETTY_DATE);
         return simpleDateFormat.format(date);
     }
 
+    /**
+     * Converts a database format (yyyyMMdd) date to a pretty format (dd/MM/yyyy) date.
+     * @param date The date to convert.
+     * @return The date in pretty format.
+     */
+    public static String getPrettyDateFromDatabaseDate(String date) {
+        return convertDate(date, DATABASE_DATE, PRETTY_DATE);
+    }
+
+    /**
+     * Converts a pretty format (dd/MM/yyyy) date to a database format (yyyyMMdd) date.
+     * @param date The date to convert.
+     * @return The date in database format.
+     */
     public static String getDatabaseDateFromPrettyDate(String date) {
         return convertDate(date, PRETTY_DATE, DATABASE_DATE);
     }

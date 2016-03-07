@@ -35,7 +35,7 @@ public class GoalDateAdapter extends BaseExpandableListAdapter {
             convertView = View.inflate(context, R.layout.simple_adapter_top_item, null);
         TextView textView = (TextView) convertView.findViewById(R.id.simple_adapter_text);
         String history = dates.get(groupPosition);
-        textView.setText(Extension.getPrettyDate(history));
+        textView.setText(Extension.getPrettyDateFromDatabaseDate(history));
         return convertView;
     }
 

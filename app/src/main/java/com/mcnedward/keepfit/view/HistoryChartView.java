@@ -5,14 +5,11 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-import com.androidplot.xy.BoundaryMode;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYStepMode;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.model.GoalDate;
 
 import java.text.FieldPosition;
 import java.text.NumberFormat;
@@ -83,7 +80,7 @@ public class HistoryChartView extends LinearLayout {
         xyPlot.addSeries(historySeries, new LineAndPointFormatter(Color.GREEN, Color.GREEN, Color.TRANSPARENT, null));
 
         xyPlot.setRangeTopMin(lowerBoundary / 2);
-        xyPlot.setRangeTopMax(upperBoundary);
+        xyPlot.setRangeTopMax(upperBoundary + 5);
         xyPlot.redraw();
     }
 

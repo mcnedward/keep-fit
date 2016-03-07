@@ -109,21 +109,12 @@ public class GoalOfDayFragment extends BaseFragment {
 
     private void checkForGoalOfDay() {
         Goal goalOfDay = goalRepository.getGoalOfDay();
-        handleGoalOfDay(goalOfDay);
-    }
-
-    private void checkForGoalOfDay(String date) {
-        Goal goalOfDay = goalRepository.getGoalOfDay(date);
-        handleGoalOfDay(goalOfDay);
-    }
-
-    private void handleGoalOfDay(Goal goal) {
-        if (goal == null) {
+        if (goalOfDay == null) {
             toggleContent(false);
             return;
         }
-        if (goal != null) {
-            updateGoalOfDay(goal);
+        if (goalOfDay != null) {
+            updateGoalOfDay(goalOfDay);
         }
     }
 
@@ -205,7 +196,7 @@ public class GoalOfDayFragment extends BaseFragment {
     private void toggleCalendarChange(String date) {
         txtEditDate.setVisibility(View.VISIBLE);
         txtEditDate.setText("Editing for: " + date);
-        checkForGoalOfDay(date);
+        checkForGoalOfDay();
     }
 
     public static void toggleEditMode(boolean isEditMode, String date) {

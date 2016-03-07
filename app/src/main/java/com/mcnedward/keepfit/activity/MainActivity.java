@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.fragment.BaseFragment;
-import com.mcnedward.keepfit.activity.fragment.GoalOfDayFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
@@ -33,13 +32,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     private static final String TAG = "MainActivity";
 
     public static boolean IS_EDIT_MODE;
+    public static Calendar CALENDAR;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
     private MenuItem calendarItem;
 
     private IGoalRepository goalRepository;
-    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     private void initializeCalendarButton(MenuItem item) {
-        calendar = Calendar.getInstance();
+        CALENDAR = Calendar.getInstance();
         final Activity activity = this;
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -87,15 +86,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear,
                                           int dayOfMonth) {
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, monthOfYear);
-                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        Extension.broadcastCalendarChange(Extension.getCalendarPrettyDate(calendar.getTime()), activity);
+                        CALENDAR.set(Calendar.YEAR, year);
+                        CALENDAR.set(Calendar.MONTH, monthOfYear);
+                        CALENDAR.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        Extension.broadcastCalendarChange(Extension.getCalendarPrettyDate(CALENDAR.getTime()), activity);
                     }
                 };
-                new DatePickerDialog(MainActivity.this, date, calendar
-                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(MainActivity.this, date, CALENDAR
+                        .get(Calendar.YEAR), CALENDAR.get(Calendar.MONTH),
+                        CALENDAR.get(Calendar.DAY_OF_MONTH)).show();
                 return true;
             }
         });
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         int id = item.getItemId();
         if (id == R.id.action_edit) {
             IS_EDIT_MODE = !item.isChecked();
-            Extension.broadcastEditModeSwitch(IS_EDIT_MODE, Extension.getCalendarPrettyDate(calendar.getTime()), this);
+            Extension.broadcastEditModeSwitch(IS_EDIT_MODE, Extension.getCalendarPrettyDate(CALENDAR.getTime()), this);
             if (item.isChecked()) {
                 item.setChecked(false);
                 calendarItem.setVisible(false);

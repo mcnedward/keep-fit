@@ -11,8 +11,8 @@ public interface IGoalRepository extends IRepository<Goal> {
 
     Goal getGoalByName(String goalName);
     Goal getGoalOfDay();
-    Goal getGoalOfDay(String date);
     void setGoalOfDay(Goal goal);
     List<Goal> getGoalHistory();
+    List<Goal> getGoalsForDay();
 
 }

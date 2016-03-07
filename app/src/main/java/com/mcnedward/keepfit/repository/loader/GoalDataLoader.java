@@ -3,7 +3,7 @@ package com.mcnedward.keepfit.repository.loader;
 import android.content.Context;
 
 import com.mcnedward.keepfit.repository.GoalRepository;
-import com.mcnedward.keepfit.repository.IRepository;
+import com.mcnedward.keepfit.repository.IGoalRepository;
 import com.mcnedward.keepfit.model.Goal;
 
 import java.util.List;
@@ -14,28 +14,28 @@ import java.util.List;
 public class GoalDataLoader extends BaseDataLoader<Goal, List<Goal>> {
     private static final String TAG = "GoalDataLoader";
 
-    private IRepository<Goal> dataSource;
+    private IGoalRepository repository;
 
     public GoalDataLoader(Context context) {
         super(context);
-        this.dataSource = new GoalRepository(context);
+        this.repository = new GoalRepository(context);
     }
 
     @Override
     protected List<Goal> buildDataList() {
-        return dataSource.retrieve();
+        return repository.getGoalsForDay();
     }
 
     public void insert(Goal goal) {
-        new InsertTask<>(this, goal, dataSource).execute();
+        new InsertTask<>(this, goal, repository).execute();
     }
 
     public void delete(Goal goal) {
-        new DeleteTask<>(this, goal, dataSource).execute();
+        new DeleteTask<>(this, goal, repository).execute();
     }
 
     public void update(Goal goal) {
-        new UpdateTask<>(this, goal, dataSource).execute();
+        new UpdateTask<>(this, goal, repository).execute();
     }
 
 }

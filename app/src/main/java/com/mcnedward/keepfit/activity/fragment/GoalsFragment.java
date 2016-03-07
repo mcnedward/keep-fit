@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
@@ -35,8 +36,10 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     private final int LOADER_ID = new Random().nextInt(1000);
 
     private Context context;
+    private GoalDataLoader loader;
     private IGoalRepository goalRepository;
     private GoalListAdapter adapter;
+    private TextView txtMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,8 +51,8 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     protected void initialize(View view) {
         context = view.getContext();
-
         goalRepository = new GoalRepository(context);
+        txtMessage = (TextView) view.findViewById(R.id.goals_message);
 
         initializeGoalList(view);
         initializeLoader();
@@ -61,7 +64,8 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
         getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.ADD_GOAL.title));
         getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_OF_DAY.title));
         getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_AMOUNT.title));
-
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.EDIT_MODE_SWITCH.title));
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.CALENDER_CHANGE.title));
     }
 
     private void initializeGoalList(View view) {
@@ -98,7 +102,7 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     public Loader<List<Goal>> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "CREATING LOADER " + id);
-        GoalDataLoader loader = new GoalDataLoader(context);
+        loader = new GoalDataLoader(context);
         adapter.setLoader(loader);
         return loader;
     }
@@ -106,6 +110,10 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     public void onLoadFinished(Loader<List<Goal>> loader, List<Goal> data) {
         adapter.setGroups(data);
+        if (data.isEmpty())
+            txtMessage.setVisibility(View.VISIBLE);
+        else
+            txtMessage.setVisibility(View.GONE);
     }
 
     @Override
@@ -119,15 +127,27 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
             Action action = Action.getById(intent.getIntExtra("action", 0));
             Goal goal = (Goal) intent.getSerializableExtra("goal");
             switch (action) {
-                case ADD_GOAL:
+                case ADD_GOAL: {
                     adapter.addGoal(goal);
+                    txtMessage.setVisibility(View.GONE);
                     break;
-                case UPDATE_GOAL_OF_DAY:
+                }
+                case UPDATE_GOAL_OF_DAY: {
                     adapter.editGoal(goal);
                     break;
-                case UPDATE_GOAL_AMOUNT:
+                }
+                case UPDATE_GOAL_AMOUNT: {
                     adapter.editGoal(goal);
                     break;
+                }
+                case EDIT_MODE_SWITCH: {
+                    break;
+                }
+                case CALENDER_CHANGE: {
+                    String date = intent.getStringExtra("date");
+                    loader.forceLoad();
+                    break;
+                }
             }
         }
     }
