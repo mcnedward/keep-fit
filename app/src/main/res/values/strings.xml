@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">KeepFit</string>
     <string name="goal_of_day">Goal Of The Day</string>
-    <string name="empty_goal_of_day">Tap the button in the bottom to add a new goals!</string>
+    <string name="empty_goal_of_day">Tap the button in the bottom to add a new goalDates!</string>
     <string name="goal_of_day_steps">Steps - </string>
     <string name="forward_slash">/</string>
-    <string name="no_goals_add_one">No current goals! Add one here</string>
+    <string name="no_goals_add_one">No current goalDates! Add one here</string>
     <string name="no_goals_choose_one">Or choose one from the list</string>
 
     <string name="add_steps">Add Steps</string>

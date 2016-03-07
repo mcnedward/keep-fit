@@ -80,14 +80,50 @@ public class GoalOfDayFragment extends BaseFragment {
         }
     }
 
+    @Override
+    protected void initialize(View view) {
+        context = view.getContext();
+        goalRepository = new GoalRepository(view.getContext());
+        addGoalView = (AddGoalView) view.findViewById(R.id.add_goal_view);
+
+        goalOfDayName = (TextView) view.findViewById(R.id.goal_of_day_name);
+        editGoalOfDayStepAmount = (EditText) view.findViewById(R.id.goal_of_day_step_amount);
+        goalOfDayStepGoal = (TextView) view.findViewById(R.id.goal_of_day_step_goal);
+        txtEditDate = (TextView) view.findViewById(R.id.edit_date);
+        // Clear focus from EditText
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        content = (RelativeLayout) view.findViewById(R.id.content);
+        actionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+
+        initializeStepCountButtons(view);
+
+        progressBar = (ProgressBar) view.findViewById(R.id.step_progress_bar);
+        progressBar.setProgress(0);
+
+        toggleContent(editable);
+        checkForGoalOfDay();
+
+        registerReceivers();
+    }
+
     private void checkForGoalOfDay() {
         Goal goalOfDay = goalRepository.getGoalOfDay();
-        if (goalOfDay == null) {
+        handleGoalOfDay(goalOfDay);
+    }
+
+    private void checkForGoalOfDay(String date) {
+        Goal goalOfDay = goalRepository.getGoalOfDay(date);
+        handleGoalOfDay(goalOfDay);
+    }
+
+    private void handleGoalOfDay(Goal goal) {
+        if (goal == null) {
             toggleContent(false);
             return;
         }
-        if (goalOfDay != null) {
-            updateGoalOfDay(goalOfDay);
+        if (goal != null) {
+            updateGoalOfDay(goal);
         }
     }
 
@@ -139,37 +175,11 @@ public class GoalOfDayFragment extends BaseFragment {
     }
 
     @Override
-    protected void initialize(View view) {
-        context = view.getContext();
-        goalRepository = new GoalRepository(view.getContext());
-        addGoalView = (AddGoalView) view.findViewById(R.id.add_goal_view);
-
-        goalOfDayName = (TextView) view.findViewById(R.id.goal_of_day_name);
-        editGoalOfDayStepAmount = (EditText) view.findViewById(R.id.goal_of_day_step_amount);
-        goalOfDayStepGoal = (TextView) view.findViewById(R.id.goal_of_day_step_goal);
-        txtEditDate = (TextView) view.findViewById(R.id.edit_date);
-        // Clear focus from EditText
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        content = (RelativeLayout) view.findViewById(R.id.content);
-
-        actionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-
-        initializeStepCountButtons(view);
-
-        progressBar = (ProgressBar) view.findViewById(R.id.step_progress_bar);
-        progressBar.setProgress(0);
-
-        toggleContent(editable);
-        checkForGoalOfDay();
-
-        registerReceivers();
-    }
-
-    @Override
     protected void registerReceivers() {
         getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.ADD_GOAL.title));
         getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_OF_DAY.title));
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.EDIT_MODE_SWITCH.title));
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.CALENDER_CHANGE.title));
     }
 
     private void initializeStepCountButtons(View view) {
@@ -192,15 +202,15 @@ public class GoalOfDayFragment extends BaseFragment {
         Extension.setRippleBackground(imgIncrement, context);
     }
 
-    public static void toggleCalendarChange(Calendar calendar) {
-        String date = Extension.getPrettyDate(calendar.getTime());
+    private void toggleCalendarChange(String date) {
+        txtEditDate.setVisibility(View.VISIBLE);
         txtEditDate.setText("Editing for: " + date);
+        checkForGoalOfDay(date);
     }
 
-    public static void toggleEditMode(boolean isEditMode, Calendar calendar) {
+    public static void toggleEditMode(boolean isEditMode, String date) {
         if (isEditMode) {
             txtEditDate.setVisibility(View.VISIBLE);
-            String date = Extension.getPrettyDate(calendar.getTime());
             txtEditDate.setText("Editing for: " + date);
         } else {
             txtEditDate.setVisibility(View.GONE);
@@ -213,14 +223,26 @@ public class GoalOfDayFragment extends BaseFragment {
             Action action = Action.getById(intent.getIntExtra("action", 0));
             Goal goal = (Goal) intent.getSerializableExtra("goal");
             switch (action) {
-                case ADD_GOAL:
+                case ADD_GOAL: {
                     updateGoalOfDay(goal);
                     toggleContent(true);
                     break;
-                case UPDATE_GOAL_OF_DAY:
-                    goal = (Goal) intent.getSerializableExtra("goal");
+                }
+                case UPDATE_GOAL_OF_DAY: {
                     updateGoalOfDay(goal);
                     break;
+                }
+                case EDIT_MODE_SWITCH: {
+                    boolean isEditMode = intent.getBooleanExtra("isEditMode", false);
+                    String date = intent.getStringExtra("date");
+                    toggleEditMode(isEditMode, date);
+                    break;
+                }
+                case CALENDER_CHANGE: {
+                    String date = intent.getStringExtra("date");
+                    toggleCalendarChange(date);
+                    break;
+                }
             }
         }
     }

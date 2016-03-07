@@ -30,8 +30,8 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        ExpandableListView expListView = (ExpandableListView) findViewById(R.id.history_expandable_list);
-        expListAdapter = new GoalDateAdapter(this);
+//        ExpandableListView expListView = (ExpandableListView) findViewById(R.id.history_expandable_list);
+//        expListAdapter = new GoalDateAdapter(this);
         // TODO Put this in AsyncTaskLoader!
         List<String> history = new ArrayList<>();
         List<List<Goal>> goals = new ArrayList<>();
@@ -40,7 +40,7 @@ public class HistoryActivity extends AppCompatActivity {
 //            goals.add(gco.getGoals());
 //        }
         expListAdapter.setUp(history, goals);
-        expListView.setAdapter(expListAdapter);
+//        expListView.setAdapter(expListAdapter);
     }
 
 }

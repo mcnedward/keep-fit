@@ -11,22 +11,18 @@ import java.util.List;
 public class GoalDate {
 
     private String date;
-    private List<Goal> goals;
+    private Goal goal;
 
-    public GoalDate(String date) {
+    public GoalDate(String date, Goal goal) {
         this.date = date;
-        goals = new ArrayList<>();
-    }
-
-    public void add(Goal goal) {
-        goals.add(goal);
+        this.goal = goal;
     }
 
     public String getDate() {
         return date;
     }
 
-    public List<Goal> getGoals() {
-        return goals;
+    public Goal getGoal() {
+        return goal;
     }
 }

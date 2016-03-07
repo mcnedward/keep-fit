@@ -3,7 +3,6 @@ package com.mcnedward.keepfit.repository.loader;
 import android.content.Context;
 
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.model.GoalDate;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
 
@@ -12,8 +11,8 @@ import java.util.List;
 /**
  * Created by Edward on 3/7/2016.
  */
-public class GoalDateDataLoader extends BaseDataLoader<GoalDate, List<GoalDate>> {
-    private static final String TAG = "GoalDataLoader";
+public class GoalDateDataLoader extends BaseDataLoader<Goal, List<Goal>> {
+    private static final String TAG = "GoalDateDataLoader";
 
     private IGoalRepository dataSource;
 
@@ -23,25 +22,20 @@ public class GoalDateDataLoader extends BaseDataLoader<GoalDate, List<GoalDate>>
     }
 
     @Override
-    protected List<GoalDate> buildDataList() {
-        return dataSource.getGoalDates();
+    protected List<Goal> buildDataList() {
+        return dataSource.getGoalHistory();
     }
 
-    @Override
-    public void insert(GoalDate goalDate) {
-        for (Goal goal : goalDate.getGoals())
-            new InsertTask<>(this, goal, dataSource).execute();
+    public void insert(Goal goal) {
+        new InsertTask<>(this, goal, dataSource).execute();
     }
 
-    @Override
-    public void delete(GoalDate goalDate) {
-        for (Goal goal : goalDate.getGoals())
-            new DeleteTask<>(this, goal, dataSource).execute();
+    public void delete(Goal goal) {
+        new DeleteTask<>(this, goal, dataSource).execute();
     }
 
-    @Override
-    public void update(GoalDate goalDate) {
-        for (Goal goal : goalDate.getGoals())
-            new UpdateTask<>(this, goal, dataSource).execute();
+    public void update(Goal goal) {
+        new UpdateTask<>(this, goal, dataSource).execute();
     }
+
 }

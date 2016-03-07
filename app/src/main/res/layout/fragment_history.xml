@@ -3,9 +3,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ExpandableListView
-        android:id="@+id/history_expandable_list"
+    <com.mcnedward.keepfit.view.HistoryChartView
+        android:id="@+id/history_chart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:childDivider="@color/Black"/>
+        android:layout_height="match_parent"/>
 </LinearLayout>

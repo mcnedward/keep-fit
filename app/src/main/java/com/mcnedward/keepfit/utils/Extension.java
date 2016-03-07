@@ -108,51 +108,56 @@ public class Extension {
         context.sendBroadcast(intent);
     }
 
+    public static void broadcastEditModeSwitch(boolean isEditMode, String date, Context context) {
+        Intent intent = new Intent(Action.EDIT_MODE_SWITCH.title);
+        intent.putExtra("isEditMode", isEditMode);
+        intent.putExtra("date", date);
+        intent.putExtra("action", Action.EDIT_MODE_SWITCH.id);
+        context.sendBroadcast(intent);
+    }
+
+    public static void broadcastCalendarChange(String date, Context context) {
+        Intent intent = new Intent(Action.CALENDER_CHANGE.title);
+        intent.putExtra("date", date);
+        intent.putExtra("action", Action.CALENDER_CHANGE.id);
+        context.sendBroadcast(intent);
+    }
 
     /***** Date Stuff *****/
 
-    public static String getTimestamp() {
-        return getTimestamp(new Date());
-    }
+    private static String PRETTY_DATE = "dd/MM/yyyy";
+    private static String DATABASE_DATE = "yyyyMMdd";
 
-    public static String getTimestamp(Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-        return simpleDateFormat.format(date);
-    }
-
-    public static String getDateStamp() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+    public static String getDatabaseDateStamp() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATABASE_DATE);
         return simpleDateFormat.format(new Date());
     }
 
-    public static String getPrettyDate(Date date) {
-        String timestamp = getTimestamp(date);
-        return getPrettyDate(timestamp);
+    public static String getPrettyDate(String date) {
+        return convertDate(date, DATABASE_DATE, PRETTY_DATE);
     }
 
-    public static String getPrettyDate(String date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+    public static String getCalendarPrettyDate(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(PRETTY_DATE);
+        return simpleDateFormat.format(date);
+    }
+
+    public static String getDatabaseDateFromPrettyDate(String date) {
+        return convertDate(date, PRETTY_DATE, DATABASE_DATE);
+    }
+
+    private static String convertDate(String date, String fromFormat, String toFormat) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(fromFormat);
         String d = null;
         try {
             Date theDate = simpleDateFormat.parse(date);
-            SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat f = new SimpleDateFormat(toFormat);
             d = f.format(theDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return d;
-    }
 
-    public static Calendar getCalendar(String date) {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        try {
-            Date theDate = simpleDateFormat.parse(date);
-            calendar.setTime(theDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return calendar;
     }
 
 }

@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.model.GoalDate;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
@@ -27,7 +26,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     @Override
     public Goal save(Goal goal) throws EntityAlreadyExistsException {
-        String datestamp = Extension.getDateStamp();
+        String datestamp = Extension.getDatabaseDateStamp();
         goal.setCreatedOn(datestamp);
         goal.setIsGoalOfDay(true);
         Goal currentGoal = getGoalOfDay();
@@ -41,8 +40,17 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
     }
 
     public Goal getGoalOfDay() {
-        String datestamp = Extension.getDateStamp();
-        List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{datestamp}, null, null, null);
+        String dateStamp = Extension.getDatabaseDateStamp();
+        return getGoalOfDayWithDateStamp(dateStamp);
+    }
+
+    public Goal getGoalOfDay(String date) {
+        String dateStamp = Extension.getDatabaseDateFromPrettyDate(date);
+        return getGoalOfDayWithDateStamp(dateStamp);
+    }
+
+    private Goal getGoalOfDayWithDateStamp(String dateStamp) {
+        List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{dateStamp}, null, null, null);
         if (!goals.isEmpty())
             for (Goal goal : goals)
                 if (goal.isGoalOfDay())
@@ -52,29 +60,15 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     public void setGoalOfDay(Goal goal) {
         Goal currentGoal = getGoalOfDay();
-        goal.setStepAmount(goal.getStepAmount() + currentGoal.getStepAmount());
-        currentGoal.setStepAmount(0);
+        if (currentGoal.getStepAmount() > goal.getStepAmount())
+            goal.setStepAmount(currentGoal.getStepAmount());
         updateGoalOfDay(currentGoal, false);
         updateGoalOfDay(goal, true);
     }
 
     @Override
-    public List<GoalDate> getGoalDates() {
-        List<GoalDate> goalDates = new ArrayList<>();
-        List<Goal> dates = readDistinct("", null, DatabaseHelper.G_CREATED_ON, null, DatabaseHelper.G_CREATED_ON, null);
-        for (Goal goal : dates) {
-            goalDates.add(new GoalDate(goal.getCreatedOn()));
-        }
-        List<Goal> goals = retrieve();
-        for (Goal goal : goals) {
-            for (GoalDate date : goalDates) {
-                if (date.getDate().equals(goal.getCreatedOn())) {
-                    date.add(goal);
-                    continue;
-                }
-            }
-        }
-        return goalDates;
+    public List<Goal> getGoalHistory() {
+        return readDistinct(DatabaseHelper.G_IS_GOAL_OF_DAY + " = 1", null, DatabaseHelper.G_CREATED_ON, null, DatabaseHelper.G_CREATED_ON, null);
     }
 
     private void updateGoalOfDay(Goal goal, boolean isGoalOfDay) {

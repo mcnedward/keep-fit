@@ -32,6 +32,8 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private static final String TAG = "MainActivity";
 
+    public static boolean IS_EDIT_MODE;
+
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
     private MenuItem calendarItem;
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private void initializeCalendarButton(MenuItem item) {
         calendar = Calendar.getInstance();
+        final Activity activity = this;
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        GoalOfDayFragment.toggleCalendarChange(calendar);
+                        Extension.broadcastCalendarChange(Extension.getCalendarPrettyDate(calendar.getTime()), activity);
                     }
                 };
                 new DatePickerDialog(MainActivity.this, date, calendar
@@ -181,14 +184,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_edit) {
+            IS_EDIT_MODE = !item.isChecked();
+            Extension.broadcastEditModeSwitch(IS_EDIT_MODE, Extension.getCalendarPrettyDate(calendar.getTime()), this);
             if (item.isChecked()) {
                 item.setChecked(false);
                 calendarItem.setVisible(false);
-                GoalOfDayFragment.toggleEditMode(false, null);
             } else {
                 item.setChecked(true);
                 calendarItem.setVisible(true);
-                GoalOfDayFragment.toggleEditMode(true, calendar);
             }
             return true;
         }

@@ -105,7 +105,6 @@ public class GoalView extends RelativeLayout {
         });
 
         progressBar = (ProgressBar) findViewById(R.id.step_progress_bar);
-
         checkIfGoalOfDay();
     }
 
@@ -114,6 +113,7 @@ public class GoalView extends RelativeLayout {
                         ContextCompat.getDrawable(context, android.R.drawable.star_big_on) :
                         ContextCompat.getDrawable(context, android.R.drawable.star_big_off)
         );
+        progressBar.setVisibility(goal.isGoalOfDay() ? VISIBLE : GONE);
     }
 
     public void update(Goal goal, GoalListAdapter adapter) {
