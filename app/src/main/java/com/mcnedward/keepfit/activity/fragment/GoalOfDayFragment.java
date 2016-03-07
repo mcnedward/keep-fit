@@ -67,7 +67,6 @@ public class GoalOfDayFragment extends BaseFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initializeFAB();
     }
 
     @Override
@@ -134,20 +133,6 @@ public class GoalOfDayFragment extends BaseFragment {
             addGoalView.setVisibility(View.VISIBLE);
             actionButton.hide();
         }
-    }
-
-    /**
-     * Create the Floating Action Button
-     */
-    private void initializeFAB() {
-        FloatingActionButton fab = (FloatingActionButton) ((Activity) context).findViewById(R.id.fab);
-        final Activity activity = ((Activity) context);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Extension.startAddGoalPopup(goalOfDay, activity);
-            }
-        });
     }
 
     private void updateProgress(int currentProgress, int maxProgress) {

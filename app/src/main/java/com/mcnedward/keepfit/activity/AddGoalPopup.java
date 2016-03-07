@@ -1,6 +1,7 @@
 package com.mcnedward.keepfit.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Code;
+import com.mcnedward.keepfit.utils.enums.Action;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.view.AddGoalView;
 
@@ -23,62 +25,11 @@ import com.mcnedward.keepfit.view.AddGoalView;
 public class AddGoalPopup extends Activity {
     private static final String TAG = "AddGoalPopup";
 
-    private GoalRepository repository;
-
-    private Goal goal;
-    private EditText editGoalName;
-    private EditText editGoalSteps;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(new AddGoalView(this));
-        repository = new GoalRepository(this);
-        goal = (Goal) getIntent().getSerializableExtra("goal");
-        initialize();
         initializeWindow();
-    }
-
-    private void initialize() {
-        editGoalName = (EditText) findViewById(R.id.edit_goal_name);
-        editGoalSteps = (EditText) findViewById(R.id.edit_goal_steps);
-        (findViewById(R.id.btn_edit_goal)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addGoal();
-            }
-        });
-    }
-
-    private void addGoal() {
-        String goalName = editGoalName.getText().toString();
-        String goalSteps = editGoalSteps.getText().toString();
-
-        if (goalName.equals("") || goalSteps.equals("")) {
-            Toast.makeText(this, "You need to fill in everything!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Goal goal = new Goal(goalName, Integer.valueOf(goalSteps));
-
-        try {
-            repository.save(goal);
-        } catch (EntityAlreadyExistsException e) {
-            e.printStackTrace();
-        }
-        Toast.makeText(this, "Added " + goalName + "!", Toast.LENGTH_SHORT).show();
-
-        editGoalName.setText("");
-        editGoalSteps.setText("");
-
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-        finish();
-        Intent intent = new Intent();
-        intent.putExtra("goal", goal);
-        setResult(Code.RESULT_OK.id(), intent);
     }
 
     private void initializeWindow() {
@@ -90,5 +41,18 @@ public class AddGoalPopup extends Activity {
 
         getWindow().setLayout(width, height);
     }
+
+    public class FragmentReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Action action = Action.getById(intent.getIntExtra("action", 0));
+            switch (action) {
+                case ADD_GOAL_ACTIVITY:
+                    finish();
+                    break;
+            }
+        }
+    }
+
 
 }

@@ -29,6 +29,16 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
     public Goal save(Goal goal) throws EntityAlreadyExistsException {
         String datestamp = Extension.getDateStamp();
         goal.setCreatedOn(datestamp);
+        goal.setIsGoalOfDay(true);
+        Goal currentGoal = getGoalOfTheDay();
+        if (currentGoal != null) {
+            currentGoal.setIsGoalOfDay(false);
+            try {
+                update(currentGoal);
+            } catch (EntityDoesNotExistException e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
         goal = super.save(goal);
         return goal;
     }
@@ -104,6 +114,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         goal.setName(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_GOAL)));
         goal.setStepAmount(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_AMOUNT)));
         goal.setStepGoal(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_GOAL)));
+        goal.setIsGoalOfDay(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_IS_GOAL_OF_DAY)) == 1);
         goal.setCreatedOn(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_CREATED_ON)));
         return goal;
     }
@@ -115,6 +126,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         values.put(DatabaseHelper.G_GOAL, entity.getName());
         values.put(DatabaseHelper.G_STEP_AMOUNT, entity.getStepAmount());
         values.put(DatabaseHelper.G_STEP_GOAL, entity.getStepGoal());
+        values.put(DatabaseHelper.G_IS_GOAL_OF_DAY, entity.isGoalOfDay());
         values.put(DatabaseHelper.G_CREATED_ON, entity.getCreatedOn());
         return values;
     }

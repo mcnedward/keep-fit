@@ -9,6 +9,9 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.AddGoalPopup;
@@ -16,6 +19,7 @@ import com.mcnedward.keepfit.activity.EditGoalActivity;
 import com.mcnedward.keepfit.activity.HistoryActivity;
 import com.mcnedward.keepfit.activity.StepCounterPopup;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.view.AddGoalView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,12 +77,11 @@ public class Extension {
         activity.startActivity(intent);
     }
 
-    public static void startAddGoalPopup(final Goal goal, final Activity activity) {
+    public static void startAddGoalPopup(final Activity activity) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(activity, AddGoalPopup.class);
-                intent.putExtra("goal", goal);
                 activity.startActivityForResult(intent, ActivityCode.ADD_GOAL_POPUP);
             }
         }, 300);

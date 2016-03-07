@@ -1,7 +1,9 @@
 package com.mcnedward.keepfit.activity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +15,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ import com.mcnedward.keepfit.activity.fragment.GoalOfDayFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
+import com.mcnedward.keepfit.utils.Extension;
 
 import java.util.Calendar;
 
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initialize();
+        initializeFAB();
     }
 
     private void initialize() {
@@ -54,6 +59,20 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         goalRepository = new GoalRepository(this);
+    }
+
+    /**
+     * Create the Floating Action Button
+     */
+    private void initializeFAB() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final Activity activity = this;
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Extension.startAddGoalPopup(activity);
+            }
+        });
     }
 
     private void initializeCalendarButton(MenuItem item) {
