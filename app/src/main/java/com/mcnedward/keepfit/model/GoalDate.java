@@ -8,13 +8,13 @@ import java.util.List;
 /**
  * Created by Edward on 2/13/2016.
  */
-public class GoalsCreatedOn {
+public class GoalDate {
 
-    private String createdOn;
+    private String date;
     private List<Goal> goals;
 
-    public GoalsCreatedOn(String createdOn) {
-        this.createdOn = createdOn;
+    public GoalDate(String date) {
+        this.date = date;
         goals = new ArrayList<>();
     }
 
@@ -22,9 +22,8 @@ public class GoalsCreatedOn {
         goals.add(goal);
     }
 
-    public String getCreatedOn() {
-        // TODO CHANGE THIS!!!!!
-        return Extension.getPrettyDate(createdOn);
+    public String getDate() {
+        return date;
     }
 
     public List<Goal> getGoals() {

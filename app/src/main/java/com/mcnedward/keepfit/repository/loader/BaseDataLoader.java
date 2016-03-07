@@ -5,6 +5,8 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
+import com.mcnedward.keepfit.model.GoalDate;
+import com.mcnedward.keepfit.repository.IGoalRepository;
 import com.mcnedward.keepfit.repository.IRepository;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;

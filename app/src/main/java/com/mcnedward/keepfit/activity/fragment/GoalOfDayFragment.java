@@ -1,7 +1,6 @@
 package com.mcnedward.keepfit.activity.fragment;
 
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -82,7 +81,7 @@ public class GoalOfDayFragment extends BaseFragment {
     }
 
     private void checkForGoalOfDay() {
-        Goal goalOfDay = goalRepository.getGoalOfTheDay();
+        Goal goalOfDay = goalRepository.getGoalOfDay();
         if (goalOfDay == null) {
             toggleContent(false);
             return;
@@ -107,8 +106,11 @@ public class GoalOfDayFragment extends BaseFragment {
         int currentSteps = 0;
         if (!currentStepsString.equals(""))
             currentSteps = Integer.parseInt(currentStepsString);
-        if (up)
+        if (up) {
             currentSteps += stepAmount;
+            if (currentSteps > goalOfDay.getStepGoal())
+                currentSteps = goalOfDay.getStepGoal();
+        }
         else {
             currentSteps -= stepAmount;
             if (currentSteps < 0)
@@ -142,9 +144,9 @@ public class GoalOfDayFragment extends BaseFragment {
         animation.start();
     }
 
-    private void initialize(View view) {
+    @Override
+    protected void initialize(View view) {
         context = view.getContext();
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter("addGoal"));
 
         goalRepository = new GoalRepository(view.getContext());
 
@@ -168,6 +170,12 @@ public class GoalOfDayFragment extends BaseFragment {
 
         toggleContent(editable);
         checkForGoalOfDay();
+    }
+
+    @Override
+    protected void registerReceivers() {
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter("addGoal"));
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter("updateGoalOfDay"));
     }
 
     private void initializeStepCountButtons(View view) {
@@ -209,11 +217,15 @@ public class GoalOfDayFragment extends BaseFragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Action action = Action.getById(intent.getIntExtra("action", 0));
+            Goal goal = (Goal) intent.getSerializableExtra("goal");
             switch (action) {
                 case ADD_GOAL_ACTIVITY:
-                    Goal goal = (Goal) intent.getSerializableExtra("goal");
                     updateGoalOfDay(goal);
                     toggleContent(true);
+                    break;
+                case UPDATE_GOAL_OF_DAY:
+                    goal = (Goal) intent.getSerializableExtra("goal");
+                    updateGoalOfDay(goal);
                     break;
             }
         }

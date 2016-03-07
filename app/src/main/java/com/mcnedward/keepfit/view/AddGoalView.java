@@ -81,7 +81,7 @@ public class AddGoalView extends LinearLayout {
         broadcastAddGoal();
     }
 
-    public void broadcastAddGoal() {
+    private void broadcastAddGoal() {
         Intent intent = new Intent("addGoal");
         intent.putExtra("goal", goal);
         intent.putExtra("action", 1);

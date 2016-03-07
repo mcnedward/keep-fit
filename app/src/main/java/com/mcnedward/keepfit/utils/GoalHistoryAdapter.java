@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,11 +20,13 @@ public class GoalHistoryAdapter extends BaseExpandableListAdapter {
     private static final String TAG = "GoalHistoryAdapter";
 
     private Context context;
-    private List<String> historyList;
+    private List<String> dates;
     private List<List<Goal>> goals;
 
     public GoalHistoryAdapter(Context context) {
         this.context = context;
+        dates = new ArrayList<>();
+        goals = new ArrayList<>();
     }
 
     @Override
@@ -31,7 +34,7 @@ public class GoalHistoryAdapter extends BaseExpandableListAdapter {
         if (convertView == null)
             convertView = View.inflate(context, R.layout.simple_adapter_top_item, null);
         TextView textView = (TextView) convertView.findViewById(R.id.simple_adapter_text);
-        String history = historyList.get(groupPosition);
+        String history = dates.get(groupPosition);
         textView.setText(history);
         return convertView;
     }
@@ -54,15 +57,15 @@ public class GoalHistoryAdapter extends BaseExpandableListAdapter {
         return convertView;
     }
 
-    public void setUp(List<String> history, List<List<Goal>> goals) {
-        historyList = history;
+    public void setUp(List<String> dates, List<List<Goal>> goals) {
+        this.dates = dates;
         this.goals = goals;
         notifyDataSetChanged();
     }
 
     @Override
     public int getGroupCount() {
-        return historyList.size();
+        return dates.size();
     }
 
     @Override
@@ -72,7 +75,7 @@ public class GoalHistoryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getGroup(int groupPosition) {
-        return historyList.get(groupPosition);
+        return dates.get(groupPosition);
     }
 
     @Override

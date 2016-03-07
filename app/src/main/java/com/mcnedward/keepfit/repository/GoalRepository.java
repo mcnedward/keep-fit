@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.model.History;
+import com.mcnedward.keepfit.model.GoalDate;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
@@ -30,15 +30,8 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         String datestamp = Extension.getDateStamp();
         goal.setCreatedOn(datestamp);
         goal.setIsGoalOfDay(true);
-        Goal currentGoal = getGoalOfTheDay();
-        if (currentGoal != null) {
-            currentGoal.setIsGoalOfDay(false);
-            try {
-                update(currentGoal);
-            } catch (EntityDoesNotExistException e) {
-                Log.e(TAG, e.getMessage());
-            }
-        }
+        Goal currentGoal = getGoalOfDay();
+        updateGoalOfDay(currentGoal, false);
         goal = super.save(goal);
         return goal;
     }
@@ -47,7 +40,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         return read(DatabaseHelper.G_GOAL + " = ?", new String[]{goalName}, null, null, null).get(0);
     }
 
-    public Goal getGoalOfTheDay() {
+    public Goal getGoalOfDay() {
         String datestamp = Extension.getDateStamp();
         List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{datestamp}, null, null, null);
         if (!goals.isEmpty())
@@ -57,19 +50,55 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         return null;
     }
 
-//    public List<GoalsCreatedOn> getGoalDates() {
-//        List<GoalsCreatedOn> goalsCreatedOn = new ArrayList<>();
+    public void setGoalOfDay(Goal goal) {
+        Goal currentGoal = getGoalOfDay();
+        updateGoalOfDay(currentGoal, false);
+        updateGoalOfDay(goal, true);
+    }
+
+    @Override
+    public List<GoalDate> getGoalDates() {
+        List<GoalDate> goalDates = new ArrayList<>();
+        List<Goal> dates = readDistinct("", null, DatabaseHelper.G_CREATED_ON, null, DatabaseHelper.G_CREATED_ON, null);
+        for (Goal goal : dates) {
+            goalDates.add(new GoalDate(goal.getCreatedOn()));
+        }
+        List<Goal> goals = retrieve();
+        for (Goal goal : goals) {
+            for (GoalDate date : goalDates) {
+                if (date.getDate().equals(goal.getCreatedOn())) {
+                    date.add(goal);
+                    continue;
+                }
+            }
+        }
+        return goalDates;
+    }
+
+    private void updateGoalOfDay(Goal goal, boolean isGoalOfDay) {
+        if (goal != null) {
+            goal.setIsGoalOfDay(isGoalOfDay);
+            try {
+                update(goal);
+            } catch (EntityDoesNotExistException e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
+    }
+
+//    public List<GoalDates> getGoalDates() {
+//        List<GoalDates> goalsCreatedOn = new ArrayList<>();
 //        // Get the distinct goal dates
 //        List<Goal> goalDates = readDistinct(null, null, DatabaseHelper.G_CREATED_ON, null, null, null);
 //        List<String> dates = new ArrayList<>();
 //        for (Goal goal : goalDates)
-//            dates.add(goal.getCreatedOn());
+//            dates.add(goal.getDate());
 //        // Sort all of the goals by date
 //        List<Goal> goals = retrieve();
 //        for (String date : dates) {
-//            GoalsCreatedOn gco = new GoalsCreatedOn(date);
+//            GoalDates gco = new GoalDates(date);
 //            for (Goal goal : goals) {
-//                if (goal.getCreatedOn().equals(date)) {
+//                if (goal.getDate().equals(date)) {
 //                    gco.add(goal);
 //                }
 //            }

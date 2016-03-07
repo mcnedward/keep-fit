@@ -1,8 +1,7 @@
 package com.mcnedward.keepfit.repository;
 
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.model.GoalsCreatedOn;
-import com.mcnedward.keepfit.repository.IRepository;
+import com.mcnedward.keepfit.model.GoalDate;
 
 import java.util.List;
 
@@ -12,6 +11,8 @@ import java.util.List;
 public interface IGoalRepository extends IRepository<Goal> {
 
     Goal getGoalByName(String goalName);
-    Goal getGoalOfTheDay();
+    Goal getGoalOfDay();
+    void setGoalOfDay(Goal goal);
+    List<GoalDate> getGoalDates();
 
 }

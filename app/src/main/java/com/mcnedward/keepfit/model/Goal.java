@@ -61,4 +61,9 @@ public class Goal extends BaseEntity {
     public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

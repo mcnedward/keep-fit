@@ -1,6 +1,7 @@
 package com.mcnedward.keepfit.activity.fragment;
 
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 /**
  * Created by Edward on 2/23/2016.
@@ -36,4 +37,7 @@ public abstract class BaseFragment extends Fragment {
         }
         return null;
     }
+
+    protected abstract void initialize(View view);
+    protected abstract void registerReceivers();
 }

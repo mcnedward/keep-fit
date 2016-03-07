@@ -4,7 +4,8 @@ package com.mcnedward.keepfit.utils.enums;
  * Created by Edward on 3/7/2016.
  */
 public enum Action {
-    ADD_GOAL_ACTIVITY(1);
+    ADD_GOAL_ACTIVITY(1),
+    UPDATE_GOAL_OF_DAY(2);
 
     int id;
 
