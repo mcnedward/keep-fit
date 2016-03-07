@@ -2,6 +2,8 @@ package com.mcnedward.keepfit.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,6 +31,7 @@ public class GoalView extends RelativeLayout {
     private GoalListAdapter adapter;
 
     private TextView txtGoalName;
+    private ImageView imgIsGoalOfDay;
     private ImageView imgGoalEdit;
     private ImageView imgGoalDelete;
     private ProgressBar progressBar;
@@ -53,6 +56,18 @@ public class GoalView extends RelativeLayout {
         if (goal != null)
             txtGoalName.setText(goal.getName());
 
+        imgIsGoalOfDay = (ImageView) findViewById(R.id.list_goal_isGoal_of_day);
+        Extension.setRippleBackground(imgIsGoalOfDay, context);
+        imgIsGoalOfDay.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                repository.setGoalOfDay(goal);
+                broadcastUpdateGoalOfDay(goal);
+                Toast.makeText(getContext(), String.format("Set %s as the goal of the day!", goal.getName()), Toast.LENGTH_SHORT).show();
+                adapter.notifyDataSetChanged(true);
+            }
+        });
+
         imgGoalEdit = (ImageView) findViewById(R.id.list_goal_edit);
         Extension.setRippleBackground(imgGoalEdit, context);
         imgGoalEdit.setOnClickListener(new OnClickListener() {
@@ -66,22 +81,39 @@ public class GoalView extends RelativeLayout {
 
         imgGoalDelete = (ImageView) findViewById(R.id.list_goal_delete);
         Extension.setRippleBackground(imgGoalDelete, context);
-        imgGoalDelete.setOnClickListener(new OnClickListener() {
+        imgGoalDelete.setOnLongClickListener(new OnLongClickListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onLongClick(View v) {
                 if (adapter != null) {
                     try {
                         repository.delete(goal);
                     } catch (EntityDoesNotExistException e) {
                         e.printStackTrace();
+                        return false;
                     }
                     adapter.deleteGoal(goal);
                     Toast.makeText(context, "Deleted " + goal.getName(), Toast.LENGTH_SHORT).show();
                 }
+                return true;
+            }
+        });
+        imgGoalDelete.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Long tap to delete " + goal.getName(), Toast.LENGTH_SHORT).show();
             }
         });
 
         progressBar = (ProgressBar) findViewById(R.id.step_progress_bar);
+
+        checkIfGoalOfDay();
+    }
+
+    private void checkIfGoalOfDay() {
+        imgIsGoalOfDay.setImageDrawable(goal.isGoalOfDay() ?
+                        ContextCompat.getDrawable(context, android.R.drawable.star_big_on) :
+                        ContextCompat.getDrawable(context, android.R.drawable.star_big_off)
+        );
     }
 
     public void update(Goal goal, GoalListAdapter adapter) {
@@ -90,5 +122,13 @@ public class GoalView extends RelativeLayout {
         txtGoalName.setText(goal.getName());
         progressBar.setProgress(goal.getStepAmount());
         progressBar.setMax(goal.getStepGoal());
+        checkIfGoalOfDay();
+    }
+
+    private void broadcastUpdateGoalOfDay(Goal goal) {
+        Intent intent = new Intent("updateGoalOfDay");
+        intent.putExtra("goal", goal);
+        intent.putExtra("action", 2);
+        context.sendBroadcast(intent);
     }
 }

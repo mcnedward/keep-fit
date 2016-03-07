@@ -107,7 +107,7 @@ public class Extension {
     }
 
     public static String getPrettyDate(String date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         String d = null;
         try {
             Date theDate = simpleDateFormat.parse(date);

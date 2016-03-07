@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.repository.GoalRepository;
+import com.mcnedward.keepfit.repository.IGoalRepository;
+import com.mcnedward.keepfit.repository.loader.GoalDataLoader;
 import com.mcnedward.keepfit.view.GoalView;
 
 import java.util.ArrayList;
@@ -19,6 +22,7 @@ import java.util.List;
 public class GoalListAdapter extends ArrayAdapter<Goal> {
     private static final String TAG = "GoalListAdapter";
 
+    private GoalDataLoader loader;
     private List<Goal> groups;
     protected Context context;
     protected LayoutInflater inflater;
@@ -71,6 +75,19 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
     public void deleteGoal(Goal goal) {
         groups.remove(goal);
         notifyDataSetChanged();
+    }
+
+
+    public void notifyDataSetChanged(boolean triggerReload) {
+        if (triggerReload) {
+            List<Goal> data = loader.loadInBackground();
+            setGroups(data);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void setLoader(GoalDataLoader loader) {
+        this.loader = loader;
     }
 
     @Override

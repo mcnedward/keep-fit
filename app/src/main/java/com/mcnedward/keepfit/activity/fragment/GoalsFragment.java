@@ -69,16 +69,15 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
         goalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getContext(), "Long tap to set this as the active goal!", Toast.LENGTH_SHORT).show();
+                Goal goal = adapter.getItem(i);
+                Toast.makeText(getContext(), goal.toString(), Toast.LENGTH_SHORT).show();
             }
         });
         goalList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Goal goal = adapter.getItem(i);
-                goalRepository.setGoalOfDay(goal);
-                broadcastUpdateGoalOfDay(goal);
-                Toast.makeText(getContext(), String.format("Set %s as the goal of the day!", goal), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), goal.toString(), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -97,7 +96,9 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     public Loader<List<Goal>> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "CREATING LOADER " + id);
-        return new GoalDataLoader(context);
+        GoalDataLoader loader = new GoalDataLoader(context);
+        adapter.setLoader(loader);
+        return loader;
     }
 
     @Override
@@ -123,13 +124,6 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
                     break;
             }
         }
-    }
-
-    private void broadcastUpdateGoalOfDay(Goal goal) {
-        Intent intent = new Intent("updateGoalOfDay");
-        intent.putExtra("goal", goal);
-        intent.putExtra("action", 2);
-        context.sendBroadcast(intent);
     }
 
 }
