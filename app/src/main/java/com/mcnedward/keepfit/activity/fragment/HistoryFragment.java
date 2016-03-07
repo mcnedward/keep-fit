@@ -13,9 +13,8 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.model.GoalDate;
 import com.mcnedward.keepfit.repository.GoalRepository;
-import com.mcnedward.keepfit.repository.loader.GoalDataLoader;
 import com.mcnedward.keepfit.repository.loader.GoalDateDataLoader;
-import com.mcnedward.keepfit.utils.GoalHistoryAdapter;
+import com.mcnedward.keepfit.utils.GoalDateAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
 
     private Context context;
     private GoalRepository repository;
-    private GoalHistoryAdapter expListAdapter;
+    private GoalDateAdapter expListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +44,7 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
         repository = new GoalRepository(context);
 
         ExpandableListView expListView = (ExpandableListView) view.findViewById(R.id.history_expandable_list);
-        expListAdapter = new GoalHistoryAdapter(context);
+        expListAdapter = new GoalDateAdapter(context);
         expListView.setAdapter(expListAdapter);
 
         initializeLoader();

@@ -106,23 +106,17 @@ public class GoalOfDayFragment extends BaseFragment {
         int currentSteps = 0;
         if (!currentStepsString.equals(""))
             currentSteps = Integer.parseInt(currentStepsString);
-        if (up) {
+        if (up)
             currentSteps += stepAmount;
-            if (currentSteps > goalOfDay.getStepGoal())
-                currentSteps = goalOfDay.getStepGoal();
-        }
-        else {
+        else
             currentSteps -= stepAmount;
-            if (currentSteps < 0)
-                currentSteps = 0;
-        }
         goalOfDay.setStepAmount(currentSteps);
         try {
             goalRepository.update(goalOfDay);
         } catch (EntityDoesNotExistException e) {
             e.printStackTrace();
         }
-        updateGoalOfDay(goalOfDay);
+        Extension.broadcastUpdateGoalOfDay(goalOfDay, context);
     }
 
     private void toggleContent(boolean showContent) {
@@ -147,9 +141,7 @@ public class GoalOfDayFragment extends BaseFragment {
     @Override
     protected void initialize(View view) {
         context = view.getContext();
-
         goalRepository = new GoalRepository(view.getContext());
-
         addGoalView = (AddGoalView) view.findViewById(R.id.add_goal_view);
 
         goalOfDayName = (TextView) view.findViewById(R.id.goal_of_day_name);
@@ -170,12 +162,14 @@ public class GoalOfDayFragment extends BaseFragment {
 
         toggleContent(editable);
         checkForGoalOfDay();
+
+        registerReceivers();
     }
 
     @Override
     protected void registerReceivers() {
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter("addGoal"));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter("updateGoalOfDay"));
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.ADD_GOAL.title));
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_OF_DAY.title));
     }
 
     private void initializeStepCountButtons(View view) {
@@ -219,7 +213,7 @@ public class GoalOfDayFragment extends BaseFragment {
             Action action = Action.getById(intent.getIntExtra("action", 0));
             Goal goal = (Goal) intent.getSerializableExtra("goal");
             switch (action) {
-                case ADD_GOAL_ACTIVITY:
+                case ADD_GOAL:
                     updateGoalOfDay(goal);
                     toggleContent(true);
                     break;

@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         if (goal != null)
             Toast.makeText(this, String.format("FOUND G_GOAL %s with id %s!", goal.getName(), goal.getId()), Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(this, "Could not find a goal with the name " + query + "...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Could not find a goal with the title " + query + "...", Toast.LENGTH_SHORT).show();
         return false;
     }
 

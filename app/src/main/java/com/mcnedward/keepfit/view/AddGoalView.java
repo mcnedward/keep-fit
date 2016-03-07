@@ -13,6 +13,8 @@ import android.widget.Toast;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
+import com.mcnedward.keepfit.utils.Extension;
+import com.mcnedward.keepfit.utils.enums.Action;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 
 /**
@@ -78,14 +80,6 @@ public class AddGoalView extends LinearLayout {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
-        broadcastAddGoal();
+        Extension.broadcastAddGoal(goal, context);
     }
-
-    private void broadcastAddGoal() {
-        Intent intent = new Intent("addGoal");
-        intent.putExtra("goal", goal);
-        intent.putExtra("action", 1);
-        context.sendBroadcast(intent);
-    }
-
 }

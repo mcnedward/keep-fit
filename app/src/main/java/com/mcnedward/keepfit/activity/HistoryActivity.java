@@ -7,7 +7,7 @@ import android.widget.ExpandableListView;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
-import com.mcnedward.keepfit.utils.GoalHistoryAdapter;
+import com.mcnedward.keepfit.utils.GoalDateAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class HistoryActivity extends AppCompatActivity {
     private static final String TAG = "HistoryActivity";
 
     private GoalRepository repository;
-    private GoalHistoryAdapter expListAdapter;
+    private GoalDateAdapter expListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class HistoryActivity extends AppCompatActivity {
 
     private void initialize() {
         ExpandableListView expListView = (ExpandableListView) findViewById(R.id.history_expandable_list);
-        expListAdapter = new GoalHistoryAdapter(this);
+        expListAdapter = new GoalDateAdapter(this);
         // TODO Put this in AsyncTaskLoader!
         List<String> history = new ArrayList<>();
         List<List<Goal>> goals = new ArrayList<>();

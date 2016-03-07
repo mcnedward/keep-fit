@@ -53,12 +53,14 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
 
         initializeGoalList(view);
         initializeLoader();
+        registerReceivers();
     }
 
     @Override
     protected void registerReceivers() {
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter("addGoal"));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter("updateGoalOfDay"));
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.ADD_GOAL.title));
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_OF_DAY.title));
+        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_AMOUNT.title));
 
     }
 
@@ -117,10 +119,14 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
             Action action = Action.getById(intent.getIntExtra("action", 0));
             Goal goal = (Goal) intent.getSerializableExtra("goal");
             switch (action) {
-                case ADD_GOAL_ACTIVITY:
+                case ADD_GOAL:
                     adapter.addGoal(goal);
                     break;
                 case UPDATE_GOAL_OF_DAY:
+                    adapter.editGoal(goal);
+                    break;
+                case UPDATE_GOAL_AMOUNT:
+                    adapter.editGoal(goal);
                     break;
             }
         }

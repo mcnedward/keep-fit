@@ -6,17 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.mcnedward.keepfit.R;
-import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.repository.GoalRepository;
-import com.mcnedward.keepfit.utils.Code;
 import com.mcnedward.keepfit.utils.enums.Action;
-import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.view.AddGoalView;
 
 /**
@@ -47,7 +38,7 @@ public class AddGoalPopup extends Activity {
         public void onReceive(Context context, Intent intent) {
             Action action = Action.getById(intent.getIntExtra("action", 0));
             switch (action) {
-                case ADD_GOAL_ACTIVITY:
+                case ADD_GOAL:
                     finish();
                     break;
             }

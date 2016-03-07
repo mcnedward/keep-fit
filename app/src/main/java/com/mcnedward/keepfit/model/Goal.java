@@ -36,6 +36,10 @@ public class Goal extends BaseEntity {
 
     public void setStepAmount(int stepAmount) {
         this.stepAmount = stepAmount;
+        if (this.stepAmount > stepGoal)
+            this.stepAmount = stepGoal;
+        if (this.stepAmount < 0)
+            this.stepAmount = 0;
     }
 
     public int getStepGoal() {

@@ -16,14 +16,14 @@ import java.util.List;
 /**
  * Created by Edward on 2/13/2016.
  */
-public class GoalHistoryAdapter extends BaseExpandableListAdapter {
-    private static final String TAG = "GoalHistoryAdapter";
+public class GoalDateAdapter extends BaseExpandableListAdapter {
+    private static final String TAG = "GoalDateAdapter";
 
     private Context context;
     private List<String> dates;
     private List<List<Goal>> goals;
 
-    public GoalHistoryAdapter(Context context) {
+    public GoalDateAdapter(Context context) {
         this.context = context;
         dates = new ArrayList<>();
         goals = new ArrayList<>();

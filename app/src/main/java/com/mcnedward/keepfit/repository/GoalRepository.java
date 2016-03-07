@@ -52,6 +52,8 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     public void setGoalOfDay(Goal goal) {
         Goal currentGoal = getGoalOfDay();
+        goal.setStepAmount(goal.getStepAmount() + currentGoal.getStepAmount());
+        currentGoal.setStepAmount(0);
         updateGoalOfDay(currentGoal, false);
         updateGoalOfDay(goal, true);
     }
@@ -86,27 +88,6 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         }
     }
 
-//    public List<GoalDates> getGoalDates() {
-//        List<GoalDates> goalsCreatedOn = new ArrayList<>();
-//        // Get the distinct goal dates
-//        List<Goal> goalDates = readDistinct(null, null, DatabaseHelper.G_CREATED_ON, null, null, null);
-//        List<String> dates = new ArrayList<>();
-//        for (Goal goal : goalDates)
-//            dates.add(goal.getDate());
-//        // Sort all of the goals by date
-//        List<Goal> goals = retrieve();
-//        for (String date : dates) {
-//            GoalDates gco = new GoalDates(date);
-//            for (Goal goal : goals) {
-//                if (goal.getDate().equals(date)) {
-//                    gco.add(goal);
-//                }
-//            }
-//            goalsCreatedOn.add(gco);
-//        }
-//        return goalsCreatedOn;
-//    }
-
     public void fillOldDateTestData() {
         List<String> timestamps = new ArrayList<>();
         timestamps.add("12-02-2016-07-46-31");
@@ -133,28 +114,45 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     @Override
     public String[] getAllColumns() {
-        return new String[]{DatabaseHelper.ID, DatabaseHelper.G_GOAL, DatabaseHelper.G_STEP_AMOUNT, DatabaseHelper.G_STEP_GOAL, DatabaseHelper.G_IS_GOAL_OF_DAY, DatabaseHelper.G_CREATED_ON};
+        return new String[]{
+                DatabaseHelper.ID,
+                DatabaseHelper.G_GOAL,
+                DatabaseHelper.G_STEP_AMOUNT,
+                DatabaseHelper.G_STEP_GOAL,
+                DatabaseHelper.G_IS_GOAL_OF_DAY,
+                DatabaseHelper.G_CREATED_ON};
     }
 
+    /**
+     * Generates a Goal object from the database cursor.
+     * It is important to place the StepGoal BEFORE the StepAmount, since calculations done in setStepAmount() are reliant on StepGoal being already set.
+     * @param cursor The cursor to use for generating the Goal
+     * @return The generated Goal
+     */
     @Override
     public Goal generateObjectFromCursor(Cursor cursor) {
         Goal goal = new Goal();
         goal.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.ID)));
         goal.setName(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_GOAL)));
-        goal.setStepAmount(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_AMOUNT)));
         goal.setStepGoal(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_GOAL)));
+        goal.setStepAmount(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_AMOUNT)));
         goal.setIsGoalOfDay(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_IS_GOAL_OF_DAY)) == 1);
         goal.setCreatedOn(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_CREATED_ON)));
         return goal;
     }
 
+    /**
+     * Generates the values for a Goal entity to be saved in the database.
+     * @param entity The Goal entity to use for database values
+     * @return The ContentValues to use in the database
+     */
     @Override
     public ContentValues generateContentValuesFromEntity(Goal entity) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.ID, entity.getId());
         values.put(DatabaseHelper.G_GOAL, entity.getName());
-        values.put(DatabaseHelper.G_STEP_AMOUNT, entity.getStepAmount());
         values.put(DatabaseHelper.G_STEP_GOAL, entity.getStepGoal());
+        values.put(DatabaseHelper.G_STEP_AMOUNT, entity.getStepAmount());
         values.put(DatabaseHelper.G_IS_GOAL_OF_DAY, entity.isGoalOfDay());
         values.put(DatabaseHelper.G_CREATED_ON, entity.getCreatedOn());
         return values;

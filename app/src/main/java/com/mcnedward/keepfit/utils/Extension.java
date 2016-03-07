@@ -9,17 +9,13 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.AddGoalPopup;
 import com.mcnedward.keepfit.activity.EditGoalActivity;
 import com.mcnedward.keepfit.activity.HistoryActivity;
-import com.mcnedward.keepfit.activity.StepCounterPopup;
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.view.AddGoalView;
+import com.mcnedward.keepfit.utils.enums.Action;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,6 +68,8 @@ public class Extension {
         activity.startActivity(intent);
     }
 
+    /***** Starting activity *****/
+
     public static void startHistoryActivity(Activity activity) {
         Intent intent = new Intent(activity, HistoryActivity.class);
         activity.startActivity(intent);
@@ -86,6 +84,32 @@ public class Extension {
             }
         }, 300);
     }
+
+    /***** Broadcasting *****/
+
+    public static void broadcastAddGoal(Goal goal, Context context) {
+        Intent intent = new Intent(Action.ADD_GOAL.title);
+        intent.putExtra("goal", goal);
+        intent.putExtra("action", Action.ADD_GOAL.id);
+        context.sendBroadcast(intent);
+    }
+
+    public static void broadcastUpdateGoalOfDay(Goal goal, Context context) {
+        Intent intent = new Intent(Action.UPDATE_GOAL_OF_DAY.title);
+        intent.putExtra("goal", goal);
+        intent.putExtra("action", Action.UPDATE_GOAL_OF_DAY.id);
+        context.sendBroadcast(intent);
+    }
+
+    public static void broadcastUpdateGoalAmount(Goal goal, Context context) {
+        Intent intent = new Intent(Action.UPDATE_GOAL_AMOUNT.title);
+        intent.putExtra("goal", goal);
+        intent.putExtra("action", Action.UPDATE_GOAL_AMOUNT.id);
+        context.sendBroadcast(intent);
+    }
+
+
+    /***** Date Stuff *****/
 
     public static String getTimestamp() {
         return getTimestamp(new Date());

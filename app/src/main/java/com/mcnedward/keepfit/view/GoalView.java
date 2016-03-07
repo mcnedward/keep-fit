@@ -62,7 +62,7 @@ public class GoalView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 repository.setGoalOfDay(goal);
-                broadcastUpdateGoalOfDay(goal);
+                Extension.broadcastUpdateGoalOfDay(goal, context);
                 Toast.makeText(getContext(), String.format("Set %s as the goal of the day!", goal.getName()), Toast.LENGTH_SHORT).show();
                 adapter.notifyDataSetChanged(true);
             }
@@ -123,12 +123,5 @@ public class GoalView extends RelativeLayout {
         progressBar.setProgress(goal.getStepAmount());
         progressBar.setMax(goal.getStepGoal());
         checkIfGoalOfDay();
-    }
-
-    private void broadcastUpdateGoalOfDay(Goal goal) {
-        Intent intent = new Intent("updateGoalOfDay");
-        intent.putExtra("goal", goal);
-        intent.putExtra("action", 2);
-        context.sendBroadcast(intent);
     }
 }
