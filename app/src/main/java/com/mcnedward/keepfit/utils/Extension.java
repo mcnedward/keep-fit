@@ -14,12 +14,13 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.AddGoalPopup;
 import com.mcnedward.keepfit.activity.EditGoalActivity;
 import com.mcnedward.keepfit.activity.MainActivity;
+import com.mcnedward.keepfit.activity.SettingsActivity;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.enums.Action;
+import com.mcnedward.keepfit.utils.enums.ActivityCode;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -78,6 +79,11 @@ public class Extension {
                 activity.startActivityForResult(intent, ActivityCode.ADD_GOAL_POPUP);
             }
         }, 300);
+    }
+
+    public static void startSettingsActivity(final Activity activity) {
+        Intent intent = new Intent(activity, SettingsActivity.class);
+        activity.startActivity(intent);
     }
 
     /***** Broadcasting *****/

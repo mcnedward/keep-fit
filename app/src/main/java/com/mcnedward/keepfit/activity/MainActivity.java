@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initialize();
-        initializeFAB();
     }
 
     private void initialize() {
@@ -60,20 +59,6 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         goalRepository = new GoalRepository(this);
-    }
-
-    /**
-     * Create the Floating Action Button
-     */
-    private void initializeFAB() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        final Activity activity = this;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Extension.startAddGoalPopup(activity);
-            }
-        });
     }
 
     private void initializeCalendarButton(MenuItem item) {
@@ -167,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
                 item.setChecked(true);
                 calendarItem.setVisible(true);
             }
+            return true;
+        }
+        if (id == R.id.action_settings) {
+            Extension.startSettingsActivity(this);
             return true;
         }
         return super.onOptionsItemSelected(item);

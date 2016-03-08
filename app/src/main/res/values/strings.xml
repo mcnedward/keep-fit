@@ -24,6 +24,13 @@
     <!-- History Fragment -->
     <string name="history_title">Goal History</string>
 
+    <!-- Settings -->
+    <string name="settings_title">Units for Steps</string>
+    <string name="meters">Meters</string>
+    <string name="yards">Yards</string>
+    <string name="kilometers">Kilometers</string>
+    <string name="miles">Miles</string>
+
     <!-- Menu -->
     <string name="action_calendar">Calendar</string>
     <string name="action_settings">Settings</string>

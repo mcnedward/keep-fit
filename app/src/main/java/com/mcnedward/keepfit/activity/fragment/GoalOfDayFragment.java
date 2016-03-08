@@ -1,10 +1,9 @@
 package com.mcnedward.keepfit.activity.fragment;
 
 import android.animation.ObjectAnimator;
-import android.content.BroadcastReceiver;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -22,14 +21,11 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
-import com.mcnedward.keepfit.utils.ActivityCode;
-import com.mcnedward.keepfit.utils.Code;
+import com.mcnedward.keepfit.utils.enums.ActivityCode;
+import com.mcnedward.keepfit.utils.enums.Code;
 import com.mcnedward.keepfit.utils.Extension;
-import com.mcnedward.keepfit.utils.enums.Action;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 import com.mcnedward.keepfit.view.AddGoalView;
-
-import java.util.Calendar;
 
 /**
  * Created by Edward on 2/22/2016.
@@ -51,10 +47,10 @@ public class GoalOfDayFragment extends BaseFragment {
     private static EditText editGoalOfDayStepAmount;
     private static ImageView imgDecrement;
     private static ImageView imgIncrement;
-    private FloatingActionButton actionButton;
     private static TextView txtEditDate;
     private ProgressBar progressBar;
     private RelativeLayout content;
+    private FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,11 +86,19 @@ public class GoalOfDayFragment extends BaseFragment {
         editGoalOfDayStepAmount = (EditText) view.findViewById(R.id.goal_of_day_step_amount);
         goalOfDayStepGoal = (TextView) view.findViewById(R.id.goal_of_day_step_goal);
         txtEditDate = (TextView) view.findViewById(R.id.edit_date);
+
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Extension.startAddGoalPopup(((Activity) context));
+            }
+        });
+
         // Clear focus from EditText
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         content = (RelativeLayout) view.findViewById(R.id.content);
-        actionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab);
 
         initializeStepCountButtons(view);
 
@@ -180,11 +184,9 @@ public class GoalOfDayFragment extends BaseFragment {
         if (showContent) {
             content.setVisibility(View.VISIBLE);
             addGoalView.setVisibility(View.GONE);
-            actionButton.show();
         } else {
             content.setVisibility(View.GONE);
             addGoalView.setVisibility(View.VISIBLE);
-            actionButton.hide();
         }
     }
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SettingsView">
+        <attr name="setting_title" format="string" />
+        <attr name="setting_unit" format="enum">
+            <enum name="meters" value="1"/>
+            <enum name="yards" value="2"/>
+            <enum name="miles" value="3"/>
+            <enum name="kilometers" value="4"/>
+        </attr>
+    </declare-styleable>
+</resources>

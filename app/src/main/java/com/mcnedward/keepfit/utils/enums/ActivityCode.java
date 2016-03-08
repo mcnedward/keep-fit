@@ -1,4 +1,4 @@
-package com.mcnedward.keepfit.utils;
+package com.mcnedward.keepfit.utils.enums;
 
 /**
  * Created by Edward on 2/23/2016.
