@@ -20,6 +20,9 @@
     <!-- Goals Fragment -->
     <string name="no_goals_for_day">There are no goals for this day</string>
 
+    <!-- History Fragment -->
+    <string name="history_title">Goal History</string>
+
     <string name="placeholder">Stuff Here!</string>
     <string name="action_search">Search</string>
     <string name="action_calendar">Calendar</string>

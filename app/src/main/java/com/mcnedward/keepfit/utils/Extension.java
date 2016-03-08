@@ -120,8 +120,8 @@ public class Extension {
 
     /***** Date Stuff *****/
 
-    private static String PRETTY_DATE = "dd/MM/yyyy";
-    private static String DATABASE_DATE = "yyyyMMdd";
+    public static String PRETTY_DATE = "dd/MM/yyyy";
+    public static String DATABASE_DATE = "yyyyMMdd";
 
     /**
      * Gets a date stamp in the database format (yyyyyMMdd). If the app is in Edit Mode, then this datestamp will use the MainActivity's calendar.
@@ -166,12 +166,12 @@ public class Extension {
     }
 
     private static String convertDate(String date, String fromFormat, String toFormat) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(fromFormat);
+        SimpleDateFormat fromDateFormat = new SimpleDateFormat(fromFormat);
         String d = null;
         try {
-            Date theDate = simpleDateFormat.parse(date);
-            SimpleDateFormat f = new SimpleDateFormat(toFormat);
-            d = f.format(theDate);
+            Date theDate = fromDateFormat.parse(date);
+            SimpleDateFormat toDateFormat = new SimpleDateFormat(toFormat);
+            d = toDateFormat.format(theDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
