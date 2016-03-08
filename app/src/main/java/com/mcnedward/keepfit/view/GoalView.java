@@ -91,7 +91,7 @@ public class GoalView extends RelativeLayout {
                         e.printStackTrace();
                         return false;
                     }
-                    adapter.deleteGoal(goal);
+                    Extension.broadcastDeleteGoal(goal, context);
                     Toast.makeText(context, "Deleted " + goal.getName(), Toast.LENGTH_SHORT).show();
                 }
                 return true;

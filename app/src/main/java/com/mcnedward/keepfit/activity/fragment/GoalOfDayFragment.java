@@ -107,6 +107,36 @@ public class GoalOfDayFragment extends BaseFragment {
         registerReceivers();
     }
 
+    @Override
+    protected void addGoalActionReceived(Goal goal) {
+        updateGoalOfDay(goal);
+        toggleContent(true);
+    }
+
+    @Override
+    protected void deleteGoalActionReceived(Goal goal) {
+    }
+
+    @Override
+    protected void updateGoalOfDayActionReceived(Goal goal) {
+        updateGoalOfDay(goal);
+    }
+
+    @Override
+    protected void updateGoalAmountActionReceived(Goal goal) {
+
+    }
+
+    @Override
+    protected void editModeSwitchActionReceived(boolean isEditMode, String date) {
+        toggleEditMode(isEditMode, date);
+    }
+
+    @Override
+    protected void calendarChangeActionReceived(String date) {
+        toggleCalendarChange(date);
+    }
+
     private void checkForGoalOfDay() {
         Goal goalOfDay = goalRepository.getGoalOfDay();
         if (goalOfDay == null) {
@@ -165,14 +195,6 @@ public class GoalOfDayFragment extends BaseFragment {
         animation.start();
     }
 
-    @Override
-    protected void registerReceivers() {
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.ADD_GOAL.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_OF_DAY.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.EDIT_MODE_SWITCH.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.CALENDER_CHANGE.title));
-    }
-
     private void initializeStepCountButtons(View view) {
         imgDecrement = (ImageView) view.findViewById(R.id.step_counter_decrement);
         imgDecrement.setOnClickListener(new View.OnClickListener() {
@@ -208,33 +230,4 @@ public class GoalOfDayFragment extends BaseFragment {
         }
     }
 
-    public class FragmentReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Action action = Action.getById(intent.getIntExtra("action", 0));
-            Goal goal = (Goal) intent.getSerializableExtra("goal");
-            switch (action) {
-                case ADD_GOAL: {
-                    updateGoalOfDay(goal);
-                    toggleContent(true);
-                    break;
-                }
-                case UPDATE_GOAL_OF_DAY: {
-                    updateGoalOfDay(goal);
-                    break;
-                }
-                case EDIT_MODE_SWITCH: {
-                    boolean isEditMode = intent.getBooleanExtra("isEditMode", false);
-                    String date = intent.getStringExtra("date");
-                    toggleEditMode(isEditMode, date);
-                    break;
-                }
-                case CALENDER_CHANGE: {
-                    String date = intent.getStringExtra("date");
-                    toggleCalendarChange(date);
-                    break;
-                }
-            }
-        }
-    }
 }

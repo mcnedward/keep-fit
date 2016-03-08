@@ -28,7 +28,7 @@ import com.mcnedward.keepfit.utils.Extension;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     public static boolean IS_EDIT_MODE;
@@ -151,32 +151,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         getMenuInflater().inflate(R.menu.menu_main, menu);
         calendarItem = menu.findItem(R.id.action_calendar);
         initializeCalendarButton(calendarItem);
-        // Associate searchable configuration with the SearchView
-//        SearchManager searchManager =
-//                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView =
-//                (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        searchView.setSearchableInfo(
-//                searchManager.getSearchableInfo(getComponentName()));
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        searchView.setOnQueryTextListener(this);
         return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        Goal goal = goalRepository.getGoalByName(query);
-        if (goal != null)
-            Toast.makeText(this, String.format("FOUND G_GOAL %s with id %s!", goal.getName(), goal.getId()), Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(this, "Could not find a goal with the title " + query + "...", Toast.LENGTH_SHORT).show();
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        // User changed the text
-        return false;
     }
 
     @Override

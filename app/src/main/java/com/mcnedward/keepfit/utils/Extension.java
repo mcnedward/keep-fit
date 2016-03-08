@@ -89,6 +89,13 @@ public class Extension {
         context.sendBroadcast(intent);
     }
 
+    public static void broadcastDeleteGoal(Goal goal, Context context) {
+        Intent intent = new Intent(Action.DELETE_GOAL.title);
+        intent.putExtra("goal", goal);
+        intent.putExtra("action", Action.DELETE_GOAL.id);
+        context.sendBroadcast(intent);
+    }
+
     public static void broadcastUpdateGoalOfDay(Goal goal, Context context) {
         Intent intent = new Intent(Action.UPDATE_GOAL_OF_DAY.title);
         intent.putExtra("goal", goal);

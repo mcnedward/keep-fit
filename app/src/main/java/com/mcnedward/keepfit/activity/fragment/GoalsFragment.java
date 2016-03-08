@@ -60,12 +60,34 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     }
 
     @Override
-    protected void registerReceivers() {
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.ADD_GOAL.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_OF_DAY.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_AMOUNT.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.EDIT_MODE_SWITCH.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.CALENDER_CHANGE.title));
+    protected void addGoalActionReceived(Goal goal) {
+        adapter.addGoal(goal);
+        txtMessage.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void deleteGoalActionReceived(Goal goal) {
+        adapter.deleteGoal(goal);
+    }
+
+    @Override
+    protected void updateGoalOfDayActionReceived(Goal goal) {
+        adapter.editGoal(goal);
+    }
+
+    @Override
+    protected void updateGoalAmountActionReceived(Goal goal) {
+        adapter.editGoal(goal);
+    }
+
+    @Override
+    protected void editModeSwitchActionReceived(boolean isEditMode, String date) {
+
+    }
+
+    @Override
+    protected void calendarChangeActionReceived(String date) {
+        loader.forceLoad();
     }
 
     private void initializeGoalList(View view) {
@@ -119,37 +141,6 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     public void onLoaderReset(Loader<List<Goal>> loader) {
         adapter.setGroups(new ArrayList<Goal>());
-    }
-
-    public class FragmentReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Action action = Action.getById(intent.getIntExtra("action", 0));
-            Goal goal = (Goal) intent.getSerializableExtra("goal");
-            switch (action) {
-                case ADD_GOAL: {
-                    adapter.addGoal(goal);
-                    txtMessage.setVisibility(View.GONE);
-                    break;
-                }
-                case UPDATE_GOAL_OF_DAY: {
-                    adapter.editGoal(goal);
-                    break;
-                }
-                case UPDATE_GOAL_AMOUNT: {
-                    adapter.editGoal(goal);
-                    break;
-                }
-                case EDIT_MODE_SWITCH: {
-                    break;
-                }
-                case CALENDER_CHANGE: {
-                    String date = intent.getStringExtra("date");
-                    loader.forceLoad();
-                    break;
-                }
-            }
-        }
     }
 
 }

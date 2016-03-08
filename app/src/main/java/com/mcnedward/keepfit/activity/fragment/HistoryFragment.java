@@ -10,9 +10,7 @@ import android.view.ViewGroup;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.model.GoalDate;
 import com.mcnedward.keepfit.repository.GoalRepository;
-import com.mcnedward.keepfit.repository.loader.GoalDataLoader;
 import com.mcnedward.keepfit.repository.loader.GoalDateDataLoader;
 import com.mcnedward.keepfit.view.HistoryChartView;
 
@@ -41,13 +39,38 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
     protected void initialize(View view) {
         context = view.getContext();
         repository = new GoalRepository(context);
-
         historyChartView = (HistoryChartView) view.findViewById(R.id.history_chart);
+
+        registerReceivers();
         initializeLoader();
     }
 
     @Override
-    protected void registerReceivers() {
+    protected void addGoalActionReceived(Goal goal) {
+        historyChartView.addGoal(goal);
+    }
+
+    @Override
+    protected void deleteGoalActionReceived(Goal goal) {
+    }
+
+    @Override
+    protected void updateGoalOfDayActionReceived(Goal goal) {
+        historyChartView.editGoal(goal);
+    }
+
+    @Override
+    protected void updateGoalAmountActionReceived(Goal goal) {
+        historyChartView.editGoal(goal);
+    }
+
+    @Override
+    protected void editModeSwitchActionReceived(boolean isEditMode, String date) {
+
+    }
+
+    @Override
+    protected void calendarChangeActionReceived(String date) {
 
     }
 

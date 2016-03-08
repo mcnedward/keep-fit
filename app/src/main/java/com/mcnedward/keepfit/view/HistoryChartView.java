@@ -41,6 +41,11 @@ public class HistoryChartView extends LinearLayout {
     private XYPlot plot;
     private SimpleXYSeries historySeries;
 
+    private List<Integer> stepAmounts;
+    private List<Integer> dates;
+    private int upperBound;
+    private int rangeIncrement = 10;
+
     public HistoryChartView(List<Goal> goals, Context context) {
         super(context);
         this.goals = goals;
@@ -65,9 +70,12 @@ public class HistoryChartView extends LinearLayout {
         plot.getLayoutManager().remove(plot.getLegendWidget());
         plot.setBorderPaint(null);
 
-        plot.setRangeStep(XYStepMode.INCREMENT_BY_VAL, 10);
+        plot.setRangeBottomMax(0);
         plot.getGraphWidget().getRangeLabelPaint().setTextSize(20);
         plot.getGraphWidget().getDomainLabelPaint().setTextSize(20);
+
+
+        plot.setRangeValueFormat(new DecimalFormat("0"));
 
         if (goals != null && !goals.isEmpty()) {
             updatePlot();
@@ -75,20 +83,9 @@ public class HistoryChartView extends LinearLayout {
     }
 
     private void updatePlot() {
-        List<Integer> stepAmounts = new ArrayList<>();
-        List<Integer> dates = new ArrayList<>();
-        int lowerBoundary = 0, upperBoundary = 0;
-        for (Goal goal : goals) {
-            stepAmounts.add(goal.getStepAmount());
-            dates.add(Integer.valueOf(goal.getCreatedOn()));
-            int stepAmount = goal.getStepAmount();
-            if (lowerBoundary == 0 || stepAmount < lowerBoundary)
-                lowerBoundary = stepAmount;
-            if (upperBoundary == 0 || stepAmount > upperBoundary)
-                upperBoundary = stepAmount;
-        }
-
         refresh();
+
+        handleData();
 
         historySeries = new SimpleXYSeries(dates, stepAmounts, null);
         plot.addSeries(historySeries, new LineAndPointFormatter(
@@ -103,7 +100,8 @@ public class HistoryChartView extends LinearLayout {
 
     private void updatePlotWidget() {
         if (goals != null) {
-            plot.setRangeValueFormat(new DecimalFormat("0"));
+            plot.setRangeStep(XYStepMode.INCREMENT_BY_VAL, rangeIncrement);
+            plot.setRangeTopMin(upperBound + 10);
 
             plot.setDomainStep(XYStepMode.SUBDIVIDE, goals.size());
             plot.setDomainValueFormat(new Format() {
@@ -129,6 +127,45 @@ public class HistoryChartView extends LinearLayout {
                 }
             });
         }
+    }
+
+    private void handleData() {
+        stepAmounts = new ArrayList<>();
+        dates = new ArrayList<>();
+        for (Goal goal : goals) {
+            stepAmounts.add(goal.getStepAmount());
+            dates.add(Integer.valueOf(goal.getCreatedOn()));
+            if (upperBound == 0 || upperBound < goal.getStepAmount())
+                upperBound = goal.getStepAmount();
+        }
+        if (upperBound > 100)
+            rangeIncrement = ((upperBound / 100) + 1) * 10;
+        else
+            rangeIncrement = 10;
+    }
+
+    public void addGoal(Goal goal) {
+        goals.add(goal);
+        updatePlot();
+    }
+
+    public void editGoal(Goal goal) {
+        int index = -1;
+        for (int x = 0; x < goals.size(); x++) {
+            if (goals.get(x).getId().equals(goal.getId())) {
+                index = x;
+                break;
+            }
+        }
+        if (index != -1) {
+            goals.set(index, goal);
+            updatePlot();
+        }
+    }
+
+    public void deleteGoal(Goal goal) {
+        goals.remove(goal);
+        updatePlot();
     }
 
     public void refresh() {
