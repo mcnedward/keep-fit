@@ -49,7 +49,7 @@ public class GoalView extends RelativeLayout {
     }
 
     private void initialize() {
-        inflate(context, R.layout.goal_list_item, this);
+        inflate(context, R.layout.item_goal, this);
 
         txtGoalName = (TextView) findViewById(R.id.list_goal_name);
         if (goal != null)

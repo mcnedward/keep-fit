@@ -8,8 +8,6 @@ import android.widget.ArrayAdapter;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
-import com.mcnedward.keepfit.repository.GoalRepository;
-import com.mcnedward.keepfit.repository.IGoalRepository;
 import com.mcnedward.keepfit.repository.loader.GoalDataLoader;
 import com.mcnedward.keepfit.view.GoalView;
 
@@ -32,7 +30,7 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
     }
 
     public GoalListAdapter(List<Goal> groups, Context context) {
-        super(context, R.layout.goal_list_item);
+        super(context, R.layout.item_goal);
         this.groups = groups;
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -20,10 +20,12 @@ import com.androidplot.xy.XYStepMode;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.Extension;
+import com.mcnedward.keepfit.utils.enums.Unit;
 
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.Format;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -41,10 +43,10 @@ public class HistoryChartView extends LinearLayout {
     private XYPlot plot;
     private SimpleXYSeries historySeries;
 
-    private List<Integer> stepAmounts;
+    private List<Double> stepAmounts;
     private List<Integer> dates;
-    private int upperBound;
-    private int rangeIncrement = 10;
+    private double upperBound;
+    private Unit unit = Unit.METER;
 
     public HistoryChartView(List<Goal> goals, Context context) {
         super(context);
@@ -59,6 +61,7 @@ public class HistoryChartView extends LinearLayout {
     public HistoryChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+        goals = new ArrayList<>();
         if (!isInEditMode()) {
             inflate(context, R.layout.view_history_chart, this);
             initializePlot();
@@ -73,8 +76,6 @@ public class HistoryChartView extends LinearLayout {
         plot.setRangeBottomMax(0);
         plot.getGraphWidget().getRangeLabelPaint().setTextSize(20);
         plot.getGraphWidget().getDomainLabelPaint().setTextSize(20);
-
-
         plot.setRangeValueFormat(new DecimalFormat("0"));
 
         if (goals != null && !goals.isEmpty()) {
@@ -83,25 +84,38 @@ public class HistoryChartView extends LinearLayout {
     }
 
     private void updatePlot() {
-//        refresh();
-//
-//        handleData();
-//
-//        historySeries = new SimpleXYSeries(dates, stepAmounts, null);
-//        plot.addSeries(historySeries, new LineAndPointFormatter(
-//                ContextCompat.getColor(context, R.color.LimeGreen),
-//                ContextCompat.getColor(context, R.color.ForestGreen),
-//                Color.TRANSPARENT, null));
-//
-//        updatePlotWidget();
-//
-//        plot.redraw();
+        refresh();
+
+        double rangeIncrement = handleData();
+
+        historySeries = new SimpleXYSeries(dates, stepAmounts, null);
+        plot.addSeries(historySeries, new LineAndPointFormatter(
+                ContextCompat.getColor(context, R.color.LimeGreen),
+                ContextCompat.getColor(context, R.color.ForestGreen),
+                Color.TRANSPARENT, null));
+
+        updatePlotWidget(rangeIncrement);
+
+        plot.redraw();
     }
 
-    private void updatePlotWidget() {
+    private void updatePlotWidget(double rangeIncrement) {
         if (goals != null) {
             plot.setRangeStep(XYStepMode.INCREMENT_BY_VAL, rangeIncrement);
-            plot.setRangeTopMin(upperBound + 10);
+            plot.setRangeTopMin(upperBound + rangeIncrement);
+            plot.setRangeValueFormat(new Format() {
+                private DecimalFormat format = new DecimalFormat("#.#####");
+                @Override
+                public StringBuffer format(Object object, StringBuffer buffer, FieldPosition position) {
+                    double value = (Double) object;
+                    return format.format(value, buffer, position);
+                }
+
+                @Override
+                public Object parseObject(String string, ParsePosition position) {
+                    return null;
+                }
+            });
 
             plot.setDomainStep(XYStepMode.SUBDIVIDE, goals.size());
             plot.setDomainValueFormat(new Format() {
@@ -110,38 +124,43 @@ public class HistoryChartView extends LinearLayout {
                 private SimpleDateFormat toDateFormat = new SimpleDateFormat("dd/MM");
 
                 @Override
-                public StringBuffer format(Object obj, StringBuffer stringBuffer, FieldPosition position) {
-                    int dateValue = ((Double) obj).intValue();
+                public StringBuffer format(Object value, StringBuffer buffer, FieldPosition position) {
+                    int dateValue = ((Double) value).intValue();
                     Date date = null;
                     try {
                         date = fromDateFormat.parse(String.valueOf(dateValue));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    return toDateFormat.format(date, stringBuffer, position);
+                    return toDateFormat.format(date, buffer, position);
                 }
 
                 @Override
-                public Object parseObject(String source, ParsePosition position) {
+                public Object parseObject(String string, ParsePosition position) {
                     return null;
                 }
             });
         }
     }
 
-    private void handleData() {
+    private double handleData() {
         stepAmounts = new ArrayList<>();
         dates = new ArrayList<>();
+        upperBound = 0;
+        double average = 0;
         for (Goal goal : goals) {
-//            stepAmounts.add(goal.getStepAmount());
+            double stepAmount = goal.getStepAmount();
+            stepAmount = Unit.convert(goal.getUnit(), unit, stepAmount);
+            stepAmounts.add(stepAmount);
+            average += stepAmount;
+
             dates.add(Integer.valueOf(goal.getCreatedOn()));
-//            if (upperBound == 0 || upperBound < goal.getStepAmount())
-//                upperBound = goal.getStepAmount();
+            if (upperBound == 0 || upperBound < goal.getStepAmount())
+                upperBound = stepAmount;
         }
-        if (upperBound > 100)
-            rangeIncrement = ((upperBound / 100) + 1) * 10;
-        else
-            rangeIncrement = 10;
+
+        average /= goals.size();
+        return average;
     }
 
     public void addGoal(Goal goal) {
@@ -168,13 +187,18 @@ public class HistoryChartView extends LinearLayout {
         updatePlot();
     }
 
-    public void refresh() {
-        plot.clear();
-    }
-
     public void setGoalDates(List<Goal> goals) {
         this.goals = goals;
         updatePlot();
+    }
+
+    public void switchUnit(Unit unit) {
+        this.unit = unit;
+        updatePlot();
+    }
+
+    public void refresh() {
+        plot.clear();
     }
 
 }

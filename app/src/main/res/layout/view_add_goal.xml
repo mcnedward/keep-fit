@@ -56,14 +56,18 @@
                 android:selectAllOnFocus="true" />
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/spinner_units"
+        <LinearLayout
+            android:id="@+id/spinner_value_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"/>
+            android:padding="16dp"
+            android:background="@drawable/border">
+
+            <Spinner
+                android:id="@+id/spinner_units"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_edit_goal"

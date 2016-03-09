@@ -7,13 +7,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.loader.GoalDateDataLoader;
+import com.mcnedward.keepfit.utils.adapter.UnitAdapter;
+import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.view.HistoryChartView;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -27,6 +32,8 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
     private Context context;
     private GoalRepository repository;
     private HistoryChartView historyChartView;
+    private Spinner spinUnit;
+    private UnitAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +49,7 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
         historyChartView = (HistoryChartView) view.findViewById(R.id.history_chart);
 
         registerReceivers();
+        initializeSpinner(view);
         initializeLoader();
     }
 
@@ -72,6 +80,27 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
     @Override
     protected void calendarChangeActionReceived(String date) {
 
+    }
+
+    private void initializeSpinner(View view) {
+        spinUnit = (Spinner) view.findViewById(R.id.spinner_history_unit);
+        adapter = new UnitAdapter(context, android.R.layout.simple_spinner_item, Arrays.asList(Unit.values()));
+        spinUnit.setAdapter(adapter);
+        spinUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switchUnit(adapter.getItem(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void switchUnit(Unit unit) {
+        historyChartView.switchUnit(unit);
     }
 
     private void initializeLoader() {

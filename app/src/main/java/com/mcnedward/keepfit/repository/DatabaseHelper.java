@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database title
     public static String DB_NAME = "Goal.db";
     // Database version - increment this number to upgrade the database
-    public static final int DB_VERSION = 15;
+    public static final int DB_VERSION = 17;
 
     // Tables
     public static final String GOAL_TABLE = "Goals";
@@ -50,7 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createGoalTable = String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "%s TEXT, %s REAL, %s REAL, %s INTEGER, %s INTEGER, %s TEXT)",
+                "%s TEXT, %s REAL, %s REAL, %s INTEGER, %s INTEGER, %s INTEGER)",
                 GOAL_TABLE, ID, G_GOAL, G_STEP_AMOUNT, G_STEP_GOAL, G_IS_GOAL_OF_DAY, G_UNIT, G_CREATED_ON);
         sqLiteDatabase.execSQL(createGoalTable);
     }

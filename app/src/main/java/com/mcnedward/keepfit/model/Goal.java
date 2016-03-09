@@ -11,7 +11,7 @@ public class Goal extends BaseEntity {
     private double stepAmount;
     private double stepGoal;
     private boolean isGoalOfDay;
-    private String createdOn;
+    private int createdOn;
     private Unit unit;
 
     public Goal() {
@@ -66,11 +66,11 @@ public class Goal extends BaseEntity {
         this.isGoalOfDay = isGoalOfDay;
     }
 
-    public String getCreatedOn() {
+    public int getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(String createdOn) {
+    public void setCreatedOn(int createdOn) {
         this.createdOn = createdOn;
     }
 
