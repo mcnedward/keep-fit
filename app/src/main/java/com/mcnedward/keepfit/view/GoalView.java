@@ -2,7 +2,6 @@ package com.mcnedward.keepfit.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -16,7 +15,7 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
-import com.mcnedward.keepfit.utils.GoalListAdapter;
+import com.mcnedward.keepfit.utils.adapter.GoalListAdapter;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 
 /**
@@ -120,8 +119,8 @@ public class GoalView extends RelativeLayout {
         this.goal = goal;
         this.adapter = adapter;
         txtGoalName.setText(goal.getName());
-        progressBar.setProgress(goal.getStepAmount());
-        progressBar.setMax(goal.getStepGoal());
+        progressBar.setProgress((int) goal.getStepAmount());
+        progressBar.setMax((int) goal.getStepGoal());
         checkIfGoalOfDay();
     }
 }

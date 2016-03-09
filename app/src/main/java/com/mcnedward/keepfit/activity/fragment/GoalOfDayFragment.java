@@ -11,21 +11,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
+import com.mcnedward.keepfit.utils.adapter.UnitAdapter;
 import com.mcnedward.keepfit.utils.enums.ActivityCode;
 import com.mcnedward.keepfit.utils.enums.Code;
 import com.mcnedward.keepfit.utils.Extension;
+import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 import com.mcnedward.keepfit.view.AddGoalView;
+
+import java.util.Arrays;
 
 /**
  * Created by Edward on 2/22/2016.
@@ -33,21 +39,24 @@ import com.mcnedward.keepfit.view.AddGoalView;
 public class GoalOfDayFragment extends BaseFragment {
     private static final String TAG = "GoalOfDayFragment";
 
-    public static boolean editable = false;
-
     private Context context;
     private IGoalRepository goalRepository;
 
     private int stepAmount = 10;
     private static Goal goalOfDay;
+    public boolean editable = false;
+    private Unit selectedUnit;
 
     private AddGoalView addGoalView;
     private TextView goalOfDayStepGoal;
     private TextView goalOfDayName;
-    private static EditText editGoalOfDayStepAmount;
-    private static ImageView imgDecrement;
-    private static ImageView imgIncrement;
-    private static TextView txtEditDate;
+    private TextView goalOfDayUnit;
+    private EditText editGoalOfDayStepAmount;
+    private ImageView imgDecrement;
+    private ImageView imgIncrement;
+    private TextView txtEditDate;
+    private Spinner spinUnit;
+    private UnitAdapter adapter;
     private ProgressBar progressBar;
     private RelativeLayout content;
     private FloatingActionButton fab;
@@ -57,6 +66,22 @@ public class GoalOfDayFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_goal_of_day, container, false);
         initialize(view);
         return view;
+    }
+    private void initializeUnitSpinner(View view) {
+        spinUnit = (Spinner) view.findViewById(R.id.goal_of_day_spinner_unit);
+        adapter = new UnitAdapter(context, android.R.layout.simple_spinner_item, Arrays.asList(Unit.values()));
+        spinUnit.setAdapter(adapter);
+        selectedUnit = (Unit) spinUnit.getSelectedItem();
+        spinUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedUnit = adapter.getItem(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     @Override
@@ -86,6 +111,9 @@ public class GoalOfDayFragment extends BaseFragment {
         editGoalOfDayStepAmount = (EditText) view.findViewById(R.id.goal_of_day_step_amount);
         goalOfDayStepGoal = (TextView) view.findViewById(R.id.goal_of_day_step_goal);
         txtEditDate = (TextView) view.findViewById(R.id.edit_date);
+        goalOfDayUnit = (TextView) view.findViewById(R.id.goal_of_day_unit);
+
+        initializeUnitSpinner(view);
 
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -110,6 +138,8 @@ public class GoalOfDayFragment extends BaseFragment {
 
         registerReceivers();
     }
+
+
 
     @Override
     protected void addGoalActionReceived(Goal goal) {
@@ -157,20 +187,26 @@ public class GoalOfDayFragment extends BaseFragment {
         goalOfDayName.setText(goalOfDay.getName());
         editGoalOfDayStepAmount.setText(String.valueOf(goalOfDay.getStepAmount()));
         goalOfDayStepGoal.setText(String.valueOf(goalOfDay.getStepGoal()));
-        progressBar.setMax(goalOfDay.getStepGoal());
-        progressBar.setProgress(goalOfDay.getStepAmount());
+        goalOfDayUnit.setText(goalOfDay.getUnit().abbreviation);
+        progressBar.setMax((int) goalOfDay.getStepGoal());
+        progressBar.setProgress((int) goalOfDay.getStepAmount());
         toggleContent(true);
     }
 
     private void changeStepAmount(boolean up) {
         String currentStepsString = editGoalOfDayStepAmount.getText().toString();
-        int currentSteps = 0;
+        double currentSteps = 0;
         if (!currentStepsString.equals(""))
-            currentSteps = Integer.parseInt(currentStepsString);
+            currentSteps = Double.parseDouble(currentStepsString);
+
         if (up)
             currentSteps += stepAmount;
         else
             currentSteps -= stepAmount;
+
+        // Convert the amount according to the selected unit
+//        currentSteps = Conversion.convert(selectedUnit, goalOfDay.getUnit(), currentSteps);
+
         goalOfDay.setStepAmount(currentSteps);
         try {
             goalRepository.update(goalOfDay);
@@ -223,7 +259,7 @@ public class GoalOfDayFragment extends BaseFragment {
         checkForGoalOfDay();
     }
 
-    public static void toggleEditMode(boolean isEditMode, String date) {
+    private void toggleEditMode(boolean isEditMode, String date) {
         if (isEditMode) {
             txtEditDate.setVisibility(View.VISIBLE);
             txtEditDate.setText("Editing for: " + date);

@@ -83,19 +83,19 @@ public class HistoryChartView extends LinearLayout {
     }
 
     private void updatePlot() {
-        refresh();
-
-        handleData();
-
-        historySeries = new SimpleXYSeries(dates, stepAmounts, null);
-        plot.addSeries(historySeries, new LineAndPointFormatter(
-                ContextCompat.getColor(context, R.color.LimeGreen),
-                ContextCompat.getColor(context, R.color.ForestGreen),
-                Color.TRANSPARENT, null));
-
-        updatePlotWidget();
-
-        plot.redraw();
+//        refresh();
+//
+//        handleData();
+//
+//        historySeries = new SimpleXYSeries(dates, stepAmounts, null);
+//        plot.addSeries(historySeries, new LineAndPointFormatter(
+//                ContextCompat.getColor(context, R.color.LimeGreen),
+//                ContextCompat.getColor(context, R.color.ForestGreen),
+//                Color.TRANSPARENT, null));
+//
+//        updatePlotWidget();
+//
+//        plot.redraw();
     }
 
     private void updatePlotWidget() {
@@ -133,10 +133,10 @@ public class HistoryChartView extends LinearLayout {
         stepAmounts = new ArrayList<>();
         dates = new ArrayList<>();
         for (Goal goal : goals) {
-            stepAmounts.add(goal.getStepAmount());
+//            stepAmounts.add(goal.getStepAmount());
             dates.add(Integer.valueOf(goal.getCreatedOn()));
-            if (upperBound == 0 || upperBound < goal.getStepAmount())
-                upperBound = goal.getStepAmount();
+//            if (upperBound == 0 || upperBound < goal.getStepAmount())
+//                upperBound = goal.getStepAmount();
         }
         if (upperBound > 100)
             rangeIncrement = ((upperBound / 100) + 1) * 10;

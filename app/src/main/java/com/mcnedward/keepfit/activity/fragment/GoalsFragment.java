@@ -1,9 +1,6 @@
 package com.mcnedward.keepfit.activity.fragment;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -21,8 +18,7 @@ import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
 import com.mcnedward.keepfit.repository.loader.GoalDataLoader;
-import com.mcnedward.keepfit.utils.GoalListAdapter;
-import com.mcnedward.keepfit.utils.enums.Action;
+import com.mcnedward.keepfit.utils.adapter.GoalListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

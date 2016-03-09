@@ -8,14 +8,19 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
+import com.mcnedward.keepfit.utils.adapter.UnitAdapter;
 import com.mcnedward.keepfit.utils.enums.Action;
+import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
+
+import java.util.Arrays;
 
 /**
  * Created by Edward on 3/7/2016.
@@ -28,6 +33,8 @@ public class AddGoalView extends LinearLayout {
     private Goal goal;
     private EditText editGoalName;
     private EditText editGoalSteps;
+    private Spinner spinUnit;
+    private UnitAdapter adapter;
 
     public AddGoalView(Context context) {
         super(context);
@@ -52,17 +59,22 @@ public class AddGoalView extends LinearLayout {
                 addGoal();
             }
         });
+
+        spinUnit = (Spinner) findViewById(R.id.spinner_units);
+        adapter = new UnitAdapter(context, android.R.layout.simple_spinner_item, Arrays.asList(Unit.values()));
+        spinUnit.setAdapter(adapter);
     }
 
     private void addGoal() {
         String goalName = editGoalName.getText().toString();
         String goalSteps = editGoalSteps.getText().toString();
+        Unit unit = (Unit) spinUnit.getSelectedItem();
 
         if (goalName.equals("") || goalSteps.equals("")) {
             Toast.makeText(context, "You need to fill in everything!", Toast.LENGTH_SHORT).show();
             return;
         }
-        goal = new Goal(goalName, Integer.valueOf(goalSteps));
+        goal = new Goal(goalName, Integer.valueOf(goalSteps), unit);
 
         try {
             repository.save(goal);

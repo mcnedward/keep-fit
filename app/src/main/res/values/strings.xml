@@ -19,7 +19,7 @@
     <string name="add_goal">Add Goal</string>
 
     <!-- Goals Fragment -->
-    <string name="no_goals_for_day">There are no goals for this day</string>
+    <string name="no_goals_for_day">There are no goals for today</string>
 
     <!-- History Fragment -->
     <string name="history_title">Goal History</string>

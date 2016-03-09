@@ -118,6 +118,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
                 DatabaseHelper.G_STEP_AMOUNT,
                 DatabaseHelper.G_STEP_GOAL,
                 DatabaseHelper.G_IS_GOAL_OF_DAY,
+                DatabaseHelper.G_UNIT,
                 DatabaseHelper.G_CREATED_ON};
     }
 
@@ -132,9 +133,10 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         Goal goal = new Goal();
         goal.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.ID)));
         goal.setName(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_GOAL)));
-        goal.setStepGoal(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_GOAL)));
-        goal.setStepAmount(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_AMOUNT)));
+        goal.setStepGoal(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_GOAL)));
+        goal.setStepAmount(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_AMOUNT)));
         goal.setIsGoalOfDay(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_IS_GOAL_OF_DAY)) == 1);
+        goal.setUnit(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_UNIT)));
         goal.setCreatedOn(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_CREATED_ON)));
         return goal;
     }
@@ -152,6 +154,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         values.put(DatabaseHelper.G_STEP_GOAL, entity.getStepGoal());
         values.put(DatabaseHelper.G_STEP_AMOUNT, entity.getStepAmount());
         values.put(DatabaseHelper.G_IS_GOAL_OF_DAY, entity.isGoalOfDay());
+        values.put(DatabaseHelper.G_UNIT, entity.getUnitId());
         values.put(DatabaseHelper.G_CREATED_ON, entity.getCreatedOn());
         return values;
     }

@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
@@ -19,7 +20,7 @@ public class SettingView extends LinearLayout {
 
     private Context context;
     private TextView txtSettingName;
-    private RadioButton radioButton;
+    private Spinner unitSpinner;
     private Unit unit;
 
     public SettingView(Context context) {
@@ -49,14 +50,11 @@ public class SettingView extends LinearLayout {
         inflate(context, R.layout.view_setting, this);
         txtSettingName = (TextView) findViewById(R.id.setting_name);
 
-        radioButton = (RadioButton) findViewById(R.id.radio_button);
+        unitSpinner = (Spinner) findViewById(R.id.spinner_units);
     }
 
     public Unit getUnit() {
         return unit;
     }
 
-    public void toggleRadio(boolean checked) {
-        radioButton.setChecked(checked);
-    }
 }

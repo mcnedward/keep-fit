@@ -1,15 +1,18 @@
 package com.mcnedward.keepfit.model;
 
+import com.mcnedward.keepfit.utils.enums.Unit;
+
 /**
  * Created by Edward on 1/31/2016.
  */
 public class Goal extends BaseEntity {
 
     private String name;
-    private int stepAmount;
-    private int stepGoal;
+    private double stepAmount;
+    private double stepGoal;
     private boolean isGoalOfDay;
     private String createdOn;
+    private Unit unit;
 
     public Goal() {
         super();
@@ -22,6 +25,11 @@ public class Goal extends BaseEntity {
         this.stepGoal = stepGoal;
     }
 
+    public Goal(String name, int stepGoal, Unit unit) {
+        this(name, stepGoal);
+        this.unit = unit;
+    }
+
     public String getName() {
         return name;
     }
@@ -30,11 +38,11 @@ public class Goal extends BaseEntity {
         this.name = name;
     }
 
-    public int getStepAmount() {
+    public double getStepAmount() {
         return stepAmount;
     }
 
-    public void setStepAmount(int stepAmount) {
+    public void setStepAmount(double stepAmount) {
         this.stepAmount = stepAmount;
         if (this.stepAmount > stepGoal)
             this.stepAmount = stepGoal;
@@ -42,11 +50,11 @@ public class Goal extends BaseEntity {
             this.stepAmount = 0;
     }
 
-    public int getStepGoal() {
+    public double getStepGoal() {
         return stepGoal;
     }
 
-    public void setStepGoal(int stepGoal) {
+    public void setStepGoal(double stepGoal) {
         this.stepGoal = stepGoal;
     }
 
@@ -64,6 +72,22 @@ public class Goal extends BaseEntity {
 
     public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
+    }
+
+    public int getUnitId() {
+        return unit.id;
+    }
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
+
+    public void setUnit(int unitId) {
+        this.unit = Unit.getById(unitId);
     }
 
     @Override

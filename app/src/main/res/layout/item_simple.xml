@@ -5,7 +5,7 @@
     android:background="@color/WhiteSmoke">
 
     <TextView
-        android:id="@+id/simple_adapter_text"
+        android:id="@+id/simple_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/placeholder"

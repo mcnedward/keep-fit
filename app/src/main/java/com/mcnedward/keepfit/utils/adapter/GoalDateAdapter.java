@@ -1,4 +1,4 @@
-package com.mcnedward.keepfit.utils;
+package com.mcnedward.keepfit.utils.adapter;
 
 import android.content.Context;
 import android.view.View;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.utils.Extension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +33,8 @@ public class GoalDateAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         if (convertView == null)
-            convertView = View.inflate(context, R.layout.simple_adapter_top_item, null);
-        TextView textView = (TextView) convertView.findViewById(R.id.simple_adapter_text);
+            convertView = View.inflate(context, R.layout.item_simple, null);
+        TextView textView = (TextView) convertView.findViewById(R.id.simple_item);
         String history = dates.get(groupPosition);
         textView.setText(Extension.getPrettyDateFromDatabaseDate(history));
         return convertView;
@@ -51,8 +52,8 @@ public class GoalDateAdapter extends BaseExpandableListAdapter {
         txtGoalName.setText(goal.getName());
         String progress = String.format("%s/%s", goal.getStepAmount(), goal.getStepGoal());
         txtStepProgress.setText(progress);
-        progressBar.setMax(goal.getStepGoal());
-        progressBar.setProgress(goal.getStepAmount());
+        progressBar.setMax((int) goal.getStepGoal());
+        progressBar.setProgress((int) goal.getStepAmount());
 
         return convertView;
     }

@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database title
     public static String DB_NAME = "Goal.db";
     // Database version - increment this number to upgrade the database
-    public static final int DB_VERSION = 14;
+    public static final int DB_VERSION = 15;
 
     // Tables
     public static final String GOAL_TABLE = "Goals";
@@ -29,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String G_STEP_AMOUNT = "StepAmount";
     public static final String G_STEP_GOAL = "StepGoal";
     public static final String G_IS_GOAL_OF_DAY = "IsGoalOfDay";
+    public static final String G_UNIT = "Unit";
     public static final String G_CREATED_ON = "CreatedOn";
 
     public DatabaseHelper(Context context) {
@@ -45,10 +46,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sInstance;
     }
 
+    // TODO: CREATED_ON AS INTEGER
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createGoalTable = String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                "%s TEXT, %s INTEGER, %s INTEGER, %s INTEGER, %s TEXT)", GOAL_TABLE, ID, G_GOAL, G_STEP_AMOUNT, G_STEP_GOAL, G_IS_GOAL_OF_DAY, G_CREATED_ON);
+                "%s TEXT, %s REAL, %s REAL, %s INTEGER, %s INTEGER, %s TEXT)",
+                GOAL_TABLE, ID, G_GOAL, G_STEP_AMOUNT, G_STEP_GOAL, G_IS_GOAL_OF_DAY, G_UNIT, G_CREATED_ON);
         sqLiteDatabase.execSQL(createGoalTable);
     }
 

@@ -41,66 +41,7 @@
             android:progress="100"
             android:progressDrawable="@drawable/circle_progress" />
 
-        <ImageView
-            android:id="@+id/step_counter_decrement"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_toLeftOf="@+id/step_counter"
-            android:padding="5dp"
-            android:src="@android:drawable/ic_delete" />
-
-        <LinearLayout
-            android:id="@+id/step_counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/goal_of_day_step_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:inputType="number"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="0"
-                    android:textSize="30dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:text="@string/forward_slash"
-                    android:textSize="30dp" />
-
-                <TextView
-                    android:id="@+id/goal_of_day_step_goal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:text="0"
-                    android:textSize="30dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/step_counter_increment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@+id/step_counter"
-            android:padding="5dp"
-            android:src="@android:drawable/ic_menu_add" />
+        <include layout="@layout/item_step_value"/>
 
     </RelativeLayout>
 
@@ -136,5 +77,15 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="@color/FireBrick" />
+
+    <Spinner
+        android:id="@+id/goal_of_day_spinner_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"/>
 
 </RelativeLayout>

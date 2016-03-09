@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
-import com.mcnedward.keepfit.activity.fragment.MainContentFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
@@ -72,7 +70,7 @@ public class EditGoalActivity extends AppCompatActivity {
 
     private void editGoal() {
         String originalGoalName = editGoal.getName();
-        int originalGoalSteps = editGoal.getStepGoal();
+        double originalGoalSteps = editGoal.getStepGoal();
         String goalName = editGoalName.getText().toString();
         String goalSteps = editGoalSteps.getText().toString();
 
@@ -92,7 +90,6 @@ public class EditGoalActivity extends AppCompatActivity {
         } catch (EntityDoesNotExistException e) {
             e.printStackTrace();
         }
-        MainContentFragment.editGoal(editGoal);
 
         Toast.makeText(this, "Updated " + originalGoalName + " to " + goalName + "!", Toast.LENGTH_SHORT).show();
 
@@ -114,7 +111,6 @@ public class EditGoalActivity extends AppCompatActivity {
         } catch (EntityAlreadyExistsException e) {
             e.printStackTrace();
         }
-        MainContentFragment.addGoal(goal);
         Toast.makeText(this, "Added " + goalName + "!", Toast.LENGTH_SHORT).show();
 
         editGoalName.setText("");

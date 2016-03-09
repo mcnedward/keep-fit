@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.mcnedward.keepfit.R;
-import com.mcnedward.keepfit.activity.fragment.MainContentFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
@@ -92,7 +91,6 @@ public class StepCounterPopup extends Activity {
         } catch (EntityDoesNotExistException e) {
             e.printStackTrace();
         }
-        MainContentFragment.updateStepCounter(goal);
         finish();
     }
 
