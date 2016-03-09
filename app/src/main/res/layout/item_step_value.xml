@@ -21,7 +21,7 @@
                 android:layout_above="@+id/step_counter"
                 android:layout_centerInParent="true"
                 android:padding="5dp"
-                android:src="@android:drawable/ic_menu_add" />
+                android:src="@drawable/plus_blue" />
 
             <ImageView
                 android:id="@+id/step_counter_decrement"
@@ -30,7 +30,7 @@
                 android:layout_below="@+id/step_counter"
                 android:layout_centerInParent="true"
                 android:padding="5dp"
-                android:src="@android:drawable/ic_delete" />
+                android:src="@drawable/minus"/>
 
             <LinearLayout
                 android:id="@+id/step_counter"

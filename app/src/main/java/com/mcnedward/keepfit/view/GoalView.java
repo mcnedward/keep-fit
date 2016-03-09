@@ -109,8 +109,8 @@ public class GoalView extends RelativeLayout {
 
     private void checkIfGoalOfDay() {
         imgIsGoalOfDay.setImageDrawable(goal.isGoalOfDay() ?
-                        ContextCompat.getDrawable(context, android.R.drawable.star_big_on) :
-                        ContextCompat.getDrawable(context, android.R.drawable.star_big_off)
+                        ContextCompat.getDrawable(context, R.drawable.star_on) :
+                        ContextCompat.getDrawable(context, R.drawable.star_off)
         );
         progressBar.setVisibility(goal.isGoalOfDay() ? VISIBLE : GONE);
     }

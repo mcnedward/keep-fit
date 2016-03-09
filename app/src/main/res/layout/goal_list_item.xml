@@ -35,7 +35,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="15dp"
-            android:src="@android:drawable/btn_star_big_off" />
+            android:src="@drawable/star_off" />
 
         <ImageView
             android:id="@+id/list_goal_edit"
@@ -47,7 +47,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="15dp"
-            android:src="@android:drawable/ic_menu_edit" />
+            android:src="@drawable/edit" />
 
         <ImageView
             android:id="@+id/list_goal_delete"
@@ -59,7 +59,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="15dp"
-            android:src="@android:drawable/ic_delete" />
+            android:src="@drawable/delete" />
     </RelativeLayout>
 
     <android.support.v4.widget.ContentLoadingProgressBar
