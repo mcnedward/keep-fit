@@ -41,7 +41,7 @@
             android:progress="100"
             android:progressDrawable="@drawable/circle_progress" />
 
-        <include layout="@layout/item_step_value"/>
+        <include layout="@layout/item_step_value" />
 
     </RelativeLayout>
 
@@ -49,8 +49,8 @@
         android:id="@+id/add_goal_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -62,8 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/placeholder"
-            android:textSize="18dp"
             android:textColor="@color/Red"
+            android:textSize="18dp"
             android:textStyle="bold"
             android:visibility="gone" />
     </RelativeLayout>
@@ -72,20 +72,51 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/spinner_container"
         android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="@color/FireBrick" />
 
-    <Spinner
-        android:id="@+id/goal_of_day_spinner_unit"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/spinner_container"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"/>
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <LinearLayout
+            android:id="@+id/spinner_unit_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/border">
+
+            <Spinner
+                android:id="@+id/goal_of_day_spinner_unit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/spinner_value_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/border">
+
+            <Spinner
+                android:id="@+id/goal_of_day_spinner_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

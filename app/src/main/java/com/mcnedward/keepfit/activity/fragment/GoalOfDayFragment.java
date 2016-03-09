@@ -6,12 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -42,10 +47,13 @@ public class GoalOfDayFragment extends BaseFragment {
     private Context context;
     private IGoalRepository goalRepository;
 
-    private int stepAmount = 10;
+    private static Integer[] VALUES = new Integer[]
+            {
+                    10, 20, 50, 100, 200, 500, 1000
+            };
+
     private static Goal goalOfDay;
     public boolean editable = false;
-    private Unit selectedUnit;
 
     private AddGoalView addGoalView;
     private TextView goalOfDayStepGoal;
@@ -56,6 +64,7 @@ public class GoalOfDayFragment extends BaseFragment {
     private ImageView imgIncrement;
     private TextView txtEditDate;
     private Spinner spinUnit;
+    private Spinner spinValue;
     private UnitAdapter adapter;
     private ProgressBar progressBar;
     private RelativeLayout content;
@@ -66,22 +75,6 @@ public class GoalOfDayFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_goal_of_day, container, false);
         initialize(view);
         return view;
-    }
-    private void initializeUnitSpinner(View view) {
-        spinUnit = (Spinner) view.findViewById(R.id.goal_of_day_spinner_unit);
-        adapter = new UnitAdapter(context, android.R.layout.simple_spinner_item, Arrays.asList(Unit.values()));
-        spinUnit.setAdapter(adapter);
-        selectedUnit = (Unit) spinUnit.getSelectedItem();
-        spinUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedUnit = adapter.getItem(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
     }
 
     @Override
@@ -106,32 +99,22 @@ public class GoalOfDayFragment extends BaseFragment {
         context = view.getContext();
         goalRepository = new GoalRepository(view.getContext());
         addGoalView = (AddGoalView) view.findViewById(R.id.add_goal_view);
-
         goalOfDayName = (TextView) view.findViewById(R.id.goal_of_day_name);
-        editGoalOfDayStepAmount = (EditText) view.findViewById(R.id.goal_of_day_step_amount);
         goalOfDayStepGoal = (TextView) view.findViewById(R.id.goal_of_day_step_goal);
         txtEditDate = (TextView) view.findViewById(R.id.edit_date);
         goalOfDayUnit = (TextView) view.findViewById(R.id.goal_of_day_unit);
 
-        initializeUnitSpinner(view);
+        progressBar = (ProgressBar) view.findViewById(R.id.step_progress_bar);
+        progressBar.setProgress(0);
 
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Extension.startAddGoalPopup(((Activity) context));
-            }
-        });
+        initializeEditGoalOfDayStepAmount(view);
+        initializeSpinners(view);
+        initializeFAB(view);
+        initializeStepCountButtons(view);
 
         // Clear focus from EditText
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
         content = (RelativeLayout) view.findViewById(R.id.content);
-
-        initializeStepCountButtons(view);
-
-        progressBar = (ProgressBar) view.findViewById(R.id.step_progress_bar);
-        progressBar.setProgress(0);
 
         toggleContent(editable);
         checkForGoalOfDay();
@@ -139,7 +122,46 @@ public class GoalOfDayFragment extends BaseFragment {
         registerReceivers();
     }
 
+    private void initializeEditGoalOfDayStepAmount(View view) {
+        editGoalOfDayStepAmount = (EditText) view.findViewById(R.id.goal_of_day_step_amount);
+        editGoalOfDayStepAmount.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    double changeAmount = Double.parseDouble(v.getText().toString());
+                    changeAmount = Unit.convert((Unit) spinUnit.getSelectedItem(), goalOfDay.getUnit(), changeAmount);
+                    updateGoalOfDayStepAmount(changeAmount);
+                    View view = ((Activity) context).getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 
+    private void initializeSpinners(View view) {
+        spinUnit = (Spinner) view.findViewById(R.id.goal_of_day_spinner_unit);
+        adapter = new UnitAdapter(context, android.R.layout.simple_spinner_item, Arrays.asList(Unit.values()));
+        spinUnit.setAdapter(adapter);
+
+        spinValue = (Spinner) view.findViewById(R.id.goal_of_day_spinner_value);
+        ArrayAdapter<Integer> valuesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, Arrays.asList(VALUES));
+        spinValue.setAdapter(valuesAdapter);
+    }
+
+    private void initializeFAB(View view) {
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Extension.startAddGoalPopup(((Activity) context));
+            }
+        });
+    }
 
     @Override
     protected void addGoalActionReceived(Goal goal) {
@@ -185,7 +207,7 @@ public class GoalOfDayFragment extends BaseFragment {
     private void updateGoalOfDay(Goal goal) {
         goalOfDay = goal;
         goalOfDayName.setText(goalOfDay.getName());
-        editGoalOfDayStepAmount.setText(String.valueOf(goalOfDay.getStepAmount()));
+        editGoalOfDayStepAmount.setText(String.valueOf(Unit.format(goalOfDay.getStepAmount())));
         goalOfDayStepGoal.setText(String.valueOf(goalOfDay.getStepGoal()));
         goalOfDayUnit.setText(goalOfDay.getUnit().abbreviation);
         progressBar.setMax((int) goalOfDay.getStepGoal());
@@ -198,16 +220,17 @@ public class GoalOfDayFragment extends BaseFragment {
         double currentSteps = 0;
         if (!currentStepsString.equals(""))
             currentSteps = Double.parseDouble(currentStepsString);
-
+        // Convert the stepAmount value according to the selected unit
+        double stepAmount = Unit.convert((Unit) spinUnit.getSelectedItem(), goalOfDay.getUnit(), (Integer) spinValue.getSelectedItem());
         if (up)
             currentSteps += stepAmount;
         else
             currentSteps -= stepAmount;
+        updateGoalOfDayStepAmount(currentSteps);
+    }
 
-        // Convert the amount according to the selected unit
-//        currentSteps = Conversion.convert(selectedUnit, goalOfDay.getUnit(), currentSteps);
-
-        goalOfDay.setStepAmount(currentSteps);
+    private void updateGoalOfDayStepAmount(double amount) {
+        goalOfDay.setStepAmount(amount);
         try {
             goalRepository.update(goalOfDay);
         } catch (EntityDoesNotExistException e) {
