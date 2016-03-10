@@ -178,7 +178,7 @@ public class Extension {
         return convertDate(date, PRETTY_DATE, DATABASE_DATE);
     }
 
-    private static String convertDate(String date, String fromFormat, String toFormat) {
+    public static String convertDate(String date, String fromFormat, String toFormat) {
         SimpleDateFormat fromDateFormat = new SimpleDateFormat(fromFormat);
         String d = null;
         try {

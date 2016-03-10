@@ -8,6 +8,7 @@ import android.util.Log;
 import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.Extension;
+import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 
@@ -33,6 +34,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         Goal currentGoal = getGoalOfDay();
         updateGoalOfDay(currentGoal, false);
         goal = super.save(goal);
+        fillOldDateTestData();
         return goal;
     }
 
@@ -88,26 +90,50 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     public void fillOldDateTestData() {
         List<String> timestamps = new ArrayList<>();
-        timestamps.add("12-02-2016-07-46-31");
-        timestamps.add("11-02-2016-07-46-31");
-        timestamps.add("10-02-2016-07-46-31");
-        timestamps.add("09-02-2016-07-46-31");
-        timestamps.add("08-02-2016-07-46-31");
+        timestamps.add("20160307");
+        timestamps.add("20160306");
+        timestamps.add("20160305");
+        timestamps.add("20160304");
+        timestamps.add("20160303");
+        timestamps.add("20160302");
+        timestamps.add("20160301");
+        timestamps.add("20160229");
+        timestamps.add("20160228");
+        timestamps.add("20160227");
+        timestamps.add("20160226");
+        timestamps.add("20160225");
+        timestamps.add("20160224");
+        timestamps.add("20160223");
+        timestamps.add("20160222");
+        timestamps.add("20160221");
+        timestamps.add("20160220");
+        timestamps.add("20160129");
+        timestamps.add("20160128");
+        timestamps.add("20160127");
+        timestamps.add("20160125");
+        timestamps.add("20160123");
+        timestamps.add("20160122");
+        timestamps.add("20160121");
+        timestamps.add("20160120");
+        timestamps.add("20160119");
+        timestamps.add("20160118");
         Random rand = new Random();
-        for (String timestamp : timestamps)
-            for (int i = 0; i < 10; i++) {
-                int stepGoal = rand.nextInt(1000);
-                int stepAmount = rand.nextInt(stepGoal);
-                Goal goal = new Goal();
-                goal.setName("Goal " + i);
-                goal.setStepAmount(stepAmount);
-                goal.setStepGoal(stepGoal);
-                try {
-                    super.save(goal);
-                } catch (EntityAlreadyExistsException e) {
-                    e.printStackTrace();
-                }
+        for (String timestamp : timestamps) {
+            int stepGoal = rand.nextInt(1000);
+            int stepAmount = rand.nextInt(stepGoal / 2);
+            Goal goal = new Goal();
+            goal.setName("Goal " + stepGoal);
+            goal.setStepGoal(stepGoal);
+            goal.setStepAmount(stepAmount);
+            goal.setIsGoalOfDay(true);
+            goal.setUnit(Unit.METER);
+            goal.setCreatedOn(timestamp);
+            try {
+                super.save(goal);
+            } catch (EntityAlreadyExistsException e) {
+                e.printStackTrace();
             }
+        }
     }
 
     @Override
@@ -125,6 +151,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
     /**
      * Generates a Goal object from the database cursor.
      * It is important to place the StepGoal BEFORE the StepAmount, since calculations done in setStepAmount() are reliant on StepGoal being already set.
+     *
      * @param cursor The cursor to use for generating the Goal
      * @return The generated Goal
      */
@@ -143,6 +170,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     /**
      * Generates the values for a Goal entity to be saved in the database.
+     *
      * @param entity The Goal entity to use for database values
      * @return The ContentValues to use in the database
      */

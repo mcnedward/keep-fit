@@ -2,17 +2,11 @@ package com.mcnedward.keepfit.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.Size;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 
-import com.androidplot.ui.AnchorPosition;
-import com.androidplot.ui.PositionMetrics;
-import com.androidplot.ui.SizeLayoutType;
-import com.androidplot.ui.SizeMetrics;
-import com.androidplot.ui.XLayoutStyle;
-import com.androidplot.ui.YLayoutStyle;
 import com.androidplot.xy.LineAndPointFormatter;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYPlot;
@@ -25,7 +19,6 @@ import com.mcnedward.keepfit.utils.enums.Unit;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.Format;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -37,6 +30,7 @@ import java.util.List;
  * Created by Edward on 3/7/2016.
  */
 public class HistoryChartView extends LinearLayout {
+    private static final String TAG = "HistoryChartView";
 
     private Context context;
     private List<Goal> goals;
@@ -46,6 +40,7 @@ public class HistoryChartView extends LinearLayout {
     private List<Double> stepAmounts;
     private List<Integer> dates;
     private double upperBound;
+    private int maxDomainStep = 10;
     private Unit unit = Unit.METER;
 
     public HistoryChartView(List<Goal> goals, Context context) {
@@ -105,10 +100,20 @@ public class HistoryChartView extends LinearLayout {
             plot.setRangeTopMin(upperBound + rangeIncrement);
             plot.setRangeValueFormat(new Format() {
                 private DecimalFormat format = new DecimalFormat("#.#####");
+                private int count = 0;
+                private int fieldsShown = 0;
+
                 @Override
-                public StringBuffer format(Object object, StringBuffer buffer, FieldPosition position) {
+                public StringBuffer format(Object object, StringBuffer buffer, FieldPosition field) {
                     double value = (Double) object;
-                    return format.format(value, buffer, position);
+                    int dateCount = dates.size();
+                    if (count++ == 0) return buffer;
+                    if (dateCount > maxDomainStep) {
+                        int fieldsToDisplay = dateCount / 4;
+                        int index = fieldsToDisplay * fieldsShown++;
+                        return format.format(value, buffer, field);
+                    }
+                    return format.format(value, buffer, field);
                 }
 
                 @Override
@@ -117,15 +122,34 @@ public class HistoryChartView extends LinearLayout {
                 }
             });
 
-            plot.setDomainStep(XYStepMode.SUBDIVIDE, goals.size());
+            int goalCount = goals.size();
+            plot.setDomainStep(XYStepMode.SUBDIVIDE, goalCount <= 10 ? goalCount : maxDomainStep);
+            plot.setDomainStepValue(goalCount <= 10 ? goalCount : maxDomainStep);
             plot.setDomainValueFormat(new Format() {
 
                 private SimpleDateFormat fromDateFormat = new SimpleDateFormat(Extension.DATABASE_DATE);
                 private SimpleDateFormat toDateFormat = new SimpleDateFormat("dd/MM");
 
+                private int count = 0;
+                private int fieldsShown = 0;
+
                 @Override
-                public StringBuffer format(Object value, StringBuffer buffer, FieldPosition position) {
-                    int dateValue = ((Double) value).intValue();
+                public StringBuffer format(Object value, StringBuffer buffer, FieldPosition field) {
+                    int position = count++;
+                    int dateCount = dates.size();
+                    if (dateCount > maxDomainStep) {
+                        int fieldsToDisplay = dateCount / 4;
+                        if (position % 2 == 0) {
+                            int index = fieldsToDisplay * fieldsShown++;
+                            if (index > dateCount - 1) index = dateCount - 1;
+                            return handleBuffer(dates.get(index), buffer, field);
+                        } else
+                            return buffer;
+                    }
+                    return handleBuffer(dates.get(position), buffer, field);
+                }
+
+                private StringBuffer handleBuffer(int dateValue, StringBuffer buffer, FieldPosition position) {
                     Date date = null;
                     try {
                         date = fromDateFormat.parse(String.valueOf(dateValue));
