@@ -2,7 +2,6 @@ package com.mcnedward.keepfit.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -15,8 +14,7 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
-import com.mcnedward.keepfit.utils.adapter.UnitAdapter;
-import com.mcnedward.keepfit.utils.enums.Action;
+import com.mcnedward.keepfit.utils.adapter.EnumAdapter;
 import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 
@@ -34,7 +32,7 @@ public class AddGoalView extends LinearLayout {
     private EditText editGoalName;
     private EditText editGoalSteps;
     private Spinner spinUnit;
-    private UnitAdapter adapter;
+    private EnumAdapter adapter;
 
     public AddGoalView(Context context) {
         super(context);
@@ -61,7 +59,7 @@ public class AddGoalView extends LinearLayout {
         });
 
         spinUnit = (Spinner) findViewById(R.id.spinner_units);
-        adapter = new UnitAdapter(context, android.R.layout.simple_spinner_item, Arrays.asList(Unit.values()));
+        adapter = new EnumAdapter(context, android.R.layout.simple_spinner_item, Unit.getEnums());
         spinUnit.setAdapter(adapter);
     }
 

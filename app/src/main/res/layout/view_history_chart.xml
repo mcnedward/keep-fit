@@ -18,4 +18,16 @@
         androidPlot.graphWidget.marginRight="4dp"
         androidPlot.graphWidget.marginBottom="6dp"/>
 
+    <TextView
+        android:id="@+id/history_no_dates"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="18dp"
+        android:layout_centerInParent="true"
+        android:paddingLeft="30dp"
+        android:textStyle="bold"
+        android:text="@string/placeholder"
+        android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

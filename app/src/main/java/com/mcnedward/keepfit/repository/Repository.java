@@ -24,7 +24,12 @@ public abstract class Repository<T extends BaseEntity> implements IRepository<T>
     protected SQLiteDatabase database;
 
     public Repository(Context context) {
-        helper = DatabaseHelper.getInstance(context);
+        this(DatabaseHelper.getInstance(context));
+        open();
+    }
+
+    public Repository(DatabaseHelper helper) {
+        this.helper = helper;
         open();
     }
 
@@ -233,7 +238,8 @@ public abstract class Repository<T extends BaseEntity> implements IRepository<T>
         return database;
     }
 
-    private void close() {
+    @Override
+    public void close() {
         if (helper != null)
             helper.close();
     }

@@ -1,11 +1,13 @@
 package com.mcnedward.keepfit.utils.enums;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Edward on 3/8/2016.
  */
-public enum Unit {
+public enum Unit implements IBaseEnum {
 
     METER(1, "Meter", "m") {
         @Override
@@ -111,6 +113,21 @@ public enum Unit {
         this.id = id;
         this.title = title;
         this.abbreviation = abbreviation;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    public static List<IBaseEnum> getEnums() {
+        List<IBaseEnum> enums = new ArrayList<>();
+        enums.add(METER);
+        enums.add(KILOMETER);
+        enums.add(MILE);
+        enums.add(YARD);
+        enums.add(STEP);
+        return enums;
     }
 
     public static Unit getById(int id) {

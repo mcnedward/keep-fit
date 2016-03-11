@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.Extension;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class GoalDateAdapter extends BaseExpandableListAdapter {
             convertView = View.inflate(context, R.layout.item_simple, null);
         TextView textView = (TextView) convertView.findViewById(R.id.simple_item);
         String history = dates.get(groupPosition);
-        textView.setText(Extension.getPrettyDateFromDatabaseDate(history));
+        textView.setText(Dates.getPrettyDateFromDatabaseDate(history));
         return convertView;
     }
 

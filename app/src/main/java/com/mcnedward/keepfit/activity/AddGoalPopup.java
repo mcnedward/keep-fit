@@ -6,8 +6,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 
+import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.utils.enums.Action;
 import com.mcnedward.keepfit.view.AddGoalView;
 
@@ -20,7 +22,10 @@ public class AddGoalPopup extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new AddGoalView(this));
+        AddGoalView view = new AddGoalView(this);
+        view.setBackground(ContextCompat.getDrawable(this, R.drawable.border));
+        view.setPadding(10, 10, 10, 10);
+        setContentView(view);
         initializeWindow();
     }
 

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
@@ -26,9 +27,13 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         super(context);
     }
 
+    public GoalRepository(DatabaseHelper helper) {
+        super(helper);
+    }
+
     @Override
     public Goal save(Goal goal) throws EntityAlreadyExistsException {
-        String datestamp = Extension.getDatabaseDateStamp();
+        String datestamp = Dates.getDatabaseDateStamp();
         goal.setCreatedOn(datestamp);
         goal.setIsGoalOfDay(true);
         Goal currentGoal = getGoalOfDay();
@@ -45,7 +50,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     @Override
     public Goal getGoalOfDay() {
-        String dateStamp = Extension.getDatabaseDateStamp();
+        String dateStamp = Dates.getDatabaseDateStamp();
         List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{dateStamp}, null, null, null);
         if (!goals.isEmpty())
             for (Goal goal : goals)
@@ -72,9 +77,18 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     @Override
     public List<Goal> getGoalsForDay() {
-        String dateStamp = Extension.getDatabaseDateStamp();
+        String dateStamp = Dates.getDatabaseDateStamp();
         List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{dateStamp}, null, null, null);
         return goals;
+    }
+
+    @Override
+    public List<Goal> getGoalsInRange(int dateRange) {
+        String currentDate = Dates.getDatabaseDateStamp();
+        String previousDate = Dates.getDateFromRange(dateRange, Dates.DATABASE_DATE);
+        return read(DatabaseHelper.G_CREATED_ON + " BETWEEN ? AND ?",
+                new String[]{previousDate, currentDate},
+                DatabaseHelper.G_CREATED_ON, null, DatabaseHelper.G_CREATED_ON);
     }
 
     private void updateGoalOfDay(Goal goal, boolean isGoalOfDay) {
@@ -90,33 +104,33 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     public void fillOldDateTestData() {
         List<String> timestamps = new ArrayList<>();
-        timestamps.add("20160307");
-        timestamps.add("20160306");
-        timestamps.add("20160305");
-        timestamps.add("20160304");
-        timestamps.add("20160303");
-        timestamps.add("20160302");
-        timestamps.add("20160301");
-        timestamps.add("20160229");
-        timestamps.add("20160228");
-        timestamps.add("20160227");
-        timestamps.add("20160226");
-        timestamps.add("20160225");
-        timestamps.add("20160224");
-        timestamps.add("20160223");
-        timestamps.add("20160222");
-        timestamps.add("20160221");
-        timestamps.add("20160220");
-        timestamps.add("20160129");
-        timestamps.add("20160128");
-        timestamps.add("20160127");
-        timestamps.add("20160125");
-        timestamps.add("20160123");
-        timestamps.add("20160122");
-        timestamps.add("20160121");
-        timestamps.add("20160120");
-        timestamps.add("20160119");
-        timestamps.add("20160118");
+        timestamps.add("2016-03-07");
+        timestamps.add("2016-03-06");
+        timestamps.add("2016-03-05");
+        timestamps.add("2016-03-04");
+        timestamps.add("2016-03-03");
+        timestamps.add("2016-03-02");
+        timestamps.add("2016-03-01");
+        timestamps.add("2016-02-29");
+        timestamps.add("2016-02-28");
+        timestamps.add("2016-02-27");
+        timestamps.add("2016-02-26");
+        timestamps.add("2016-02-25");
+        timestamps.add("2016-02-24");
+        timestamps.add("2016-02-23");
+        timestamps.add("2016-02-22");
+        timestamps.add("2016-02-21");
+        timestamps.add("2016-02-20");
+        timestamps.add("2016-01-29");
+        timestamps.add("2016-01-28");
+        timestamps.add("2016-01-27");
+        timestamps.add("2016-01-25");
+        timestamps.add("2016-01-23");
+        timestamps.add("2016-01-22");
+        timestamps.add("2016-01-21");
+        timestamps.add("2016-01-20");
+        timestamps.add("2016-01-19");
+        timestamps.add("2016-01-18");
         Random rand = new Random();
         for (String timestamp : timestamps) {
             int stepGoal = rand.nextInt(1000);

@@ -45,6 +45,18 @@ public abstract class BaseFragment extends Fragment {
         return null;
     }
 
+     @Override
+     public void onPause() {
+         unRegisterReceivers();
+         super.onPause();
+     }
+
+    @Override
+    public void onResume() {
+        registerReceivers();
+        super.onResume();
+    }
+
     protected abstract void initialize(View view);
     protected abstract void addGoalActionReceived(Goal goal);
     protected abstract void deleteGoalActionReceived(Goal goal);
@@ -53,13 +65,19 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void editModeSwitchActionReceived(boolean isEditMode, String date);
     protected abstract void calendarChangeActionReceived(String date);
 
-    protected void registerReceivers() {
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.ADD_GOAL.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.DELETE_GOAL.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_OF_DAY.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.UPDATE_GOAL_AMOUNT.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.EDIT_MODE_SWITCH.title));
-        getActivity().registerReceiver(new FragmentReceiver(), new IntentFilter(Action.CALENDER_CHANGE.title));
+    private void unRegisterReceivers() {
+        getActivity().unregisterReceiver(receiver);
+    }
+
+    private FragmentReceiver receiver;
+    private void registerReceivers() {
+        receiver = new FragmentReceiver();
+        getActivity().registerReceiver(receiver, new IntentFilter(Action.ADD_GOAL.title));
+        getActivity().registerReceiver(receiver, new IntentFilter(Action.DELETE_GOAL.title));
+        getActivity().registerReceiver(receiver, new IntentFilter(Action.UPDATE_GOAL_OF_DAY.title));
+        getActivity().registerReceiver(receiver, new IntentFilter(Action.UPDATE_GOAL_AMOUNT.title));
+        getActivity().registerReceiver(receiver, new IntentFilter(Action.EDIT_MODE_SWITCH.title));
+        getActivity().registerReceiver(receiver, new IntentFilter(Action.CALENDER_CHANGE.title));
     }
 
     public class FragmentReceiver extends BroadcastReceiver {

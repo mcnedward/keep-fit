@@ -1,5 +1,6 @@
 package com.mcnedward.keepfit.model;
 
+import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.enums.Unit;
 
 /**
@@ -42,6 +43,7 @@ public class Goal extends BaseEntity {
         return stepAmount;
     }
 
+
     public void setStepAmount(double stepAmount) {
         this.stepAmount = stepAmount;
         if (this.stepAmount > stepGoal)
@@ -68,6 +70,10 @@ public class Goal extends BaseEntity {
 
     public String getCreatedOn() {
         return createdOn;
+    }
+
+    public int getCreatedOnDateNumber() {
+        return Dates.getDateAsNumber(createdOn);
     }
 
     public void setCreatedOn(String createdOn) {

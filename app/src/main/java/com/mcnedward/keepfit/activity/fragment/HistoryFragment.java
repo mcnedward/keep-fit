@@ -8,17 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.loader.GoalDateDataLoader;
-import com.mcnedward.keepfit.utils.adapter.UnitAdapter;
+import com.mcnedward.keepfit.utils.adapter.EnumAdapter;
+import com.mcnedward.keepfit.utils.enums.Date;
 import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.view.HistoryChartView;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -31,9 +34,14 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
 
     private Context context;
     private GoalRepository repository;
+    private GoalDateDataLoader loader;
     private HistoryChartView historyChartView;
     private Spinner spinUnit;
-    private UnitAdapter adapter;
+    private EnumAdapter adapter;
+    private Spinner spinDate;
+    private ArrayAdapter dateAdapter;
+    private SeekBar seekBar;
+    private TextView txtHistoryNoDates;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,53 +56,63 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
         repository = new GoalRepository(context);
         historyChartView = (HistoryChartView) view.findViewById(R.id.history_chart);
 
-        registerReceivers();
         initializeSpinner(view);
+        initializeProgressDate(view);
         initializeLoader();
-    }
-
-    @Override
-    protected void addGoalActionReceived(Goal goal) {
-        historyChartView.addGoal(goal);
-    }
-
-    @Override
-    protected void deleteGoalActionReceived(Goal goal) {
-    }
-
-    @Override
-    protected void updateGoalOfDayActionReceived(Goal goal) {
-        historyChartView.editGoal(goal);
-    }
-
-    @Override
-    protected void updateGoalAmountActionReceived(Goal goal) {
-        historyChartView.editGoal(goal);
-    }
-
-    @Override
-    protected void editModeSwitchActionReceived(boolean isEditMode, String date) {
-
-    }
-
-    @Override
-    protected void calendarChangeActionReceived(String date) {
-
     }
 
     private void initializeSpinner(View view) {
         spinUnit = (Spinner) view.findViewById(R.id.spinner_history_unit);
-        adapter = new UnitAdapter(context, android.R.layout.simple_spinner_item, Arrays.asList(Unit.values()));
+        adapter = new EnumAdapter(context, android.R.layout.simple_spinner_item, Unit.getEnums());
         spinUnit.setAdapter(adapter);
         spinUnit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switchUnit(adapter.getItem(position));
+                switchUnit((Unit) adapter.getItem(position));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        spinDate = (Spinner) view.findViewById(R.id.spinner_history_date);
+        dateAdapter = new EnumAdapter(context, android.R.layout.simple_spinner_item, Date.getEnums());
+        spinDate.setAdapter(dateAdapter);
+        spinDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Date date = (Date) dateAdapter.getItem(position);
+                seekBar.setMax(date.getMaxDays());
+                seekBar.setProgress(date.getMaxDays());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void initializeProgressDate(View view) {
+        seekBar = (SeekBar) view.findViewById(R.id.progress_history_date);
+        final Date date = (Date) spinDate.getSelectedItem();
+        seekBar.setMax(date.getMaxDays());
+        seekBar.setProgress(date.getMaxDays());
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                loader.loadFromRange(progress);
+                historyChartView.notifyDateChanged(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
     }
@@ -115,7 +133,8 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
     @Override
     public Loader<List<Goal>> onCreateLoader(int id, Bundle args) {
         Log.d(TAG, "CREATING LOADER " + id);
-        return new GoalDateDataLoader(context);
+        loader = new GoalDateDataLoader(context);
+        return loader;
     }
 
     @Override
@@ -126,5 +145,35 @@ public class HistoryFragment extends BaseFragment implements android.support.v4.
     @Override
     public void onLoaderReset(Loader<List<Goal>> loader) {
         historyChartView.refresh();
+    }
+
+    @Override
+    protected void addGoalActionReceived(Goal goal) {
+        loader.forceLoad();
+    }
+
+    @Override
+    protected void deleteGoalActionReceived(Goal goal) {
+        loader.forceLoad();
+    }
+
+    @Override
+    protected void updateGoalOfDayActionReceived(Goal goal) {
+        loader.forceLoad();
+    }
+
+    @Override
+    protected void updateGoalAmountActionReceived(Goal goal) {
+        loader.forceLoad();
+    }
+
+    @Override
+    protected void editModeSwitchActionReceived(boolean isEditMode, String date) {
+
+    }
+
+    @Override
+    protected void calendarChangeActionReceived(String date) {
+
     }
 }

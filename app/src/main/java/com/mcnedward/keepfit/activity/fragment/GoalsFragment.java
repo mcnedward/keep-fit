@@ -52,7 +52,6 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
 
         initializeGoalList(view);
         initializeLoader();
-        registerReceivers();
     }
 
     @Override

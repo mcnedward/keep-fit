@@ -24,6 +24,7 @@ import com.mcnedward.keepfit.activity.fragment.BaseFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
+import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.Extension;
 
 import java.util.Calendar;
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                         CALENDAR.set(Calendar.YEAR, year);
                         CALENDAR.set(Calendar.MONTH, monthOfYear);
                         CALENDAR.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        Extension.broadcastCalendarChange(Extension.getCalendarPrettyDate(CALENDAR.getTime()), activity);
+                        Extension.broadcastCalendarChange(Dates.getCalendarPrettyDate(CALENDAR.getTime()), activity);
                     }
                 };
                 new DatePickerDialog(MainActivity.this, date, CALENDAR
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     public class SectionsPagerAdapter extends FragmentPagerAdapter implements
             ViewPager.OnPageChangeListener {
 
-        final private static int PAGE_COUNT = 3;
+        final private int PAGE_COUNT = BaseFragment.FragmentCode.values().length;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_edit) {
             IS_EDIT_MODE = !item.isChecked();
-            Extension.broadcastEditModeSwitch(IS_EDIT_MODE, Extension.getCalendarPrettyDate(CALENDAR.getTime()), this);
+            Extension.broadcastEditModeSwitch(IS_EDIT_MODE, Dates.getCalendarPrettyDate(CALENDAR.getTime()), this);
             if (item.isChecked()) {
                 item.setChecked(false);
                 calendarItem.setVisible(false);

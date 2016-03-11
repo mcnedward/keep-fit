@@ -21,4 +21,6 @@ public interface IRepository<T> {
     boolean delete(T entity) throws EntityDoesNotExistException;
 
     List<T> retrieve();
+
+    void close();
 }

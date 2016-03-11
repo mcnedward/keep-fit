@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,7 +26,7 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
-import com.mcnedward.keepfit.utils.adapter.UnitAdapter;
+import com.mcnedward.keepfit.utils.adapter.EnumAdapter;
 import com.mcnedward.keepfit.utils.enums.ActivityCode;
 import com.mcnedward.keepfit.utils.enums.Code;
 import com.mcnedward.keepfit.utils.Extension;
@@ -65,7 +63,7 @@ public class GoalOfDayFragment extends BaseFragment {
     private TextView txtEditDate;
     private Spinner spinUnit;
     private Spinner spinValue;
-    private UnitAdapter adapter;
+    private EnumAdapter adapter;
     private ProgressBar progressBar;
     private RelativeLayout content;
     private FloatingActionButton fab;
@@ -118,8 +116,6 @@ public class GoalOfDayFragment extends BaseFragment {
 
         toggleContent(editable);
         checkForGoalOfDay();
-
-        registerReceivers();
     }
 
     private void initializeEditGoalOfDayStepAmount(View view) {
@@ -145,7 +141,7 @@ public class GoalOfDayFragment extends BaseFragment {
 
     private void initializeSpinners(View view) {
         spinUnit = (Spinner) view.findViewById(R.id.goal_of_day_spinner_unit);
-        adapter = new UnitAdapter(context, android.R.layout.simple_spinner_item, Arrays.asList(Unit.values()));
+        adapter = new EnumAdapter(context, android.R.layout.simple_spinner_item, Unit.getEnums());
         spinUnit.setAdapter(adapter);
 
         spinValue = (Spinner) view.findViewById(R.id.goal_of_day_spinner_value);
