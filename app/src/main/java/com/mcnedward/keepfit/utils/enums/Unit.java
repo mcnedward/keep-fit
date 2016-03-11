@@ -120,6 +120,10 @@ public enum Unit implements IBaseEnum {
         return title;
     }
 
+    public static void setMeterToStep(double range) {
+        METER_TO_STEP = range;
+    }
+
     public static List<IBaseEnum> getEnums() {
         List<IBaseEnum> enums = new ArrayList<>();
         enums.add(METER);
@@ -153,7 +157,7 @@ public enum Unit implements IBaseEnum {
     private static double METER_TO_KILOMETER = 0.001;
     private static double METER_TO_MILE = 0.000621371;
     private static double METER_TO_YARD = 1.09361;
-    private static double METER_TO_STEP = 0.762;
+    public static double METER_TO_STEP = 500;
 
     /*****
      * Kilometers To
@@ -186,7 +190,7 @@ public enum Unit implements IBaseEnum {
      * Steps To
      *****/
 
-    private static double STEP_TO_METER = 1 / METER_TO_STEP;
+    private static double STEP_TO_METER = 1 * METER_TO_STEP;
     private static double STEP_TO_KILOMETER = 1 / KILOMETER_TO_STEP;
     private static double STEP_TO_MILE = 1 / MILES_TO_STEP;
     private static double STEP_TO_YARD = 1 / YARD_TO_STEP;

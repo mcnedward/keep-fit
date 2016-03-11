@@ -116,10 +116,9 @@ public class Extension {
         context.sendBroadcast(intent);
     }
 
-    public static void broadcastEditModeSwitch(boolean isEditMode, String date, Context context) {
+    public static void broadcastEditModeSwitch(boolean isEditMode, Context context) {
         Intent intent = new Intent(Action.EDIT_MODE_SWITCH.title);
         intent.putExtra("isEditMode", isEditMode);
-        intent.putExtra("date", date);
         intent.putExtra("action", Action.EDIT_MODE_SWITCH.id);
         context.sendBroadcast(intent);
     }

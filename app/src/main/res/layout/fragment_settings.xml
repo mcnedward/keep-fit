@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24dp"
+        android:padding="12dp"
         android:textSize="24dp"
         android:textAlignment="center"
         android:textStyle="bold"
@@ -18,11 +20,38 @@
         android:layout_height="1dp"
         android:background="@color/Black"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingLeft="8dp"
+        android:paddingBottom="20dp"
+        android:background="@drawable/border"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:layout_gravity="center"
+            android:text="@string/steps_to_meters"/>
+
+        <NumberPicker
+            android:id="@+id/settings_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="20dp"/>
+
+    </LinearLayout>
+
     <com.mcnedward.keepfit.view.SettingView
-        android:id="@+id/meters_view"
+        android:id="@+id/settings_test_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        custom:setting_title="@string/meters"
+        custom:setting_title="@string/test_mode"
+        custom:setting_description="@string/test_mode_description"
         custom:setting_unit="meters"/>
 
     <com.mcnedward.keepfit.view.SettingView

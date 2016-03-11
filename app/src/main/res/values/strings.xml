@@ -31,8 +31,10 @@
     <string name="percentage">Percentage Complete</string>
 
     <!-- Settings -->
-    <string name="settings_title">Units for Steps</string>
-    <string name="meters">Meters</string>
+    <string name="settings_title">Settings</string>
+    <string name="steps_to_meters">How many steps are in a meter?</string>
+    <string name="test_mode">Test Mode</string>
+    <string name="test_mode_description">This mode allows you to select the current date, so you can add goals for days you may have missed or forgotten.</string>
     <string name="yards">Yards</string>
     <string name="kilometers">Kilometers</string>
     <string name="miles">Miles</string>

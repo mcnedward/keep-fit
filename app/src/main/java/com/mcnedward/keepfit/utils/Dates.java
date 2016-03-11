@@ -88,7 +88,7 @@ public class Dates {
 
     private static Date getDate() {
         Date date;
-        if (MainActivity.IS_EDIT_MODE)
+        if (MainActivity.IS_TEST_MODE)
             date = MainActivity.CALENDAR.getTime();
         else
             date = new Date();

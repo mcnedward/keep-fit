@@ -2,44 +2,46 @@ package com.mcnedward.keepfit.activity;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.fragment.BaseFragment;
-import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
 import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.Extension;
+import com.mcnedward.keepfit.utils.enums.Action;
 
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    public static boolean IS_EDIT_MODE;
+    public static boolean IS_TEST_MODE;
     public static Calendar CALENDAR;
+    public static boolean IS_IN_SETTINGS = false;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
     private MenuItem calendarItem;
 
     private IGoalRepository goalRepository;
+    private ActionReceiver receiver;
+    private boolean isReceiverRegistered = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        receiver = new ActionReceiver();
         initialize();
+    }
+
+    @Override
+    public void onResume() {
+        if (!isReceiverRegistered) {
+            isReceiverRegistered = true;
+            registerReceiver(receiver, new IntentFilter(Action.EDIT_MODE_SWITCH.title));
+        }
+        if (IS_IN_SETTINGS) {
+            IS_IN_SETTINGS = false;
+        }
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if (isReceiverRegistered && !IS_IN_SETTINGS) {
+            isReceiverRegistered = false;
+            unregisterReceiver(receiver);
+        }
+        super.onPause();
     }
 
     private void initialize() {
@@ -143,22 +167,32 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_edit) {
-            IS_EDIT_MODE = !item.isChecked();
-            Extension.broadcastEditModeSwitch(IS_EDIT_MODE, Dates.getCalendarPrettyDate(CALENDAR.getTime()), this);
-            if (item.isChecked()) {
-                item.setChecked(false);
-                calendarItem.setVisible(false);
-            } else {
-                item.setChecked(true);
-                calendarItem.setVisible(true);
-            }
-            return true;
-        }
         if (id == R.id.action_settings) {
+            IS_IN_SETTINGS = true;
             Extension.startSettingsActivity(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void toggleEditMode(boolean isEditMode) {
+        IS_TEST_MODE = isEditMode;
+        if (isEditMode)
+            calendarItem.setVisible(true);
+        else
+            calendarItem.setVisible(false);
+    }
+
+    public class ActionReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Action action = Action.getById(intent.getIntExtra("action", 0));
+            switch (action) {
+                case EDIT_MODE_SWITCH: {
+                    boolean isEditMode = intent.getBooleanExtra("isEditMode", false);
+                    toggleEditMode(isEditMode);
+                }
+            }
+        }
     }
 }

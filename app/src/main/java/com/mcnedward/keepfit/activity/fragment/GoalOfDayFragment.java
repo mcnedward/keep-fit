@@ -150,13 +150,15 @@ public class GoalOfDayFragment extends BaseFragment {
     }
 
     private void initializeFAB(View view) {
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Extension.startAddGoalPopup(((Activity) context));
-            }
-        });
+        if (!view.isInEditMode()) {
+            fab = (FloatingActionButton) view.findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Extension.startAddGoalPopup(((Activity) context));
+                }
+            });
+        }
     }
 
     @Override

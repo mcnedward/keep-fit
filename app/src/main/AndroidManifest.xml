@@ -23,6 +23,7 @@
             android:theme="@style/AppTheme.PopupWindow"/>
         <activity android:name=".activity.AddGoalPopup"
             android:theme="@style/AppTheme.PopupWindow"/>
+        <activity android:name=".activity.SettingsActivity"/>
     </application>
 
 </manifest>

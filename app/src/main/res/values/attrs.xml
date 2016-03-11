@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="SettingsView">
         <attr name="setting_title" format="string" />
+        <attr name="setting_description" format="string" />
         <attr name="setting_unit" format="enum">
             <enum name="meters" value="1"/>
             <enum name="yards" value="2"/>

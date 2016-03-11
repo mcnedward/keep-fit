@@ -3,6 +3,7 @@ package com.mcnedward.keepfit.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -10,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
+import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.utils.enums.Unit;
 
 /**
@@ -20,7 +22,8 @@ public class SettingView extends LinearLayout {
 
     private Context context;
     private TextView txtSettingName;
-    private Spinner unitSpinner;
+    private TextView txtDescription;
+    private CheckBox checkBox;
     private Unit unit;
 
     public SettingView(Context context) {
@@ -38,9 +41,11 @@ public class SettingView extends LinearLayout {
 
         try {
             String title = a.getString(R.styleable.SettingsView_setting_title);
+            String description = a.getString(R.styleable.SettingsView_setting_description);
             int unitId = a.getInteger(R.styleable.SettingsView_setting_unit, 0);
             unit = Unit.getById(unitId);
             txtSettingName.setText(title);
+            txtDescription.setText(description);
         } finally {
             a.recycle();
         }
@@ -49,8 +54,16 @@ public class SettingView extends LinearLayout {
     private void initialize(Context context) {
         inflate(context, R.layout.view_setting, this);
         txtSettingName = (TextView) findViewById(R.id.setting_name);
+        txtDescription = (TextView) findViewById(R.id.setting_description);
+        checkBox = (CheckBox) findViewById(R.id.setting_check);
+    }
 
-        unitSpinner = (Spinner) findViewById(R.id.spinner_units);
+    public void setCheckBoxClickListener(CompoundButton.OnCheckedChangeListener listener) {
+        checkBox.setOnCheckedChangeListener(listener);
+    }
+
+    public void setChecked(boolean checked) {
+        checkBox.setChecked(checked);
     }
 
     public Unit getUnit() {

@@ -36,12 +36,14 @@ public class AddGoalView extends LinearLayout {
 
     public AddGoalView(Context context) {
         super(context);
-        initialize(context);
+        if (!isInEditMode())
+            initialize(context);
     }
 
     public AddGoalView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initialize(context);
+        if (!isInEditMode())
+            initialize(context);
     }
     private void initialize(Context context) {
         inflate(context, R.layout.view_add_goal, this);

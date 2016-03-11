@@ -27,6 +27,7 @@ public class StatisticView extends LinearLayout {
     private ProgressBar progressBar;
     private ImageView viewArrow;
     private boolean showContent = false;
+    private boolean isPercentage;
 
     public StatisticView(Context context, String goalSteps, String goalAmount) {
         super(context);
@@ -77,6 +78,7 @@ public class StatisticView extends LinearLayout {
         txtGoalAmount.setText(String.valueOf(percentage) + "%");
         progressBar.setMax(100);
         progressBar.setProgress(percentage);
+        isPercentage = true;
     }
 
     public void updateNumbers(double stepAmount, double goalAmount, Unit unit) {
@@ -103,7 +105,7 @@ public class StatisticView extends LinearLayout {
             txtSteps.setVisibility(VISIBLE);
             txtGoalAmount.setVisibility(VISIBLE);
             progressBar.setVisibility(VISIBLE);
-            txtSlash.setVisibility(VISIBLE);
+            if (!isPercentage) txtSlash.setVisibility(VISIBLE);
             viewArrow.setImageDrawable(ContextCompat.getDrawable(context, android.R.drawable.arrow_up_float));
         } else {
             txtSteps.setVisibility(GONE);

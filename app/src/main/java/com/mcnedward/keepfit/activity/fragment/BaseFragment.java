@@ -7,7 +7,9 @@ import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.enums.Action;
 
 /**
@@ -34,6 +36,9 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+    private FragmentReceiver receiver;
+    private boolean isReceiverRegistered = false;
+
     public static BaseFragment newInstance(FragmentCode code) {
         switch (code) {
             case GOAL_OF_THE_DAY:
@@ -48,16 +53,22 @@ public abstract class BaseFragment extends Fragment {
         return null;
     }
 
-     @Override
-     public void onPause() {
-         unRegisterReceivers();
-         super.onPause();
-     }
-
     @Override
     public void onResume() {
-        registerReceivers();
+        if (!isReceiverRegistered) {
+            isReceiverRegistered = true;
+            registerReceivers();
+        }
         super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        if (isReceiverRegistered && !MainActivity.IS_IN_SETTINGS) {
+            isReceiverRegistered = false;
+            unRegisterReceivers();
+        }
+        super.onPause();
     }
 
     protected abstract void initialize(View view);
@@ -72,7 +83,6 @@ public abstract class BaseFragment extends Fragment {
         getActivity().unregisterReceiver(receiver);
     }
 
-    private FragmentReceiver receiver;
     private void registerReceivers() {
         receiver = new FragmentReceiver();
         getActivity().registerReceiver(receiver, new IntentFilter(Action.ADD_GOAL.title));
@@ -106,8 +116,7 @@ public abstract class BaseFragment extends Fragment {
                 }
                 case EDIT_MODE_SWITCH: {
                     boolean isEditMode = intent.getBooleanExtra("isEditMode", false);
-                    String date = intent.getStringExtra("date");
-                    editModeSwitchActionReceived(isEditMode, date);
+                    editModeSwitchActionReceived(isEditMode, Dates.getCalendarPrettyDate(MainActivity.CALENDAR.getTime()));
                     break;
                 }
                 case CALENDER_CHANGE: {
