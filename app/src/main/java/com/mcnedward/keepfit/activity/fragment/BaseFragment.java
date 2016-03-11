@@ -18,7 +18,8 @@ public abstract class BaseFragment extends Fragment {
     public enum FragmentCode {
         GOAL_OF_THE_DAY(1, "Goal Of The Day"),
         GOAL(2, "Goals"),
-        HISTORY(3, "History");
+        HISTORY(3, "History"),
+        STATISTICS(4, "Statistics");
         int id;
         String title;
         FragmentCode(int id, String title) {
@@ -41,6 +42,8 @@ public abstract class BaseFragment extends Fragment {
                 return new GoalsFragment();
             case HISTORY:
                 return new HistoryFragment();
+            case STATISTICS:
+                return new StatisticsFragment();
         }
         return null;
     }

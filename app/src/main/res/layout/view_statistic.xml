@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/statistics_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="16dp"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:text="@string/placeholder" />
+
+        <TextView
+            android:id="@+id/statistics_goal_steps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/statistics_slash"
+            android:text="@string/placeholder"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/statistics_slash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp"
+            android:text="/"
+            android:layout_toLeftOf="@+id/statistics_goal_amount"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/statistics_goal_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/statistics_arrow"
+            android:layout_centerVertical="true"
+            android:text="@string/placeholder"
+            android:paddingRight="6dp"
+            android:textSize="14dp" />
+
+        <ImageView
+            android:id="@+id/statistics_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingRight="16dp"
+            android:paddingLeft="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@android:drawable/arrow_up_float"/>
+    </RelativeLayout>
+
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/statistics_progress_bar"
+        style="@android:style/Widget.Material.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" />
+
+</LinearLayout>

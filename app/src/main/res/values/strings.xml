@@ -24,6 +24,12 @@
     <!-- History Fragment -->
     <string name="history_title">Goal History</string>
 
+    <!-- Statistics Fragment -->
+    <string name="average">Average</string>
+    <string name="minimum">Minimum</string>
+    <string name="maximum">Maximum</string>
+    <string name="percentage">Percentage Complete</string>
+
     <!-- Settings -->
     <string name="settings_title">Units for Steps</string>
     <string name="meters">Meters</string>

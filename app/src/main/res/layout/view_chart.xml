@@ -9,7 +9,7 @@
     android:orientation="vertical">
 
     <com.androidplot.xy.XYPlot
-        android:id="@+id/history_plot"
+        android:id="@+id/plot_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         androidPlot.graphWidget.rangeLabelOrientation="-90"
@@ -19,7 +19,7 @@
         androidPlot.graphWidget.marginBottom="6dp"/>
 
     <TextView
-        android:id="@+id/history_no_dates"
+        android:id="@+id/txt_no_dates"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"

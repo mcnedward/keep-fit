@@ -9,4 +9,7 @@
             <enum name="kilometers" value="4"/>
         </attr>
     </declare-styleable>
+    <declare-styleable name="StatisticView">
+        <attr name="statistics_title" format="string"/>
+    </declare-styleable>
 </resources>
