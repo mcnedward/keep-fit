@@ -1,35 +1,24 @@
 package com.mcnedward.keepfit.utils;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.RippleDrawable;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.AddGoalPopup;
-import com.mcnedward.keepfit.activity.EditGoalActivity;
 import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.activity.SettingsActivity;
 import com.mcnedward.keepfit.activity.SettingsStatisticsActivity;
 import com.mcnedward.keepfit.activity.SettingsTabLayoutActivity;
-import com.mcnedward.keepfit.activity.fragment.BaseFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.enums.Action;
 import com.mcnedward.keepfit.utils.enums.ActivityCode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Edward on 1/31/2016.
@@ -68,13 +57,6 @@ public class Extension {
      */
     public static void setRippleBackground(View view, Context context) {
         setRippleBackground(view, R.color.FireBrick, R.color.GhostWhite, context);
-    }
-
-    public static void startEditGoalActivity(Goal goal, boolean isEdit, Activity activity) {
-        Intent intent = new Intent(activity, EditGoalActivity.class);
-        intent.putExtra("goal", goal);
-        intent.putExtra("isEdit", isEdit);
-        activity.startActivity(intent);
     }
 
     /*****

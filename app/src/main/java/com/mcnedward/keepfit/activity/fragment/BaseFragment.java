@@ -22,6 +22,7 @@ public abstract class BaseFragment extends Fragment {
 
     private FragmentReceiver receiver;
     private boolean isReceiverRegistered = false;
+    private static boolean pauseReceiver = true;
 
     public static BaseFragment newInstance(FragmentCode code) {
         switch (code.getCodeByTitle()) {
@@ -48,8 +49,9 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onPause() {
-        if (isReceiverRegistered && !MainActivity.IS_IN_SETTINGS) {
+        if (isReceiverRegistered && !MainActivity.IS_IN_SETTINGS && pauseReceiver) {
             isReceiverRegistered = false;
+            pauseReceiver = false;
             unRegisterReceivers();
         }
         super.onPause();
@@ -84,6 +86,10 @@ public abstract class BaseFragment extends Fragment {
         getActivity().registerReceiver(receiver, new IntentFilter(Action.TEST_MODE_SWITCH.title));
         getActivity().registerReceiver(receiver, new IntentFilter(Action.EDIT_MODE_SWITCH.title));
         getActivity().registerReceiver(receiver, new IntentFilter(Action.CALENDER_CHANGE.title));
+    }
+
+    public void setPauseReceiver(boolean pauseReceiver) {
+        this.pauseReceiver = pauseReceiver;
     }
 
     public class FragmentReceiver extends BroadcastReceiver {

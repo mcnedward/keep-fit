@@ -31,7 +31,6 @@ public class GoalView extends RelativeLayout {
 
     private TextView txtGoalName;
     private ImageView imgIsGoalOfDay;
-    private ImageView imgGoalEdit;
     private ImageView imgGoalDelete;
     private ProgressBar progressBar;
 
@@ -64,17 +63,6 @@ public class GoalView extends RelativeLayout {
                 Extension.broadcastUpdateGoalOfDay(goal, context);
                 Toast.makeText(getContext(), String.format("Set %s as the goal of the day!", goal.getName()), Toast.LENGTH_SHORT).show();
                 adapter.notifyDataSetChanged(true);
-            }
-        });
-
-        imgGoalEdit = (ImageView) findViewById(R.id.list_goal_edit);
-        Extension.setRippleBackground(imgGoalEdit, context);
-        imgGoalEdit.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (adapter != null) {
-                    Extension.startEditGoalActivity(goal, true, ((Activity) context));
-                }
             }
         });
 

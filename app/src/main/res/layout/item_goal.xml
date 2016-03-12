@@ -30,24 +30,12 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center_vertical"
-            android:layout_toLeftOf="@+id/list_goal_edit"
-            android:paddingTop="15dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="15dp"
-            android:src="@drawable/star_off" />
-
-        <ImageView
-            android:id="@+id/list_goal_edit"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@+id/list_goal_delete"
             android:paddingTop="15dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="15dp"
-            android:src="@drawable/edit" />
+            android:src="@drawable/star_off" />
 
         <ImageView
             android:id="@+id/list_goal_delete"

@@ -72,6 +72,7 @@ public class GoalOfDayFragment extends BaseFragment {
     private ProgressBar progressBar;
     private RelativeLayout content;
     private FloatingActionButton fab;
+    private boolean popupStarted = false;
 
     // Edit Mode stuff
     private EditText editGoalOfDayName;
@@ -240,6 +241,7 @@ public class GoalOfDayFragment extends BaseFragment {
                 @Override
                 public void onClick(View view) {
                     Extension.startAddGoalPopup(((Activity) context));
+                    setPauseReceiver(false);
                 }
             });
         }

@@ -5,12 +5,16 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 
 import com.mcnedward.keepfit.R;
+import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.enums.Action;
+import com.mcnedward.keepfit.utils.enums.ActivityCode;
+import com.mcnedward.keepfit.utils.enums.Code;
 import com.mcnedward.keepfit.view.AddGoalView;
 
 /**
@@ -18,6 +22,8 @@ import com.mcnedward.keepfit.view.AddGoalView;
  */
 public class AddGoalPopup extends Activity {
     private static final String TAG = "AddGoalPopup";
+
+    private FragmentReceiver receiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,19 @@ public class AddGoalPopup extends Activity {
         view.setPadding(10, 10, 10, 10);
         setContentView(view);
         initializeWindow();
+        receiver = new FragmentReceiver();
+    }
+
+    @Override
+    public void onResume() {
+        registerReceiver(receiver, new IntentFilter(Action.ADD_GOAL.title));
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        unregisterReceiver(receiver);
+        super.onPause();
     }
 
     private void initializeWindow() {
@@ -44,9 +63,9 @@ public class AddGoalPopup extends Activity {
         public void onReceive(Context context, Intent intent) {
             Action action = Action.getById(intent.getIntExtra("action", 0));
             switch (action) {
-                case ADD_GOAL:
+                case ADD_GOAL: {
                     finish();
-                    break;
+                }
             }
         }
     }
