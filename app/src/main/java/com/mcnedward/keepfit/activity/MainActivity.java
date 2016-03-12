@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         if (!isReceiverRegistered) {
             isReceiverRegistered = true;
             registerReceiver(receiver, new IntentFilter(Action.TEST_MODE_SWITCH.title));
+            registerReceiver(receiver, new IntentFilter(Action.EDIT_MODE_SWITCH.title));
             registerReceiver(receiver, new IntentFilter(Action.TAB_ORDER_CHANGE.title));
         }
         if (IS_IN_SETTINGS) {
@@ -212,6 +213,10 @@ public class MainActivity extends AppCompatActivity {
                 case TEST_MODE_SWITCH: {
                     boolean isTestMode = intent.getBooleanExtra("isTestMode", false);
                     toggleTestMode(isTestMode);
+                    break;
+                }
+                case EDIT_MODE_SWITCH: {
+                    IS_EDIT_MODE = intent.getBooleanExtra("isEditMode", false);
                     break;
                 }
             }

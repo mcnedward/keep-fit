@@ -150,6 +150,23 @@ public enum Unit implements IBaseEnum {
         return amount * conversionMetric;
     }
 
+    public static Unit getByAbbreviation(String abbreviation) {
+        switch (abbreviation) {
+            case "m":
+                return METER;
+            case "km":
+                return KILOMETER;
+            case "mi":
+                return MILE;
+            case "y":
+                return YARD;
+            case "s":
+                return STEP;
+            default:
+                return METER;
+        }
+    }
+
     /*****
      * Meters To
      *****/

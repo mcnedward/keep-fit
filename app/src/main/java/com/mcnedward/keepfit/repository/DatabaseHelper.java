@@ -59,7 +59,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sInstance;
     }
 
-    // TODO: CREATED_ON AS INTEGER
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String createGoalTable = String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +

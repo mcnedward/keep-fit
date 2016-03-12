@@ -84,7 +84,6 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewTestMode.setChecked(!viewTestMode.isChecked());
-                Extension.broadcastTestModeSwitch(viewTestMode.isChecked(), activity);
             }
         });
     }
@@ -103,7 +102,6 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 viewEditMode.setChecked(!viewEditMode.isChecked());
-                Extension.broadcastTestModeSwitch(viewEditMode.isChecked(), activity);
             }
         });
     }

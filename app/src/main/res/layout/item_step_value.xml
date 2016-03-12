@@ -30,7 +30,7 @@
                 android:layout_below="@+id/step_counter"
                 android:layout_centerInParent="true"
                 android:padding="5dp"
-                android:src="@drawable/minus"/>
+                android:src="@drawable/minus" />
 
             <LinearLayout
                 android:id="@+id/step_counter"
@@ -42,6 +42,7 @@
                 android:paddingTop="10dp">
 
                 <LinearLayout
+                    android:id="@+id/step_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -57,6 +58,7 @@
                         android:textSize="30dp" />
 
                     <TextView
+                        android:id="@+id/goal_of_day_slash"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
@@ -64,14 +66,29 @@
                         android:text="@string/forward_slash"
                         android:textSize="30dp" />
 
-                    <TextView
-                        android:id="@+id/goal_of_day_step_goal"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:text="0"
-                        android:textSize="30dp" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/goal_of_day_step_goal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="0"
+                            android:textSize="30dp" />
+
+                        <EditText
+                            android:id="@+id/edit_goal_of_day_step_goal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:textSize="30dp"
+                            android:inputType="numberDecimal"
+                            android:visibility="gone" />
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/goal_of_day_unit"
@@ -82,6 +99,7 @@
                         android:text="0"
                         android:textSize="14dp" />
                 </LinearLayout>
+
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

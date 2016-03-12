@@ -132,6 +132,7 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         Random rand = new Random();
         for (String timestamp : timestamps) {
             int stepGoal = rand.nextInt(1000);
+            if (stepGoal <= 2) stepGoal = 3;
             int stepAmount = rand.nextInt(stepGoal / 2);
             Goal goal = new Goal();
             goal.setName("Goal " + stepGoal);
