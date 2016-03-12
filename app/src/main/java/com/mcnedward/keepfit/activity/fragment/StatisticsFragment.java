@@ -6,6 +6,9 @@ import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.model.Statistic;
+import com.mcnedward.keepfit.repository.IStatisticRepository;
+import com.mcnedward.keepfit.repository.StatisticRepository;
 import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.view.StatisticView;
@@ -19,6 +22,7 @@ import java.util.List;
 public class StatisticsFragment extends AdvancedFragment implements android.support.v4.app.LoaderManager.LoaderCallbacks<List<Goal>> {
     private static final String TAG = "StatisticsFragment";
 
+    private IStatisticRepository repository;
     private StatisticView viewAverage;
     private StatisticView viewMinimum;
     private StatisticView viewMaximum;
@@ -34,6 +38,7 @@ public class StatisticsFragment extends AdvancedFragment implements android.supp
 
     @Override
     protected void setup(View view) {
+        repository = new StatisticRepository(context);
         goals = new ArrayList<>();
         txtDates = (TextView) view.findViewById(R.id.statistics_date);
         viewAverage = (StatisticView) view.findViewById(R.id.statistics_average);
@@ -41,7 +46,33 @@ public class StatisticsFragment extends AdvancedFragment implements android.supp
         viewMaximum = (StatisticView) view.findViewById(R.id.statistics_maximum);
         viewPercentage = (StatisticView) view.findViewById(R.id.statistics_percentage);
 
+        handleSettings();
+
         updateDateText(seekBar.getProgress());
+    }
+
+    private void handleSettings() {
+        List<Statistic> statistics = repository.retrieve();
+        for (Statistic statistic : statistics) {
+            switch (statistic.getStatByTitle()) {
+                case AVERAGE:
+                    viewAverage.setVisibility(statistic.isShow() ? View.VISIBLE : View.GONE);
+                    viewAverage.toggleContent(statistic.isOpen());
+                    break;
+                case MINIMUM:
+                    viewMinimum.setVisibility(statistic.isShow() ? View.VISIBLE : View.GONE);
+                    viewMinimum.toggleContent(statistic.isOpen());
+                    break;
+                case MAXIMUM:
+                    viewMaximum.setVisibility(statistic.isShow() ? View.VISIBLE : View.GONE);
+                    viewMaximum.toggleContent(statistic.isOpen());
+                    break;
+                case PERCENTAGE:
+                    viewPercentage.setVisibility(statistic.isShow() ? View.VISIBLE : View.GONE);
+                    viewPercentage.toggleContent(statistic.isOpen());
+                    break;
+            }
+        }
     }
 
     @Override
@@ -96,18 +127,6 @@ public class StatisticsFragment extends AdvancedFragment implements android.supp
 
     @Override
     public void onLoaderReset(Loader<List<Goal>> loader) {
-    }
-
-    private void updateAverage() {
-
-    }
-
-    private void updateMinimum() {
-
-    }
-
-    private void updateMaximum() {
-
     }
 
 }

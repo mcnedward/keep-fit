@@ -43,7 +43,7 @@ public class TabSelectionView extends LinearLayout {
 
         String title = "";
         try {
-            title = a.getString(R.styleable.TabSelectionView_selection_title);
+            title = a.getString(R.styleable.TabSelectionView_tab_selection_title);
         } finally {
             a.recycle();
         }

@@ -15,6 +15,9 @@
         <attr name="statistics_title" format="string"/>
     </declare-styleable>
     <declare-styleable name="TabSelectionView">
-        <attr name="selection_title" format="string"/>
+        <attr name="tab_selection_title" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="StatisticsSelectionView">
+        <attr name="statistics_selection_title" format="string"/>
     </declare-styleable>
 </resources>

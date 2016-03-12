@@ -21,6 +21,7 @@ import com.mcnedward.keepfit.activity.AddGoalPopup;
 import com.mcnedward.keepfit.activity.EditGoalActivity;
 import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.activity.SettingsActivity;
+import com.mcnedward.keepfit.activity.SettingsStatisticsActivity;
 import com.mcnedward.keepfit.activity.SettingsTabLayoutActivity;
 import com.mcnedward.keepfit.activity.fragment.BaseFragment;
 import com.mcnedward.keepfit.model.Goal;
@@ -95,8 +96,13 @@ public class Extension {
         activity.startActivity(intent);
     }
 
-    public static void startTabLayoutActivity(final Activity activity) {
+    public static void startSettingsTabLayoutActivity(final Activity activity) {
         Intent intent = new Intent(activity, SettingsTabLayoutActivity.class);
+        activity.startActivity(intent);
+    }
+
+    public static void startSettingsStatisticsActivity(final Activity activity) {
+        Intent intent = new Intent(activity, SettingsStatisticsActivity.class);
         activity.startActivity(intent);
     }
 

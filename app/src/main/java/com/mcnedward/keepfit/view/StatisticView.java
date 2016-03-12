@@ -70,7 +70,6 @@ public class StatisticView extends LinearLayout {
                 toggleContent();
             }
         });
-        toggleContent();
     }
 
     public void setAsPercentage(int percentage) {
@@ -100,8 +99,12 @@ public class StatisticView extends LinearLayout {
         }
     }
 
-    private void toggleContent() {
-        if (showContent) {
+    public void toggleContent() {
+        toggleContent(showContent);
+    }
+
+    public void toggleContent(boolean show) {
+        if (show) {
             txtSteps.setVisibility(VISIBLE);
             txtGoalAmount.setVisibility(VISIBLE);
             progressBar.setVisibility(VISIBLE);

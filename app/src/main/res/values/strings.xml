@@ -37,8 +37,13 @@
     <string name="edit_mode">Edit Mode</string>
     <string name="edit_mode_description">This mode allows you to edit your current goal. You can change the name of the goal, the step goal, and the units used for the goal.</string>
     <string name="tab_layout">Tab Layout</string>
-    <string name="tab_layout_description">You can change the order of the tabs here.</string>
+    <string name="tab_layout_description">Change the order of the tabs.</string>
     <string name="tab_layout_message">Changing the tab order will cause the app to restart.</string>
+    <string name="statistics_view">Statistics View</string>
+    <string name="statistics_view_description">Change the statistics that will be displayed.</string>
+    <string name="statistics_message">Changing the statistics view will cause the app to restart.</string>
+    <string name="statistics_show">Show</string>
+    <string name="statistics_open">Open</string>
 
     <!-- Tab Layout View -->
     <string name="goal_of_day">Goal Of The Day</string>

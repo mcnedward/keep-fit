@@ -28,6 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
     private SettingView viewTestMode;
     private SettingView viewEditMode;
     private SettingView viewTabLayout;
+    private SettingView viewStatistics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
         initializeTestModeSetting();
         initializeEditModeSetting();
         initializeTabLayoutSetting();
+        initializeStatisticsSetting();
     }
 
     private void initializeNumberPicker() {
@@ -112,7 +114,18 @@ public class SettingsActivity extends AppCompatActivity {
         viewTabLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Extension.startTabLayoutActivity(activity);
+                Extension.startSettingsTabLayoutActivity(activity);
+            }
+        });
+    }
+
+    private void initializeStatisticsSetting() {
+        viewStatistics = (SettingView) findViewById(R.id.settings_statistics_view);
+        final Activity activity = this;
+        viewStatistics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Extension.startSettingsStatisticsActivity(activity);
             }
         });
     }

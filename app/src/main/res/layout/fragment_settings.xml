@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/GhostWhite"
     tools:context=".activity.MainActivity">
 
     <android.support.v4.widget.NestedScrollView
@@ -14,8 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingBottom="20dp">
+            android:orientation="vertical">
 
             <View
                 android:layout_width="match_parent"
@@ -74,8 +74,15 @@
                 android:layout_height="wrap_content"
                 custom:setting_checkable="false"
                 custom:setting_description="@string/tab_layout_description"
-                custom:setting_title="@string/tab_layout"
-                custom:setting_unit="yards" />
+                custom:setting_title="@string/tab_layout" />
+
+            <com.mcnedward.keepfit.view.SettingView
+                android:id="@+id/settings_statistics_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                custom:setting_checkable="false"
+                custom:setting_description="@string/tab_layout_description"
+                custom:setting_title="@string/statistics_view" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

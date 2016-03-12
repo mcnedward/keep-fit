@@ -3,13 +3,11 @@ package com.mcnedward.keepfit.view;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 
 import com.mcnedward.keepfit.R;
-import com.mcnedward.keepfit.activity.fragment.BaseFragment;
 import com.mcnedward.keepfit.model.FragmentCode;
 import com.mcnedward.keepfit.repository.FragmentCodeRepository;
 import com.mcnedward.keepfit.repository.IFragmentCodeRepository;
@@ -20,7 +18,7 @@ import java.util.List;
 /**
  * Created by Edward on 3/8/2016.
  */
-public class TabLayoutView extends LinearLayout {
+public class SettingTabLayoutView extends LinearLayout {
     private static final String TAG = "TabLayoutView";
 
     private Context context;
@@ -33,12 +31,12 @@ public class TabLayoutView extends LinearLayout {
     private NumberPicker picker;
     private boolean valuesChanged = false;
 
-    public TabLayoutView(Context context) {
+    public SettingTabLayoutView(Context context) {
         super(context);
         initialize(context);
     }
 
-    public TabLayoutView(Context context, AttributeSet attrs) {
+    public SettingTabLayoutView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
     }
@@ -46,7 +44,7 @@ public class TabLayoutView extends LinearLayout {
     private boolean fromSwitch = false;
 
     private void initialize(final Context context) {
-        inflate(context, R.layout.view_tab_layout, this);
+        inflate(context, R.layout.view_setting_tab_layout, this);
         repository = new FragmentCodeRepository(context);
         List<FragmentCode> fragmentCodes = repository.getFragmentCodesSorted();
         buttons = new ArrayList<>();

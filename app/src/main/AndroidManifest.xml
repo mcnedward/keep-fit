@@ -28,6 +28,8 @@
             android:parentActivityName=".activity.MainActivity"/>
         <activity android:name=".activity.SettingsTabLayoutActivity"
             android:parentActivityName=".activity.SettingsActivity"/>
+        <activity android:name=".activity.SettingsStatisticsActivity"
+            android:parentActivityName=".activity.SettingsActivity"/>
     </application>
 
 </manifest>

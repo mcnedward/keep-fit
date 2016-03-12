@@ -9,12 +9,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="12dp"
+        android:text="@string/tab_layout_message"
         android:textAlignment="center"
-        android:textSize="16dp"
-        android:textStyle="bold"
         android:textAllCaps="true"
-        android:text="@string/tab_layout_message"/>
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/Black" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,14 +33,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            custom:selection_title="@string/goal_of_day" />
+            custom:tab_selection_title="@string/goal_of_day" />
 
         <com.mcnedward.keepfit.view.TabSelectionView
             android:id="@+id/tab_goals"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            custom:selection_title="@string/goals" />
+            custom:tab_selection_title="@string/goals" />
     </LinearLayout>
 
     <LinearLayout
@@ -48,20 +54,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            custom:selection_title="@string/history" />
+            custom:tab_selection_title="@string/history" />
 
         <com.mcnedward.keepfit.view.TabSelectionView
             android:id="@+id/tab_statistics"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            custom:selection_title="@string/statistics" />
+            custom:tab_selection_title="@string/statistics" />
     </LinearLayout>
 
     <NumberPicker
         android:id="@+id/tab_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp" />
 </LinearLayout>
