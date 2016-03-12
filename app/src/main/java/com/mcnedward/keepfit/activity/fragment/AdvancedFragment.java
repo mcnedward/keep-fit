@@ -156,7 +156,12 @@ public abstract class AdvancedFragment extends BaseFragment implements android.s
     }
 
     @Override
-    protected void editModeSwitchActionReceived(boolean isEditMode, String date) {
+    protected void testModeSwitchActionReceived(boolean isTestMode, String date) {
+
+    }
+
+    @Override
+    protected void editModeSwitchActionReceived(boolean isEditMode) {
 
     }
 

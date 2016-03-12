@@ -3,6 +3,7 @@ package com.mcnedward.keepfit.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.MainActivity;
+import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.enums.Unit;
 
 /**
@@ -53,6 +55,8 @@ public class SettingView extends LinearLayout {
 
     private void initialize(Context context) {
         inflate(context, R.layout.view_setting, this);
+        View view = findViewById(R.id.setting_container);
+        Extension.setRippleBackground(view, context);
         txtSettingName = (TextView) findViewById(R.id.setting_name);
         txtDescription = (TextView) findViewById(R.id.setting_description);
         checkBox = (CheckBox) findViewById(R.id.setting_check);
@@ -64,6 +68,10 @@ public class SettingView extends LinearLayout {
 
     public void setChecked(boolean checked) {
         checkBox.setChecked(checked);
+    }
+
+    public boolean isChecked() {
+        return checkBox.isChecked();
     }
 
     public Unit getUnit() {

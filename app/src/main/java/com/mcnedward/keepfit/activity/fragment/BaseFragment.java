@@ -76,7 +76,8 @@ public abstract class BaseFragment extends Fragment {
     protected abstract void deleteGoalActionReceived(Goal goal);
     protected abstract void updateGoalOfDayActionReceived(Goal goal);
     protected abstract void updateGoalAmountActionReceived(Goal goal);
-    protected abstract void editModeSwitchActionReceived(boolean isEditMode, String date);
+    protected abstract void testModeSwitchActionReceived(boolean isTestMode, String date);
+    protected abstract void editModeSwitchActionReceived(boolean isEditMode);
     protected abstract void calendarChangeActionReceived(String date);
 
     private void unRegisterReceivers() {
@@ -89,6 +90,7 @@ public abstract class BaseFragment extends Fragment {
         getActivity().registerReceiver(receiver, new IntentFilter(Action.DELETE_GOAL.title));
         getActivity().registerReceiver(receiver, new IntentFilter(Action.UPDATE_GOAL_OF_DAY.title));
         getActivity().registerReceiver(receiver, new IntentFilter(Action.UPDATE_GOAL_AMOUNT.title));
+        getActivity().registerReceiver(receiver, new IntentFilter(Action.TEST_MODE_SWITCH.title));
         getActivity().registerReceiver(receiver, new IntentFilter(Action.EDIT_MODE_SWITCH.title));
         getActivity().registerReceiver(receiver, new IntentFilter(Action.CALENDER_CHANGE.title));
     }
@@ -114,9 +116,14 @@ public abstract class BaseFragment extends Fragment {
                     updateGoalAmountActionReceived(goal);
                     break;
                 }
+                case TEST_MODE_SWITCH: {
+                    boolean isTestMode = intent.getBooleanExtra("isTestMode", false);
+                    testModeSwitchActionReceived(isTestMode, Dates.getCalendarPrettyDate(MainActivity.CALENDAR.getTime()));
+                    break;
+                }
                 case EDIT_MODE_SWITCH: {
                     boolean isEditMode = intent.getBooleanExtra("isEditMode", false);
-                    editModeSwitchActionReceived(isEditMode, Dates.getCalendarPrettyDate(MainActivity.CALENDAR.getTime()));
+                    editModeSwitchActionReceived(isEditMode);
                     break;
                 }
                 case CALENDER_CHANGE: {

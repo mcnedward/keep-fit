@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         androidPlot.graphWidget.rangeLabelOrientation="-90"
         androidPlot.graphWidget.marginLeft="2dp"
-        androidPlot.graphWidget.marginTop="0"
+        androidPlot.graphWidget.marginTop="0dp"
         androidPlot.graphWidget.marginRight="4dp"
         androidPlot.graphWidget.marginBottom="6dp"/>
 

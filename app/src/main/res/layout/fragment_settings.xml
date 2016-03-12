@@ -2,77 +2,60 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.MainActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:textSize="24dp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:text="@string/settings_title"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/Black"/>
+        android:background="@color/Black" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
         android:paddingLeft="8dp"
-        android:paddingBottom="20dp"
-        android:background="@drawable/border"
-        android:orientation="horizontal">
+        android:paddingTop="12dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="18dp"
             android:layout_gravity="center"
-            android:text="@string/steps_to_meters"/>
+            android:text="@string/steps_to_meters"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
         <NumberPicker
             android:id="@+id/settings_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/Black" />
 
     <com.mcnedward.keepfit.view.SettingView
         android:id="@+id/settings_test_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        custom:setting_title="@string/test_mode"
         custom:setting_description="@string/test_mode_description"
-        custom:setting_unit="meters"/>
+        custom:setting_title="@string/test_mode"
+        custom:setting_unit="meters" />
 
     <com.mcnedward.keepfit.view.SettingView
-        android:id="@+id/yards_view"
+        android:id="@+id/settings_edit_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        custom:setting_title="@string/yards"
-        custom:setting_unit="yards"/>
-
-    <com.mcnedward.keepfit.view.SettingView
-        android:id="@+id/miles_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        custom:setting_title="@string/miles"
-        custom:setting_unit="miles"/>
-
-    <com.mcnedward.keepfit.view.SettingView
-        android:id="@+id/kilommeters_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        custom:setting_title="@string/kilometers"
-        custom:setting_unit="kilometers"/>
+        custom:setting_description="@string/edit_mode_description"
+        custom:setting_title="@string/edit_mode"
+        custom:setting_unit="yards" />
 
 </LinearLayout>

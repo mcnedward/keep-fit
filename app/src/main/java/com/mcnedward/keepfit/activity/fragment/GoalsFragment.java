@@ -77,7 +77,12 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     }
 
     @Override
-    protected void editModeSwitchActionReceived(boolean isEditMode, String date) {
+    protected void testModeSwitchActionReceived(boolean isEditMode, String date) {
+
+    }
+
+    @Override
+    protected void editModeSwitchActionReceived(boolean isEditMode) {
 
     }
 

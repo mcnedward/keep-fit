@@ -96,11 +96,15 @@ public abstract class ChartView extends LinearLayout {
 
         updatePlotWidget(rangeIncrement);
 
-        plot.redraw();
+        if (dates.size() <= 1) {
+            txtNoDates.setText(dateMessage);
+            txtNoDates.setVisibility(VISIBLE);
+        } else
+            txtNoDates.setVisibility(GONE);
     }
 
-    private void updatePlotWidget(double rangeIncrement) {
-        if (goals != null) {
+    private void updatePlotWidget(final double rangeIncrement) {
+        if (goals != null && !goals.isEmpty()) {
             plot.setRangeStep(XYStepMode.INCREMENT_BY_VAL, rangeIncrement);
             plot.setRangeTopMin(upperBound + rangeIncrement);
 
@@ -117,7 +121,8 @@ public abstract class ChartView extends LinearLayout {
 
                 @Override
                 public StringBuffer format(Object value, StringBuffer buffer, FieldPosition field) {
-                    if (dates.size() == 0) return buffer;
+                    if (dates.size() == 0)
+                        return buffer;
                     int position = count++;
                     int dateCount = dates.size();
                     if (dateCount > maxDomainStep) {
@@ -148,16 +153,23 @@ public abstract class ChartView extends LinearLayout {
                 }
             });
             plot.setRangeValueFormat(new Format() {
-                private DecimalFormat format = new DecimalFormat("#.#####");
+                private DecimalFormat format = new DecimalFormat("#.###");
                 private int count = 0;
 
                 @Override
                 public StringBuffer format(Object object, StringBuffer buffer, FieldPosition field) {
+                    // Skip the first one
+                    if (count++ == 0)
+                        return buffer;
                     double value = (Double) object;
+                    int position = count;
                     int dateCount = dates.size();
-                    if (count++ == 0) return buffer;
                     if (dateCount > maxDomainStep) {
-                        return format.format(value, buffer, field);
+                        int fieldsToDisplay = dateCount / 4;
+                        if (position % fieldsToDisplay == 0) {
+                            return format.format(value, buffer, field);
+                        } else
+                            return buffer;
                     }
                     return format.format(value, buffer, field);
                 }
@@ -167,11 +179,6 @@ public abstract class ChartView extends LinearLayout {
                     return null;
                 }
             });
-            if (dates.size() <= 1) {
-                txtNoDates.setText(dateMessage);
-                txtNoDates.setVisibility(VISIBLE);
-            } else
-                txtNoDates.setVisibility(GONE);
         }
     }
 
@@ -193,6 +200,10 @@ public abstract class ChartView extends LinearLayout {
 
         average /= goals.size();
         return average;
+    }
+
+    public void notifyUpdateFinished() {
+        plot.redraw();
     }
 
     public void editGoal(Goal goal) {

@@ -93,7 +93,7 @@ public class StatisticView extends LinearLayout {
     }
 
     private void bumpProgress(double stepAmount, double goalAmount) {
-        if (goalAmount < 1 && stepAmount < 1) {
+        if (goalAmount != 0 && stepAmount != 0 && goalAmount < 1 && stepAmount < 1) {
             goalAmount *= 100;
             stepAmount *= 100;
             bumpProgress(stepAmount, goalAmount);

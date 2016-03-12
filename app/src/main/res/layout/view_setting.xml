@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/setting_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -23,11 +23,12 @@
                 android:layout_alignParentLeft="true"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
-                android:paddingTop="18dp"
-                android:paddingLeft="10dp"
                 android:paddingBottom="12dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="18dp"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
+                android:textStyle="bold"
                 android:text="@string/placeholder"
                 android:textSize="20dp" />
 
@@ -49,4 +50,10 @@
             android:paddingRight="10dp"
             android:paddingTop="15dp" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/Black" />
 </LinearLayout>

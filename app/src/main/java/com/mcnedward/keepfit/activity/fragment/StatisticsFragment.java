@@ -24,7 +24,7 @@ public class StatisticsFragment extends AdvancedFragment implements android.supp
     private StatisticView viewMaximum;
     private StatisticView viewPercentage;
     private TextView txtDates;
-    private Unit unit;
+    private Unit unit = Unit.METER;
     private List<Goal> goals;
 
     @Override
@@ -71,22 +71,23 @@ public class StatisticsFragment extends AdvancedFragment implements android.supp
         double averageStepAmount = 0;
         double averageGoalAmount = 0;
         int goalsCompleted = 0;
-        for (Goal goal : goals) {
-            double stepAmount = Unit.convert(goal.getUnit(), unit, goal.getStepAmount());
-            averageStepAmount += stepAmount;
-
-            double stepGoal = Unit.convert(goal.getUnit(), unit, goal.getStepGoal());
-            averageGoalAmount += stepGoal;
-
-            if (goal.isGoalReached())
-                goalsCompleted++;
-        }
-        averageStepAmount /= goals.size();
-        averageGoalAmount /= goals.size();
         int percentage = 0;
-        if (goals.size() > 0)
-            percentage = (goalsCompleted / goals.size()) * 100;
+        if (!goals.isEmpty()) {
+            for (Goal goal : goals) {
+                double stepAmount = Unit.convert(goal.getUnit(), unit, goal.getStepAmount());
+                averageStepAmount += stepAmount;
 
+                double stepGoal = Unit.convert(goal.getUnit(), unit, goal.getStepGoal());
+                averageGoalAmount += stepGoal;
+
+                if (goal.isGoalReached())
+                    goalsCompleted++;
+            }
+            averageStepAmount /= goals.size();
+            averageGoalAmount /= goals.size();
+            if (goals.size() > 0)
+                percentage = (goalsCompleted / goals.size()) * 100;
+        }
         viewAverage.updateNumbers(averageStepAmount, averageGoalAmount, unit);
         viewMinimum.updateNumbers(averageStepAmount, averageGoalAmount, unit);
         viewMaximum.updateNumbers(averageStepAmount, averageGoalAmount, unit);

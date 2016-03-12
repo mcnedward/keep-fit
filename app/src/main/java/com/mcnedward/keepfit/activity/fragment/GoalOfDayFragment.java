@@ -56,11 +56,12 @@ public class GoalOfDayFragment extends BaseFragment {
     private AddGoalView addGoalView;
     private TextView goalOfDayStepGoal;
     private TextView goalOfDayName;
+    private EditText editGoalOfDayName;
     private TextView goalOfDayUnit;
     private EditText editGoalOfDayStepAmount;
     private ImageView imgDecrement;
     private ImageView imgIncrement;
-    private TextView txtEditDate;
+    private TextView txtTestDate;
     private Spinner spinUnit;
     private Spinner spinValue;
     private EnumAdapter adapter;
@@ -99,12 +100,13 @@ public class GoalOfDayFragment extends BaseFragment {
         addGoalView = (AddGoalView) view.findViewById(R.id.add_goal_view);
         goalOfDayName = (TextView) view.findViewById(R.id.goal_of_day_name);
         goalOfDayStepGoal = (TextView) view.findViewById(R.id.goal_of_day_step_goal);
-        txtEditDate = (TextView) view.findViewById(R.id.edit_date);
+        txtTestDate = (TextView) view.findViewById(R.id.test_date);
         goalOfDayUnit = (TextView) view.findViewById(R.id.goal_of_day_unit);
 
         progressBar = (ProgressBar) view.findViewById(R.id.step_progress_bar);
         progressBar.setProgress(0);
 
+        initializeEditGoalOfDayName(view);
         initializeEditGoalOfDayStepAmount(view);
         initializeSpinners(view);
         initializeFAB(view);
@@ -116,6 +118,16 @@ public class GoalOfDayFragment extends BaseFragment {
 
         toggleContent(editable);
         checkForGoalOfDay();
+    }
+
+    private void initializeEditGoalOfDayName(View view) {
+        editGoalOfDayName = (EditText) view.findViewById(R.id.edit_goal_of_day_name);
+        editGoalOfDayName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                return false;
+            }
+        });
     }
 
     private void initializeEditGoalOfDayStepAmount(View view) {
@@ -182,8 +194,13 @@ public class GoalOfDayFragment extends BaseFragment {
     }
 
     @Override
-    protected void editModeSwitchActionReceived(boolean isEditMode, String date) {
-        toggleEditMode(isEditMode, date);
+    protected void testModeSwitchActionReceived(boolean isTestMode, String date) {
+        toggleTestMode(isTestMode, date);
+    }
+
+    @Override
+    protected void editModeSwitchActionReceived(boolean isEditMode) {
+        toggleEditMode(isEditMode);
     }
 
     @Override
@@ -275,17 +292,28 @@ public class GoalOfDayFragment extends BaseFragment {
     }
 
     private void toggleCalendarChange(String date) {
-        txtEditDate.setVisibility(View.VISIBLE);
-        txtEditDate.setText("Editing for: " + date);
+        txtTestDate.setVisibility(View.VISIBLE);
+        txtTestDate.setText("Editing for: " + date);
         checkForGoalOfDay();
     }
 
-    private void toggleEditMode(boolean isEditMode, String date) {
-        if (isEditMode) {
-            txtEditDate.setVisibility(View.VISIBLE);
-            txtEditDate.setText("Editing for: " + date);
+    private void toggleTestMode(boolean isTestMode, String date) {
+        if (isTestMode) {
+            txtTestDate.setVisibility(View.VISIBLE);
+            txtTestDate.setText("In Test Mode for: " + date);
         } else {
-            txtEditDate.setVisibility(View.GONE);
+            txtTestDate.setVisibility(View.GONE);
+        }
+    }
+
+    private void toggleEditMode(boolean isEditMode) {
+        if (isEditMode) {
+            editGoalOfDayName.setVisibility(View.VISIBLE);
+            editGoalOfDayName.setText(goalOfDayName.getText());
+            goalOfDayName.setVisibility(View.GONE);
+        } else {
+            editGoalOfDayName.setVisibility(View.GONE);
+            goalOfDayName.setVisibility(View.VISIBLE);
         }
     }
 

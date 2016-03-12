@@ -13,15 +13,10 @@ import android.view.View;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.AddGoalPopup;
 import com.mcnedward.keepfit.activity.EditGoalActivity;
-import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.activity.SettingsActivity;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.enums.Action;
 import com.mcnedward.keepfit.utils.enums.ActivityCode;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by Edward on 1/31/2016.
@@ -113,6 +108,13 @@ public class Extension {
         Intent intent = new Intent(Action.UPDATE_GOAL_AMOUNT.title);
         intent.putExtra("goal", goal);
         intent.putExtra("action", Action.UPDATE_GOAL_AMOUNT.id);
+        context.sendBroadcast(intent);
+    }
+
+    public static void broadcastTestModeSwitch(boolean isTestMode, Context context) {
+        Intent intent = new Intent(Action.TEST_MODE_SWITCH.title);
+        intent.putExtra("isTestMode", isTestMode);
+        intent.putExtra("action", Action.TEST_MODE_SWITCH.id);
         context.sendBroadcast(intent);
     }
 

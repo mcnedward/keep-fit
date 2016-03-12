@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     public static boolean IS_TEST_MODE;
+    public static boolean IS_EDIT_MODE;
     public static Calendar CALENDAR;
     public static boolean IS_IN_SETTINGS = false;
 
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         if (!isReceiverRegistered) {
             isReceiverRegistered = true;
-            registerReceiver(receiver, new IntentFilter(Action.EDIT_MODE_SWITCH.title));
+            registerReceiver(receiver, new IntentFilter(Action.TEST_MODE_SWITCH.title));
         }
         if (IS_IN_SETTINGS) {
             IS_IN_SETTINGS = false;
@@ -175,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void toggleEditMode(boolean isEditMode) {
-        IS_TEST_MODE = isEditMode;
-        if (isEditMode)
+    private void toggleTestMode(boolean isTestMode) {
+        IS_TEST_MODE = isTestMode;
+        if (isTestMode)
             calendarItem.setVisible(true);
         else
             calendarItem.setVisible(false);
@@ -188,9 +189,9 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             Action action = Action.getById(intent.getIntExtra("action", 0));
             switch (action) {
-                case EDIT_MODE_SWITCH: {
-                    boolean isEditMode = intent.getBooleanExtra("isEditMode", false);
-                    toggleEditMode(isEditMode);
+                case TEST_MODE_SWITCH: {
+                    boolean isTestMode = intent.getBooleanExtra("isTestMode", false);
+                    toggleTestMode(isTestMode);
                 }
             }
         }

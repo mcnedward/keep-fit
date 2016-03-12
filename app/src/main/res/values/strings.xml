@@ -35,8 +35,8 @@
     <string name="steps_to_meters">How many steps are in a meter?</string>
     <string name="test_mode">Test Mode</string>
     <string name="test_mode_description">This mode allows you to select the current date, so you can add goals for days you may have missed or forgotten.</string>
-    <string name="yards">Yards</string>
-    <string name="kilometers">Kilometers</string>
+    <string name="edit_mode">Edit Mode</string>
+    <string name="edit_mode_description">This mode allows you to edit your current goal. You can change the name of the goal, the step goal, and the units used for the goal.</string>
     <string name="miles">Miles</string>
 
     <!-- Menu -->

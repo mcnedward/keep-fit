@@ -8,8 +8,9 @@ public enum Action {
     DELETE_GOAL(2, "deleteGoal"),
     UPDATE_GOAL_OF_DAY(3, "updateGoalOfDay"),
     UPDATE_GOAL_AMOUNT(4, "updateGoalAmount"),
-    EDIT_MODE_SWITCH(5, "editModeSwitch"),
-    CALENDER_CHANGE(6, "calendarChange");
+    TEST_MODE_SWITCH(5, "testModeSwitch"),
+    EDIT_MODE_SWITCH(6, "editModeSwitch"),
+    CALENDER_CHANGE(7, "calendarChange");
 
     public int id;
     public String title;
