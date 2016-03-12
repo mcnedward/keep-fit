@@ -147,8 +147,21 @@ public abstract class Repository<T extends BaseEntity> implements IRepository<T>
      *
      * @return A list of all entities in this data source.
      */
+    @Override
     public List<T> retrieve() {
         return read(null, null, null, null, null);
+    }
+
+    /**
+     * Retrieve all data for this source.
+     * @param groupBy
+     * @param having
+     * @param orderBy
+     * @return A list of all entities in this data source.
+     */
+    @Override
+    public List<T> retrieve(String groupBy, String having, String orderBy) {
+        return read(null, null, groupBy, having, orderBy);
     }
 
     /**

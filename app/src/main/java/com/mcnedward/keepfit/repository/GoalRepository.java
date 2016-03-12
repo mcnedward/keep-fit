@@ -5,10 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.Dates;
-import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
@@ -203,6 +201,6 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     @Override
     public String getTableName() {
-        return DatabaseHelper.GOAL_TABLE;
+        return DatabaseHelper.GOALS_TABLE;
     }
 }

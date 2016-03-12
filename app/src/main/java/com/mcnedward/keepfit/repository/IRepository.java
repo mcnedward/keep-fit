@@ -22,5 +22,7 @@ public interface IRepository<T> {
 
     List<T> retrieve();
 
+    List<T> retrieve(String groupBy, String having, String orderBy);
+
     void close();
 }

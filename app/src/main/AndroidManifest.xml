@@ -26,6 +26,8 @@
             android:theme="@style/AppTheme.PopupWindow"/>
         <activity android:name=".activity.SettingsActivity"
             android:parentActivityName=".activity.MainActivity"/>
+        <activity android:name=".activity.SettingsTabLayoutActivity"
+            android:parentActivityName=".activity.SettingsActivity"/>
     </application>
 
 </manifest>

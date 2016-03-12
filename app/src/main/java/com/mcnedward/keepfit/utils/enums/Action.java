@@ -10,7 +10,8 @@ public enum Action {
     UPDATE_GOAL_AMOUNT(4, "updateGoalAmount"),
     TEST_MODE_SWITCH(5, "testModeSwitch"),
     EDIT_MODE_SWITCH(6, "editModeSwitch"),
-    CALENDER_CHANGE(7, "calendarChange");
+    CALENDER_CHANGE(7, "calendarChange"),
+    TAB_ORDER_CHANGE(8, "tabOrderChange");
 
     public int id;
     public String title;

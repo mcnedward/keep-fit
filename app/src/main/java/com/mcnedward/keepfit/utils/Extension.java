@@ -1,22 +1,34 @@
 package com.mcnedward.keepfit.utils;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.RippleDrawable;
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.AddGoalPopup;
 import com.mcnedward.keepfit.activity.EditGoalActivity;
+import com.mcnedward.keepfit.activity.MainActivity;
 import com.mcnedward.keepfit.activity.SettingsActivity;
+import com.mcnedward.keepfit.activity.SettingsTabLayoutActivity;
+import com.mcnedward.keepfit.activity.fragment.BaseFragment;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.enums.Action;
 import com.mcnedward.keepfit.utils.enums.ActivityCode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Edward on 1/31/2016.
@@ -64,7 +76,9 @@ public class Extension {
         activity.startActivity(intent);
     }
 
-    /***** Starting activity *****/
+    /*****
+     * Starting activity
+     *****/
 
     public static void startAddGoalPopup(final Activity activity) {
         new Handler().postDelayed(new Runnable() {
@@ -81,7 +95,21 @@ public class Extension {
         activity.startActivity(intent);
     }
 
-    /***** Broadcasting *****/
+    public static void startTabLayoutActivity(final Activity activity) {
+        Intent intent = new Intent(activity, SettingsTabLayoutActivity.class);
+        activity.startActivity(intent);
+    }
+
+    public static void restartApplication(final Activity activity) {
+        Intent intent = new Intent(activity, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("exiting", true);
+        activity.startActivity(intent);
+    }
+
+    /*****
+     * Broadcasting
+     *****/
 
     public static void broadcastAddGoal(Goal goal, Context context) {
         Intent intent = new Intent(Action.ADD_GOAL.title);

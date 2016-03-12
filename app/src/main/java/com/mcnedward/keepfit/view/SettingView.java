@@ -44,10 +44,12 @@ public class SettingView extends LinearLayout {
         try {
             String title = a.getString(R.styleable.SettingsView_setting_title);
             String description = a.getString(R.styleable.SettingsView_setting_description);
+            boolean checkable = a.getBoolean(R.styleable.SettingsView_setting_checkable, true);
             int unitId = a.getInteger(R.styleable.SettingsView_setting_unit, 0);
             unit = Unit.getById(unitId);
             txtSettingName.setText(title);
             txtDescription.setText(description);
+            checkBox.setVisibility(checkable ? VISIBLE : GONE);
         } finally {
             a.recycle();
         }

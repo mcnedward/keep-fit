@@ -8,42 +8,26 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.mcnedward.keepfit.activity.MainActivity;
+import com.mcnedward.keepfit.model.FragmentCode;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.enums.Action;
+
+import java.io.Serializable;
 
 /**
  * Created by Edward on 2/23/2016.
  */
 public abstract class BaseFragment extends Fragment {
 
-    public enum FragmentCode {
-        GOAL_OF_THE_DAY(1, "Goal Of The Day"),
-        GOAL(2, "Goals"),
-        HISTORY(3, "History"),
-        STATISTICS(4, "Statistics");
-        int id;
-        String title;
-        FragmentCode(int id, String title) {
-            this.id = id;
-            this.title = title;
-        }
-        public int id() {
-            return id;
-        }
-        public String title() {
-            return title;
-        }
-    }
-
     private FragmentReceiver receiver;
     private boolean isReceiverRegistered = false;
 
     public static BaseFragment newInstance(FragmentCode code) {
-        switch (code) {
+        switch (code.getCodeByTitle()) {
             case GOAL_OF_THE_DAY:
                 return new GoalOfDayFragment();
-            case GOAL:
+            case GOALS:
                 return new GoalsFragment();
             case HISTORY:
                 return new HistoryFragment();
@@ -72,12 +56,19 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected abstract void initialize(View view);
+
     protected abstract void addGoalActionReceived(Goal goal);
+
     protected abstract void deleteGoalActionReceived(Goal goal);
+
     protected abstract void updateGoalOfDayActionReceived(Goal goal);
+
     protected abstract void updateGoalAmountActionReceived(Goal goal);
+
     protected abstract void testModeSwitchActionReceived(boolean isTestMode, String date);
+
     protected abstract void editModeSwitchActionReceived(boolean isEditMode);
+
     protected abstract void calendarChangeActionReceived(String date);
 
     private void unRegisterReceivers() {

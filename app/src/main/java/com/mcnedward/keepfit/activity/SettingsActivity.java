@@ -27,6 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
     private NumberPicker picker;
     private SettingView viewTestMode;
     private SettingView viewEditMode;
+    private SettingView viewTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class SettingsActivity extends AppCompatActivity {
         initializeNumberPicker();
         initializeTestModeSetting();
         initializeEditModeSetting();
+        initializeTabLayoutSetting();
     }
 
     private void initializeNumberPicker() {
@@ -100,6 +102,17 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 viewEditMode.setChecked(!viewEditMode.isChecked());
                 Extension.broadcastTestModeSwitch(viewEditMode.isChecked(), activity);
+            }
+        });
+    }
+
+    private void initializeTabLayoutSetting() {
+        viewTabLayout = (SettingView) findViewById(R.id.settings_tab_layout);
+        final Activity activity = this;
+        viewTabLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Extension.startTabLayoutActivity(activity);
             }
         });
     }

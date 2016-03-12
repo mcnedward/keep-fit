@@ -3,6 +3,7 @@
     <declare-styleable name="SettingsView">
         <attr name="setting_title" format="string" />
         <attr name="setting_description" format="string" />
+        <attr name="setting_checkable" format="boolean" />
         <attr name="setting_unit" format="enum">
             <enum name="meters" value="1"/>
             <enum name="yards" value="2"/>
@@ -12,5 +13,8 @@
     </declare-styleable>
     <declare-styleable name="StatisticView">
         <attr name="statistics_title" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="TabSelectionView">
+        <attr name="selection_title" format="string"/>
     </declare-styleable>
 </resources>

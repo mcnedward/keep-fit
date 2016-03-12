@@ -14,19 +14,26 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.fragment.BaseFragment;
+import com.mcnedward.keepfit.model.FragmentCode;
+import com.mcnedward.keepfit.repository.FragmentCodeRepository;
 import com.mcnedward.keepfit.repository.GoalRepository;
+import com.mcnedward.keepfit.repository.IFragmentCodeRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
 import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.enums.Action;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -39,8 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
     private MenuItem calendarItem;
+    private List<FragmentCode> fragmentCodes;
 
     private IGoalRepository goalRepository;
+    private IFragmentCodeRepository fragmentCodeRepository;
     private ActionReceiver receiver;
     private boolean isReceiverRegistered = false;
 
@@ -51,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         receiver = new ActionReceiver();
+
+        goalRepository = new GoalRepository(this);
+        fragmentCodeRepository = new FragmentCodeRepository(this);
+
+        fragmentCodes = fragmentCodeRepository.getFragmentCodesSorted();
+
         initialize();
     }
 
@@ -59,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         if (!isReceiverRegistered) {
             isReceiverRegistered = true;
             registerReceiver(receiver, new IntentFilter(Action.TEST_MODE_SWITCH.title));
+            registerReceiver(receiver, new IntentFilter(Action.TAB_ORDER_CHANGE.title));
         }
         if (IS_IN_SETTINGS) {
             IS_IN_SETTINGS = false;
@@ -76,15 +92,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        setupSectionsPagerAdapter();
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void setupSectionsPagerAdapter() {
         // Set up the ViewPager with the sections adapter.
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.container);
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-        goalRepository = new GoalRepository(this);
+        sectionsPagerAdapter.notifyDataSetChanged();
     }
 
     private void initializeCalendarButton(MenuItem item) {
@@ -118,25 +137,26 @@ public class MainActivity extends AppCompatActivity {
     public class SectionsPagerAdapter extends FragmentPagerAdapter implements
             ViewPager.OnPageChangeListener {
 
-        final private int PAGE_COUNT = BaseFragment.FragmentCode.values().length;
+        private int pageCount;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            pageCount = fragmentCodes.size();
         }
 
         @Override
         public Fragment getItem(int position) {
-            return BaseFragment.newInstance(BaseFragment.FragmentCode.values()[position]);
+            return BaseFragment.newInstance(fragmentCodes.get(position));
         }
 
         @Override
         public int getCount() {
-            return PAGE_COUNT;
+            return pageCount;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return BaseFragment.FragmentCode.values()[position].title();
+            return fragmentCodes.get(position).getTitle();
         }
 
         @Override
@@ -192,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
                 case TEST_MODE_SWITCH: {
                     boolean isTestMode = intent.getBooleanExtra("isTestMode", false);
                     toggleTestMode(isTestMode);
+                    break;
                 }
             }
         }
