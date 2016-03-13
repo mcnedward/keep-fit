@@ -142,7 +142,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goalRepository.populateTestData();
-                Toast.makeText(activity, "Test date created!", Toast.LENGTH_SHORT);
+                Toast.makeText(activity, "Test data was created!", Toast.LENGTH_SHORT).show();
             }
         });
     }

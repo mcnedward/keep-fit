@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.androidplot.Plot;
 import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
@@ -104,6 +105,7 @@ public class GoalView extends RelativeLayout {
         goalProgressContainer = findViewById(R.id.goal_progress_container);
 
         checkIfGoalOfDay();
+        checkIfGoalComplete();
     }
 
     private void checkIfGoalOfDay() {
@@ -111,6 +113,18 @@ public class GoalView extends RelativeLayout {
                         ContextCompat.getDrawable(context, R.drawable.star_on) :
                         ContextCompat.getDrawable(context, R.drawable.star_off)
         );
+    }
+
+    private void checkIfGoalComplete() {
+        if (goal.isGoalReached()) {
+            findViewById(R.id.goal_top_container).setBackgroundColor(ContextCompat.getColor(context, R.color.Gold));
+            Extension.setRippleBackground(imgIsGoalOfDay, R.color.FireBrick, R.color.Gold, context);
+            Extension.setRippleBackground(imgGoalDelete, R.color.FireBrick, R.color.Gold, context);
+        } else {
+            findViewById(R.id.goal_top_container).setBackgroundColor(ContextCompat.getColor(context, R.color.GhostWhite));
+            Extension.setRippleBackground(imgIsGoalOfDay, context);
+            Extension.setRippleBackground(imgGoalDelete, context);
+        }
     }
 
     public void update(Goal goal, GoalListAdapter adapter) {
@@ -121,8 +135,10 @@ public class GoalView extends RelativeLayout {
         txtGoalSteps.setText(String.valueOf(Unit.format(goal.getStepAmount())) + goal.getUnit().abbreviation);
         txtGoalAmount.setText(String.valueOf(Unit.format(goal.getStepGoal())) + goal.getUnit().abbreviation);
 
-        progressBar.setProgress((int) goal.getStepAmount());
         progressBar.setMax((int) goal.getStepGoal());
+        progressBar.setProgress((int) goal.getStepAmount());
+
         checkIfGoalOfDay();
+        checkIfGoalComplete();
     }
 }
