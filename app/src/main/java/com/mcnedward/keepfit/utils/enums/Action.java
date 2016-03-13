@@ -11,7 +11,9 @@ public enum Action {
     TEST_MODE_SWITCH(5, "testModeSwitch"),
     EDIT_MODE_SWITCH(6, "editModeSwitch"),
     CALENDER_CHANGE(7, "calendarChange"),
-    TAB_ORDER_CHANGE(8, "tabOrderChange");
+    TAB_ORDER_CHANGE(8, "tabOrderChange"),
+    ADD_GOAL_POPUP(9, "addGoalPopup"),
+    GOAL_REACHED(10, "goalReached");
 
     public int id;
     public String title;

@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
         goalRepository = new GoalRepository(this);
         fragmentCodeRepository = new FragmentCodeRepository(this);
-
         fragmentCodes = fragmentCodeRepository.getFragmentCodesSorted();
 
         initialize();

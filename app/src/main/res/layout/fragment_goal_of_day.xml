@@ -70,7 +70,6 @@
             android:layout_width="500dp"
             android:layout_height="500dp"
             android:layout_centerInParent="true"
-            android:layout_weight="0.51"
             android:progress="100"
             android:progressDrawable="@drawable/circle_progress" />
 

@@ -1,12 +1,15 @@
 package com.mcnedward.keepfit.utils;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -19,7 +22,6 @@ import com.mcnedward.keepfit.activity.SettingsStatisticsActivity;
 import com.mcnedward.keepfit.activity.SettingsTabLayoutActivity;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.enums.Action;
-import com.mcnedward.keepfit.utils.enums.ActivityCode;
 
 /**
  * Created by Edward on 1/31/2016.
@@ -69,7 +71,7 @@ public class Extension {
             @Override
             public void run() {
                 Intent intent = new Intent(activity, AddGoalPopup.class);
-                activity.startActivityForResult(intent, ActivityCode.ADD_GOAL_POPUP);
+                activity.startActivityForResult(intent, Action.ADD_GOAL_POPUP.id);
             }
         }, 300);
     }
@@ -124,6 +126,9 @@ public class Extension {
         intent.putExtra("goal", goal);
         intent.putExtra("action", Action.UPDATE_GOAL_OF_DAY.id);
         context.sendBroadcast(intent);
+
+        if (goal.isGoalReached())
+            sendNotificationGoalReached(goal, (Activity) context);
     }
 
     public static void broadcastUpdateGoalAmount(Goal goal, Context context) {
@@ -152,6 +157,36 @@ public class Extension {
         intent.putExtra("date", date);
         intent.putExtra("action", Action.CALENDER_CHANGE.id);
         context.sendBroadcast(intent);
+    }
+
+    /*****
+     * Notifications
+     *****/
+
+    /**
+     * Source: http://developer.android.com/training/notify-user/build-notification.html
+     * @param goal
+     * @param activity
+     */
+    public static void sendNotificationGoalReached(Goal goal, final Activity activity) {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(activity)
+                        .setSmallIcon(R.drawable.ic_sentiment_very_satisfied_black_24dp)
+                        .setContentTitle("Goal Reached!")
+                        .setContentText(String.format("You reached the goal %s of %s %s!", goal.getName(), goal.getStepGoal(), goal.getUnit().abbreviation));
+
+        Intent intent = new Intent(activity, MainActivity.class);
+        intent.setAction(Action.GOAL_REACHED.title);
+        PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder.setContentIntent(pendingIntent);
+        builder.setAutoCancel(true);
+        int notificationId = 10;
+        // Gets an instance of the NotificationManager service
+        NotificationManager notificationManager =
+                (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        // Builds the notification and issues it.
+        notificationManager.notify(notificationId, builder.build());
     }
 
 }

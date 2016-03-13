@@ -1,17 +1,17 @@
 package com.mcnedward.keepfit.activity.fragment;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -29,10 +29,9 @@ import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
 import com.mcnedward.keepfit.utils.adapter.EnumAdapter;
-import com.mcnedward.keepfit.utils.enums.ActivityCode;
+import com.mcnedward.keepfit.utils.enums.Action;
 import com.mcnedward.keepfit.utils.enums.Code;
 import com.mcnedward.keepfit.utils.Extension;
-import com.mcnedward.keepfit.utils.enums.IBaseEnum;
 import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 import com.mcnedward.keepfit.view.AddGoalView;
@@ -72,7 +71,7 @@ public class GoalOfDayFragment extends BaseFragment {
     private ProgressBar progressBar;
     private RelativeLayout content;
     private FloatingActionButton fab;
-    private boolean popupStarted = false;
+    private ColorStateList textColors;
 
     // Edit Mode stuff
     private EditText editGoalOfDayName;
@@ -95,13 +94,12 @@ public class GoalOfDayFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case ActivityCode.ADD_GOAL_POPUP:
-                if (resultCode == Code.RESULT_OK.id()) {
-                    Goal goal = (Goal) data.getSerializableExtra("goal");
-                    updateGoalOfDay(goal);
-                }
-                break;
+        if (requestCode == Action.ADD_GOAL_POPUP.id) {
+            if (resultCode == Code.RESULT_OK.id()) {
+                Goal goal = (Goal) data.getSerializableExtra("goal");
+                updateGoalOfDay(goal);
+                return;
+            }
         }
     }
 
@@ -114,6 +112,8 @@ public class GoalOfDayFragment extends BaseFragment {
         txtGoalOfDayStepGoal = (TextView) view.findViewById(R.id.goal_of_day_step_goal);
         txtTestDate = (TextView) view.findViewById(R.id.test_date);
         txtGoalOfDayUnit = (TextView) view.findViewById(R.id.goal_of_day_unit);
+
+        textColors =  txtGoalOfDayName.getTextColors();
 
         progressBar = (ProgressBar) view.findViewById(R.id.step_progress_bar);
         progressBar.setProgress(0);
@@ -171,6 +171,7 @@ public class GoalOfDayFragment extends BaseFragment {
                     e.printStackTrace();
                     return false;
                 }
+                Extension.broadcastUpdateGoalOfDay(goalOfDay, context);
                 return true;
             }
         });
@@ -247,41 +248,6 @@ public class GoalOfDayFragment extends BaseFragment {
         }
     }
 
-    @Override
-    protected void addGoalActionReceived(Goal goal) {
-        updateGoalOfDay(goal);
-        toggleContent(true);
-    }
-
-    @Override
-    protected void deleteGoalActionReceived(Goal goal) {
-    }
-
-    @Override
-    protected void updateGoalOfDayActionReceived(Goal goal) {
-        updateGoalOfDay(goal);
-    }
-
-    @Override
-    protected void updateGoalAmountActionReceived(Goal goal) {
-
-    }
-
-    @Override
-    protected void testModeSwitchActionReceived(boolean isTestMode, String date) {
-        toggleTestMode(isTestMode, date);
-    }
-
-    @Override
-    protected void editModeSwitchActionReceived(boolean isEditMode) {
-        toggleEditMode(isEditMode);
-    }
-
-    @Override
-    protected void calendarChangeActionReceived(String date) {
-        toggleCalendarChange(date);
-    }
-
     private void checkForGoalOfDay() {
         Goal goalOfDay = goalRepository.getGoalOfDay();
         if (goalOfDay == null) {
@@ -293,16 +259,45 @@ public class GoalOfDayFragment extends BaseFragment {
         }
     }
 
+    private boolean progressBarColorChanged = false;
     private void updateGoalOfDay(Goal goal) {
         goalOfDay = goal;
         txtGoalOfDayName.setText(goalOfDay.getName());
         editGoalOfDayStepAmount.setText(String.valueOf(Unit.format(goalOfDay.getStepAmount())));
         txtGoalOfDayStepGoal.setText(String.valueOf(goalOfDay.getStepGoal()));
         txtGoalOfDayUnit.setText(goalOfDay.getUnit().abbreviation);
-        spinUnit.setSelection(goalOfDay.getUnitId() - 1);
+        toggleContent(true);
+
+        if (goal.isGoalReached()) {
+            txtGoalOfDayName.setTextColor(ContextCompat.getColor(context, R.color.Gold));
+            txtGoalOfDaySlash.setTextColor(ContextCompat.getColor(context, R.color.Gold));
+            txtGoalOfDayStepGoal.setTextColor(ContextCompat.getColor(context, R.color.Gold));
+            txtGoalOfDayUnit.setTextColor(ContextCompat.getColor(context, R.color.Gold));
+
+            editGoalOfDayStepAmount.setTextColor(ContextCompat.getColor(context, R.color.Gold));
+            editGoalOfDayAmount.setTextColor(ContextCompat.getColor(context, R.color.Gold));
+            editGoalOfDayName.setTextColor(ContextCompat.getColor(context, R.color.Gold));
+
+            if (!progressBarColorChanged) {
+                progressBar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.circle_progress_complete));
+                progressBarColorChanged = true;
+            }
+        } else {
+            txtGoalOfDayName.setTextColor(textColors);
+            txtGoalOfDaySlash.setTextColor(textColors);
+            txtGoalOfDayStepGoal.setTextColor(textColors);
+            txtGoalOfDayUnit.setTextColor(textColors);
+
+            editGoalOfDayStepAmount.setTextColor(textColors);
+            editGoalOfDayAmount.setTextColor(textColors);
+            editGoalOfDayName.setTextColor(textColors);
+
+            progressBar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.circle_progress));
+            progressBarColorChanged = false;
+        }
+
         progressBar.setMax((int) goalOfDay.getStepGoal());
         progressBar.setProgress((int) goalOfDay.getStepAmount());
-        toggleContent(true);
     }
 
     private void changeStepAmount(boolean up) {
@@ -337,13 +332,6 @@ public class GoalOfDayFragment extends BaseFragment {
             content.setVisibility(View.GONE);
             addGoalView.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void updateProgress(int currentProgress, int maxProgress) {
-        ObjectAnimator animation = ObjectAnimator.ofInt(progressBar, "progress", currentProgress);
-        animation.setDuration(2500);
-        animation.setInterpolator(new AccelerateDecelerateInterpolator());
-        animation.start();
     }
 
     private void initializeStepCountButtons(View view) {
@@ -410,6 +398,41 @@ public class GoalOfDayFragment extends BaseFragment {
             // Update the goal of day if an edit mode is finished
             checkForGoalOfDay();
         }
+    }
+
+    @Override
+    protected void addGoalActionReceived(Goal goal) {
+        updateGoalOfDay(goal);
+        toggleContent(true);
+    }
+
+    @Override
+    protected void deleteGoalActionReceived(Goal goal) {
+    }
+
+    @Override
+    protected void updateGoalOfDayActionReceived(Goal goal) {
+        updateGoalOfDay(goal);
+    }
+
+    @Override
+    protected void updateGoalAmountActionReceived(Goal goal) {
+
+    }
+
+    @Override
+    protected void testModeSwitchActionReceived(boolean isTestMode, String date) {
+        toggleTestMode(isTestMode, date);
+    }
+
+    @Override
+    protected void editModeSwitchActionReceived(boolean isEditMode) {
+        toggleEditMode(isEditMode);
+    }
+
+    @Override
+    protected void calendarChangeActionReceived(String date) {
+        toggleCalendarChange(date);
     }
 
 }

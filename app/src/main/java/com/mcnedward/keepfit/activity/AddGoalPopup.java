@@ -1,7 +1,6 @@
 package com.mcnedward.keepfit.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,10 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 
 import com.mcnedward.keepfit.R;
-import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.enums.Action;
-import com.mcnedward.keepfit.utils.enums.ActivityCode;
-import com.mcnedward.keepfit.utils.enums.Code;
 import com.mcnedward.keepfit.view.AddGoalView;
 
 /**
