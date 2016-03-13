@@ -299,6 +299,7 @@ public class GoalOfDayFragment extends BaseFragment {
         editGoalOfDayStepAmount.setText(String.valueOf(Unit.format(goalOfDay.getStepAmount())));
         txtGoalOfDayStepGoal.setText(String.valueOf(goalOfDay.getStepGoal()));
         txtGoalOfDayUnit.setText(goalOfDay.getUnit().abbreviation);
+        spinUnit.setSelection(goalOfDay.getUnitId() - 1);
         progressBar.setMax((int) goalOfDay.getStepGoal());
         progressBar.setProgress((int) goalOfDay.getStepAmount());
         toggleContent(true);

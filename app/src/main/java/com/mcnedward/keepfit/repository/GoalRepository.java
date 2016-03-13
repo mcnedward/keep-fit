@@ -233,8 +233,11 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         goal.setIsGoalOfDay(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_IS_GOAL_OF_DAY)) == 1);
         goal.setUnit(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_UNIT)));
         goal.setHistoryId(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_HISTORY_ID)));
+
         History history = historyRepository.get(goal.getHistoryId());
-        goal.setStepAmount(history.getTotalStepsForDay());
+        double meteredStepsForDays = Unit.convert(Unit.STEP, Unit.METER, history.getTotalStepsForDay());
+        double stepAmount = Unit.convert(Unit.METER, goal.getUnit(), meteredStepsForDays);
+        goal.setStepAmount(stepAmount);
         goal.setCreatedOn(history.getCreatedOn());
         return goal;
     }

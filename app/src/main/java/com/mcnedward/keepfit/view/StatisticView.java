@@ -87,8 +87,6 @@ public class StatisticView extends LinearLayout {
         txtGoalAmount.setText(averageGoal + " " + unit.abbreviation);
 
         bumpProgress(stepAmount, goalAmount);
-        progressBar.setMax((int) goalAmount);
-        progressBar.setProgress((int) stepAmount);
     }
 
     private void bumpProgress(double stepAmount, double goalAmount) {
@@ -97,6 +95,8 @@ public class StatisticView extends LinearLayout {
             stepAmount *= 100;
             bumpProgress(stepAmount, goalAmount);
         }
+        progressBar.setMax((int) goalAmount);
+        progressBar.setProgress((int) stepAmount);
     }
 
     public void toggleContent() {

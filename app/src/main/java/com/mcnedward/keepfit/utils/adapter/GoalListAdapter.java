@@ -46,42 +46,12 @@ public class GoalListAdapter extends ArrayAdapter<Goal> {
         return view;
     }
 
-    public void addGoal(Goal goal) {
-        groups.add(goal);
-        notifyDataSetChanged();
-    }
-
-    public void addGoals(List<Goal> goals) {
-        groups.addAll(goals);
-        notifyDataSetChanged();
-    }
-
-    public void editGoal(Goal goal) {
-        int index = -1;
-        for (int x = 0; x < groups.size(); x++) {
-            if (groups.get(x).getId().equals(goal.getId())) {
-                index = x;
-                break;
-            }
-        }
-        if (index != -1) {
-            groups.set(index, goal);
-            notifyDataSetChanged();
-        }
-    }
-
-    public void deleteGoal(Goal goal) {
-        groups.remove(goal);
-        notifyDataSetChanged();
-    }
-
-
     public void notifyDataSetChanged(boolean triggerReload) {
         if (triggerReload) {
             List<Goal> data = loader.loadInBackground();
             setGroups(data);
-        }
-        notifyDataSetChanged();
+        } else
+            notifyDataSetChanged();
     }
 
     public void setLoader(GoalDataLoader loader) {

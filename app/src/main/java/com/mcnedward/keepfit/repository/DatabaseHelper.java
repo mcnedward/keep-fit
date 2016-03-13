@@ -21,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database title
     public static String DB_NAME = "Goal.db";
     // Database version - increment this number to upgrade the database
-    public static final int DB_VERSION = 40;
+    public static final int DB_VERSION = 41;
 
     // Tables
     public static final String GOALS_TABLE = "Goals";
@@ -70,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "%s TEXT, %s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s))",
             GOALS_TABLE, ID, G_GOAL, G_STEP_GOAL, G_IS_GOAL_OF_DAY, G_UNIT, G_HISTORY_ID, G_HISTORY_ID, HISTORY_TABLE, ID);
     private static final String createHistoryTable = String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-            "%s TEXT, %s INTEGER, %s INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s))", HISTORY_TABLE, ID, H_CREATED_ON, H_TOTAL_STEPS_FOR_DAY, H_GOAL_OF_DAY_ID, H_GOAL_OF_DAY_ID, GOALS_TABLE, ID);
+            "%s TEXT, %s REAL, %s INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s))", HISTORY_TABLE, ID, H_CREATED_ON, H_TOTAL_STEPS_FOR_DAY, H_GOAL_OF_DAY_ID, H_GOAL_OF_DAY_ID, GOALS_TABLE, ID);
     private static final String createFragmentCodeTable = String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, %s INTEGER, %s TEXT)", FRAGMENT_CODES_TABLE, ID, F_CODE_ID, F_TITLE);
     private static final String createStatisticsTable = String.format("CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, %s INTEGER, %s TEXT, %s INTEGER, %s INTEGER)",
             STATISTICS_TABLE, ID, S_STAT_ID, S_TITLE, S_SHOW, S_OPEN);

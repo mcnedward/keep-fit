@@ -118,10 +118,8 @@ public class GoalView extends RelativeLayout {
         this.adapter = adapter;
         txtGoalName.setText(goal.getName());
 
-        double convertedStepAmount = Unit.convert(Unit.STEP, goal.getUnit(), goal.getStepAmount());
-        double convertedStepGoal = Unit.convert(Unit.STEP, goal.getUnit(), goal.getStepGoal());
-        txtGoalSteps.setText(String.valueOf(Unit.format(convertedStepAmount)) + goal.getUnit().abbreviation);
-        txtGoalAmount.setText(String.valueOf(Unit.format(convertedStepGoal)) + goal.getUnit().abbreviation);
+        txtGoalSteps.setText(String.valueOf(Unit.format(goal.getStepAmount())) + goal.getUnit().abbreviation);
+        txtGoalAmount.setText(String.valueOf(Unit.format(goal.getStepGoal())) + goal.getUnit().abbreviation);
 
         progressBar.setProgress((int) goal.getStepAmount());
         progressBar.setMax((int) goal.getStepGoal());

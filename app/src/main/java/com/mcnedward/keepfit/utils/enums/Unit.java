@@ -171,7 +171,7 @@ public enum Unit implements IBaseEnum {
      * Meters To
      *****/
 
-    private static double METER_TO_KILOMETER = 1000;
+    private static double METER_TO_KILOMETER = 0.001;
     private static double METER_TO_MILE = 0.000621371;
     private static double METER_TO_YARD = 1.09361;
     public static double METER_TO_STEP = 1;
@@ -180,7 +180,7 @@ public enum Unit implements IBaseEnum {
      * Kilometers To
      ******/
 
-    private static double KILOMETER_TO_METER = 0.001;
+    private static double KILOMETER_TO_METER = 1000;
     private static double KILOMETER_TO_MILE = 0.621371;
     private static double KILOMETER_TO_YARD = 1093.61;
     private static double KILOMETER_TO_STEP = 762;
