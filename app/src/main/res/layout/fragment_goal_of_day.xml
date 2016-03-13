@@ -73,7 +73,10 @@
             android:progress="100"
             android:progressDrawable="@drawable/circle_progress" />
 
-        <include layout="@layout/item_step_value" />
+        <com.mcnedward.keepfit.view.GoalValuesView
+            android:id="@+id/goal_values_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
     </RelativeLayout>
 

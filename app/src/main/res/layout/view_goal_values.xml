@@ -46,16 +46,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/goal_of_day_step_amount"
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/transparent"
-                        android:inputType="numberDecimal"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:text="0"
-                        android:textSize="30dp" />
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/goal_of_day_step_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:inputType="numberDecimal"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="0"
+                            android:textSize="30dp" />
+
+                        <TextView
+                            android:id="@+id/algorithm_goal_of_day_step_amount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="0"
+                            android:textSize="30dp"
+                            android:visibility="gone" />
+                    </RelativeLayout>
 
                     <TextView
                         android:id="@+id/goal_of_day_slash"
@@ -83,10 +98,11 @@
                             android:id="@+id/edit_goal_of_day_step_goal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:background="@android:color/transparent"
                             android:paddingLeft="8dp"
                             android:paddingRight="8dp"
                             android:textSize="30dp"
-                            android:inputType="numberDecimal"
                             android:visibility="gone" />
                     </RelativeLayout>
 
