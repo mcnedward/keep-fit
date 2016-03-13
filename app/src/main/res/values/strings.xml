@@ -66,6 +66,8 @@
 
     <!-- Algorithm -->
     <string name="algorithm_dialog_message">Using this feature will allow your device to count your steps for you!</string>
+    <string name="algorithm_dialog_warning">WARNING! This may cause slight performance issues until this feature is perfected!</string>
+    <string name="algorithm_dialog_disclaimer">You can always turn off the step counting and use the default feature by tapping the running man.</string>
     <string name="algorithm_positive_text">OK!</string>
     <string name="algorithm_negative_text">Nevermind...</string>
 

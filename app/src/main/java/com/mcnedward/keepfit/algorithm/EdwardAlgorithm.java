@@ -219,7 +219,18 @@ public class EdwardAlgorithm extends BaseAlgorithm {
 
     @Override
     public int getStepCount() {
-        return numberOfSteps;
+        return getStepCount(false);
+    }
+
+    @Override
+    public int getStepCount(boolean preserveStepCount) {
+        if (preserveStepCount)
+            return numberOfSteps;
+        else {
+            int steps = numberOfSteps;
+            numberOfSteps = 0;
+            return steps;
+        }
     }
 
     public AccelerationData getAccelerationData() {

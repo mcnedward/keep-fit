@@ -14,6 +14,8 @@ public interface IAlgorithm {
 
     int getStepCount();
 
+    int getStepCount(boolean preserveStepCount);
+
     String getName();
 
     AccelerationData getAccelerationData();

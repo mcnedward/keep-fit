@@ -5,7 +5,6 @@ package com.mcnedward.keepfit.listener;
  */
 public interface AlgorithmListener {
 
-    void notifyAlgorithmStarted();
-    void notifyAlgorithmStopped();
+    void notifyStepDetected();
 
 }

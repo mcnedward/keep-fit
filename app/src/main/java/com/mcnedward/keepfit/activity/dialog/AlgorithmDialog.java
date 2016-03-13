@@ -24,7 +24,9 @@ public class AlgorithmDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Context context = getContext();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.algorithm_dialog_message)
+        builder.setMessage(getString(R.string.algorithm_dialog_message) + "\n\n" +
+                getString(R.string.algorithm_dialog_warning) + "\n\n" +
+                getString(R.string.algorithm_dialog_disclaimer))
                 .setPositiveButton(R.string.algorithm_positive_text, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);

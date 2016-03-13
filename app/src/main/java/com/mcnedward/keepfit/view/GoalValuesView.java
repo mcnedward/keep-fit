@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -180,10 +179,7 @@ public class GoalValuesView extends LinearLayout {
     }
 
     private void changeStepAmount(boolean up) {
-        String currentStepsString = editGoalOfDayStepAmount.getText().toString();
-        double currentSteps = 0;
-        if (!currentStepsString.equals(""))
-            currentSteps = Double.parseDouble(currentStepsString);
+        double currentSteps = getCurrentStepAmountFromEditText();
         // Convert the stepAmount value according to the selected unit
         double stepAmount = Unit.convert((Unit) spinUnit.getSelectedItem(), goal.getUnit(), (Integer) spinValue.getSelectedItem());
         if (up)
@@ -191,6 +187,35 @@ public class GoalValuesView extends LinearLayout {
         else
             currentSteps -= stepAmount;
         updateGoalOfDayStepAmount(currentSteps);
+    }
+
+    /**
+     * Mainly used for converting steps from the algorithm into steps for the goal.
+     *
+     * @param amount The amount of steps counted by the algorithm.
+     */
+    private void changeStepAmount(double amount) {
+        double currentSteps = getCurrentStepAmountFromEditText();
+        // Convert from steps to meters first
+        double stepAmount = amount;
+
+        Unit selectedUnit = (Unit) spinUnit.getSelectedItem();
+        if (selectedUnit != Unit.STEP) {
+            // If the selected unit is not steps, convert the algorithm steps to meters first, then those meters to the selected unit
+            stepAmount = Unit.convert(Unit.STEP, Unit.METER, stepAmount);
+            stepAmount = Unit.convert(Unit.METER, selectedUnit, stepAmount);
+        }
+
+        currentSteps += stepAmount;
+        updateGoalOfDayStepAmount(currentSteps);
+    }
+
+    private double getCurrentStepAmountFromEditText() {
+        String currentStepsString = editGoalOfDayStepAmount.getText().toString();
+        double currentSteps = 0;
+        if (!currentStepsString.equals(""))
+            currentSteps = Double.parseDouble(currentStepsString);
+        return currentSteps;
     }
 
     private void updateGoalOfDayStepAmount(double amount) {
@@ -287,12 +312,20 @@ public class GoalValuesView extends LinearLayout {
                         if (needsToShow) {
                             txtAlgorithmStepAmount.setVisibility(VISIBLE);
                             editGoalOfDayStepAmount.setVisibility(GONE);
+                            imgIncrement.setVisibility(GONE);
+                            imgDecrement.setVisibility(GONE);
                             needsToShow = false;
                         }
-                        txtAlgorithmStepAmount.setText(String.valueOf(algorithm.getStepCount()));
+
+                        double algorithmStepCount = algorithm.getStepCount();
+                        changeStepAmount(algorithmStepCount);
+
+                        txtAlgorithmStepAmount.setText(String.valueOf(goal.getStepAmount()));
                     } else {
                         txtAlgorithmStepAmount.setVisibility(GONE);
                         editGoalOfDayStepAmount.setVisibility(VISIBLE);
+                        imgIncrement.setVisibility(VISIBLE);
+                        imgDecrement.setVisibility(VISIBLE);
                     }
                 }
             });

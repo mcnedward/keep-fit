@@ -10,7 +10,7 @@ import com.mcnedward.keepfit.model.Statistic;
 
 /**
  * Created by Edward on 2/7/2016.
- * <p/>
+ * <p>
  * Some help taken from: http://www.androiddesignpatterns.com/2012/05/correctly-managing-your-sqlite-database.html
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -115,10 +115,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public static void resetData(Context context) {
-        DatabaseHelper helper = getInstance(context);
-        SQLiteDatabase database = helper.getWritableDatabase();
 
+    private static void resetPreferences(SQLiteDatabase database) {
         database.execSQL(DROP_FRAGMENT_CODES_TABLE);
         database.execSQL(DROP_STATISTICS_TABLE);
 
@@ -126,26 +124,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(getPopulateFragmentCodeTable());
         database.execSQL(createStatisticsTable);
         database.execSQL(getPopulateStatisticsTableQuery());
+    }
 
+    private static void resetData(SQLiteDatabase database) {
+        database.execSQL(DROP_GOALS_TABLE);
+        database.execSQL(DROP_HISTORY_TABLE);
+
+        database.execSQL(createGoalTable);
+        database.execSQL(createHistoryTable);
+    }
+
+    public static void resetPreferences(Context context) {
+        DatabaseHelper helper = getInstance(context);
+        SQLiteDatabase database = helper.getWritableDatabase();
+        resetPreferences(database);
+        helper.close();
+    }
+
+    public static void resetData(Context context) {
+        DatabaseHelper helper = getInstance(context);
+        SQLiteDatabase database = helper.getWritableDatabase();
+        resetData(database);
         helper.close();
     }
 
     public static void resetDatabase(Context context) {
         DatabaseHelper helper = getInstance(context);
         SQLiteDatabase database = helper.getWritableDatabase();
-
-        database.execSQL(DROP_GOALS_TABLE);
-        database.execSQL(DROP_HISTORY_TABLE);
-        database.execSQL(DROP_FRAGMENT_CODES_TABLE);
-        database.execSQL(DROP_STATISTICS_TABLE);
-
-        database.execSQL(createGoalTable);
-        database.execSQL(createHistoryTable);
-        database.execSQL(createFragmentCodeTable);
-        database.execSQL(getPopulateFragmentCodeTable());
-        database.execSQL(createStatisticsTable);
-        database.execSQL(getPopulateStatisticsTableQuery());
-
+        resetPreferences(database);
+        resetData(database);
         helper.close();
     }
 

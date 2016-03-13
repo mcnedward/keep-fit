@@ -13,13 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -38,9 +34,7 @@ import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 import com.mcnedward.keepfit.view.AddGoalView;
 import com.mcnedward.keepfit.view.GoalValuesView;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Edward on 2/22/2016.
@@ -110,7 +104,7 @@ public class GoalOfDayFragment extends BaseFragment {
         progressBar = (ProgressBar) view.findViewById(R.id.step_progress_bar);
         progressBar.setProgress(0);
 
-        intializeEditGoalName(view);
+        initializeEditGoalName(view);
         initializeSpinners(view);
         initializeFAB(view);
 
@@ -126,7 +120,7 @@ public class GoalOfDayFragment extends BaseFragment {
         checkForGoalOfDay();
     }
 
-    private void intializeEditGoalName(View view) {
+    private void initializeEditGoalName(View view) {
         editGoalOfDayName = (EditText) view.findViewById(R.id.edit_goal_of_day_name);
         editGoalOfDayName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

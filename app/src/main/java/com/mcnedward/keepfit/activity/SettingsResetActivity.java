@@ -7,17 +7,12 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
-import com.mcnedward.keepfit.model.Statistic;
 import com.mcnedward.keepfit.repository.DatabaseHelper;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.enums.Settings;
-import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
-
-import java.util.List;
 
 /**
  * Created by Edward on 3/8/2016.
@@ -50,6 +45,7 @@ public class SettingsResetActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DatabaseHelper.resetPreferences(context);
                 editor.putBoolean(Settings.SHOWN_ALGORITHM_MESSAGE.name(), false);
                 editor.putBoolean(Settings.RUNNING_ALGORITHM.name(), false);
                 editor.commit();
@@ -66,7 +62,7 @@ public class SettingsResetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatabaseHelper.resetData(context);
-                Toast.makeText(context, R.string.reset_settings_complete_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.reset_data_complete_message, Toast.LENGTH_SHORT).show();
                 reset = true;
             }
         });
@@ -82,7 +78,7 @@ public class SettingsResetActivity extends AppCompatActivity {
                 editor.putBoolean(Settings.SHOWN_ALGORITHM_MESSAGE.name(), false);
                 editor.putBoolean(Settings.RUNNING_ALGORITHM.name(), false);
                 editor.commit();
-                Toast.makeText(context, R.string.reset_settings_complete_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.reset_all_complete_message, Toast.LENGTH_SHORT).show();
                 reset = true;
             }
         });
