@@ -16,6 +16,7 @@ import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.adapter.GoalListAdapter;
+import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
 
 /**
@@ -33,6 +34,11 @@ public class GoalView extends RelativeLayout {
     private ImageView imgIsGoalOfDay;
     private ImageView imgGoalDelete;
     private ProgressBar progressBar;
+
+    // Goal progress stuff
+    private TextView txtGoalSteps;
+    private TextView txtGoalAmount;
+    private View goalProgressContainer;
 
     public GoalView(Goal goal, Context context) {
         super(context);
@@ -92,6 +98,11 @@ public class GoalView extends RelativeLayout {
         });
 
         progressBar = (ProgressBar) findViewById(R.id.step_progress_bar);
+
+        txtGoalSteps = (TextView) findViewById(R.id.text_goal_steps);
+        txtGoalAmount = (TextView) findViewById(R.id.text_goal_amount);
+        goalProgressContainer = findViewById(R.id.goal_progress_container);
+
         checkIfGoalOfDay();
     }
 
@@ -100,13 +111,18 @@ public class GoalView extends RelativeLayout {
                         ContextCompat.getDrawable(context, R.drawable.star_on) :
                         ContextCompat.getDrawable(context, R.drawable.star_off)
         );
-        progressBar.setVisibility(goal.isGoalOfDay() ? VISIBLE : GONE);
     }
 
     public void update(Goal goal, GoalListAdapter adapter) {
         this.goal = goal;
         this.adapter = adapter;
         txtGoalName.setText(goal.getName());
+
+        double convertedStepAmount = Unit.convert(Unit.STEP, goal.getUnit(), goal.getStepAmount());
+        double convertedStepGoal = Unit.convert(Unit.STEP, goal.getUnit(), goal.getStepGoal());
+        txtGoalSteps.setText(String.valueOf(Unit.format(convertedStepAmount)) + goal.getUnit().abbreviation);
+        txtGoalAmount.setText(String.valueOf(Unit.format(convertedStepGoal)) + goal.getUnit().abbreviation);
+
         progressBar.setProgress((int) goal.getStepAmount());
         progressBar.setMax((int) goal.getStepGoal());
         checkIfGoalOfDay();

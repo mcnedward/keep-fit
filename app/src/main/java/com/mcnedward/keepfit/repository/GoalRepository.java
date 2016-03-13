@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.mcnedward.keepfit.model.Goal;
+import com.mcnedward.keepfit.model.History;
 import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
@@ -21,8 +22,11 @@ import java.util.Random;
 public class GoalRepository extends Repository<Goal> implements IGoalRepository {
     private static final String TAG = "GoalRepository";
 
+    private IHistoryRepository historyRepository;
+
     public GoalRepository(Context context) {
         super(context);
+        historyRepository = new HistoryRepository(context);
     }
 
     public GoalRepository(DatabaseHelper helper) {
@@ -31,14 +35,52 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     @Override
     public Goal save(Goal goal) throws EntityAlreadyExistsException {
-        String datestamp = Dates.getDatabaseDateStamp();
-        goal.setCreatedOn(datestamp);
         goal.setIsGoalOfDay(true);
-        Goal currentGoal = getGoalOfDay();
-        updateGoalOfDay(currentGoal, false);
+        // Check for history for this day
+        History history = historyRepository.getHistoryForCurrentDate();
+        Goal currentGoalOfDay = get(history.getGoalOfDayId());
+        if (currentGoalOfDay != null) {
+            currentGoalOfDay.setIsGoalOfDay(false);
+            try {
+                super.update(currentGoalOfDay);
+            } catch (EntityDoesNotExistException e) {
+                e.printStackTrace();
+            }
+        }
+        goal.setHistoryId(history.getId());
+        goal.setCreatedOn(history.getCreatedOn());
+        goal.setStepAmount(history.getTotalStepsForDay());
         goal = super.save(goal);
-        fillOldDateTestData();
+        history.setGoalOfDayId(goal.getId());
+        try {
+            historyRepository.update(history);
+        } catch (EntityDoesNotExistException e) {
+            e.printStackTrace();
+        }
         return goal;
+    }
+
+    @Override
+    public boolean update(Goal goal) throws EntityDoesNotExistException {
+        History history = historyRepository.getHistoryForCurrentDate();
+        Goal currentGoalOfDay = get(history.getGoalOfDayId());
+        if (currentGoalOfDay != null && currentGoalOfDay.getId() != goal.getId()) {
+            currentGoalOfDay.setIsGoalOfDay(false);
+            super.update(currentGoalOfDay);
+        }
+
+        // Convert the step amount. First ensure that the Unit is in Meters, then change to Steps
+        Unit goalUnit = goal.getUnit();
+        double amount = goal.getStepAmount();
+        if (!goalUnit.equals(Unit.METER)) {
+            amount = Unit.convert(goalUnit, Unit.METER, amount);
+        }
+        double stepAmount = Unit.convert(Unit.METER, Unit.STEP, amount);
+
+        history.setTotalStepsForDay(stepAmount);
+        history.setGoalOfDayId(goal.getId());
+        historyRepository.update(history);
+        return super.update(goal);
     }
 
     @Override
@@ -48,59 +90,62 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
 
     @Override
     public Goal getGoalOfDay() {
-        String dateStamp = Dates.getDatabaseDateStamp();
-        List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{dateStamp}, null, null, null);
-        if (!goals.isEmpty())
-            for (Goal goal : goals)
-                if (goal.isGoalOfDay())
-                    return goal;
-        return null;
+        History history = historyRepository.getHistoryForCurrentDate();
+        return get(history.getGoalOfDayId());
     }
 
     @Override
     public void setGoalOfDay(Goal goal) {
-        Goal currentGoal = getGoalOfDay();
-        if (currentGoal != null) {
-            if (currentGoal.getStepAmount() > goal.getStepAmount())
-                goal.setStepAmount(currentGoal.getStepAmount());
-            updateGoalOfDay(currentGoal, false);
+        goal.setIsGoalOfDay(true);
+        Goal currentGoalOfDay = getGoalOfDay();
+        currentGoalOfDay.setIsGoalOfDay(false);
+        History history = historyRepository.getHistoryForCurrentDate();
+        history.setGoalOfDayId(goal.getId());
+        try {
+            historyRepository.update(history);
+            super.update(currentGoalOfDay);
+            super.update(goal);
+        } catch (EntityDoesNotExistException e) {
+            e.printStackTrace();
         }
-        updateGoalOfDay(goal, true);
     }
 
     @Override
     public List<Goal> getGoalHistory() {
-        return readDistinct(DatabaseHelper.G_IS_GOAL_OF_DAY + " = 1", null, DatabaseHelper.G_CREATED_ON, null, DatabaseHelper.G_CREATED_ON, null);
+        List<Long> goalIds = historyRepository.getGoalOfDayIds();
+        return getGoalsFromIdList(goalIds);
     }
 
     @Override
     public List<Goal> getGoalsForDay() {
-        String dateStamp = Dates.getDatabaseDateStamp();
-        List<Goal> goals = read(DatabaseHelper.G_CREATED_ON + " = ?", new String[]{dateStamp}, null, null, null);
+        History history = historyRepository.getHistoryForCurrentDate();
+        List<Goal> goals = read(DatabaseHelper.G_HISTORY_ID + " = ?", new String[]{String.valueOf(history.getId())}, null, null, DatabaseHelper.G_IS_GOAL_OF_DAY + " DESC");
         return goals;
     }
 
     @Override
     public List<Goal> getGoalsInRange(int dateRange) {
-        String currentDate = Dates.getDatabaseDateStamp();
-        String previousDate = Dates.getDateFromRange(dateRange, Dates.DATABASE_DATE);
-        return read(DatabaseHelper.G_CREATED_ON + " BETWEEN ? AND ?",
-                new String[]{previousDate, currentDate},
-                DatabaseHelper.G_CREATED_ON, null, DatabaseHelper.G_CREATED_ON);
+        List<Long> goalIds = historyRepository.getGoalOfDayIdsInRange(dateRange);
+        return getGoalsFromIdList(goalIds);
     }
 
-    private void updateGoalOfDay(Goal goal, boolean isGoalOfDay) {
-        if (goal != null) {
-            goal.setIsGoalOfDay(isGoalOfDay);
-            try {
-                update(goal);
-            } catch (EntityDoesNotExistException e) {
-                Log.e(TAG, e.getMessage());
-            }
+    private List<Goal> getGoalsFromIdList(List<Long> goalIds) {
+        StringBuilder query = new StringBuilder(DatabaseHelper.ID + " IN (");
+        String[] goalIdArray = new String[goalIds.size()];
+        for (int i = 0; i < goalIds.size(); i++) {
+            long id = goalIds.get(i);
+            goalIdArray[i] = String.valueOf(id);
+            if (i != goalIds.size() - 1)
+                query.append("?, ");
+            else
+                query.append("?");
         }
+        query.append(")");
+        return read(query.toString(), goalIdArray, null, null, null);
     }
 
-    public void fillOldDateTestData() {
+    @Override
+    public void populateTestData() {
         List<String> timestamps = new ArrayList<>();
         timestamps.add("2016-03-07");
         timestamps.add("2016-03-06");
@@ -141,9 +186,20 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
             goal.setIsGoalOfDay(true);
             goal.setUnit(Unit.METER);
             goal.setCreatedOn(timestamp);
+            goal.setStepAmount(stepAmount);
+
+            History history = new History(timestamp);
+            history.setTotalStepsForDay(goal.getStepAmount());
+
             try {
-                super.save(goal);
+                history = historyRepository.save(history);
+                goal.setHistoryId(history.getId());
+                goal = super.save(goal);
+                history.setGoalOfDayId(goal.getId());
+                historyRepository.update(history);
             } catch (EntityAlreadyExistsException e) {
+                e.printStackTrace();
+            } catch (EntityDoesNotExistException e) {
                 e.printStackTrace();
             }
         }
@@ -154,11 +210,11 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         return new String[]{
                 DatabaseHelper.ID,
                 DatabaseHelper.G_GOAL,
-                DatabaseHelper.G_STEP_AMOUNT,
                 DatabaseHelper.G_STEP_GOAL,
                 DatabaseHelper.G_IS_GOAL_OF_DAY,
                 DatabaseHelper.G_UNIT,
-                DatabaseHelper.G_CREATED_ON};
+                DatabaseHelper.G_HISTORY_ID
+        };
     }
 
     /**
@@ -173,11 +229,13 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         Goal goal = new Goal();
         goal.setId(cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.ID)));
         goal.setName(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_GOAL)));
-        goal.setStepGoal(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_GOAL)));
-        goal.setStepAmount(cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_AMOUNT)));
+        goal.setStepGoal(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_STEP_GOAL)));
         goal.setIsGoalOfDay(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_IS_GOAL_OF_DAY)) == 1);
         goal.setUnit(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_UNIT)));
-        goal.setCreatedOn(cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.G_CREATED_ON)));
+        goal.setHistoryId(cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseHelper.G_HISTORY_ID)));
+        History history = historyRepository.get(goal.getHistoryId());
+        goal.setStepAmount(history.getTotalStepsForDay());
+        goal.setCreatedOn(history.getCreatedOn());
         return goal;
     }
 
@@ -193,10 +251,9 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
         values.put(DatabaseHelper.ID, entity.getId());
         values.put(DatabaseHelper.G_GOAL, entity.getName());
         values.put(DatabaseHelper.G_STEP_GOAL, entity.getStepGoal());
-        values.put(DatabaseHelper.G_STEP_AMOUNT, entity.getStepAmount());
         values.put(DatabaseHelper.G_IS_GOAL_OF_DAY, entity.isGoalOfDay());
         values.put(DatabaseHelper.G_UNIT, entity.getUnitId());
-        values.put(DatabaseHelper.G_CREATED_ON, entity.getCreatedOn());
+        values.put(DatabaseHelper.G_HISTORY_ID, entity.getHistoryId());
         return values;
     }
 

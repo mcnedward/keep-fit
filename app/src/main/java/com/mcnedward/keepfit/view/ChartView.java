@@ -34,7 +34,6 @@ public abstract class ChartView extends LinearLayout {
     private static final String TAG = "ChartView";
 
     protected Context context;
-    protected RadioGroup radioGroup;
     protected TextView txtNoDates;
     protected List<Goal> goals;
     protected XYPlot plot;
@@ -101,6 +100,8 @@ public abstract class ChartView extends LinearLayout {
             txtNoDates.setVisibility(VISIBLE);
         } else
             txtNoDates.setVisibility(GONE);
+
+        plot.redraw();
     }
 
     private void updatePlotWidget(final double rangeIncrement) {
@@ -126,7 +127,7 @@ public abstract class ChartView extends LinearLayout {
                     int position = count++;
                     int dateCount = dates.size();
                     if (dateCount > maxDomainStep) {
-                        int fieldsToDisplay = dateCount / 4;
+                        int fieldsToDisplay = dateCount / 2;
                         if (position % 2 == 0) {
                             int index = fieldsToDisplay * fieldsShown++;
                             if (index > dateCount - 1) index = dateCount - 1;
@@ -154,24 +155,10 @@ public abstract class ChartView extends LinearLayout {
             });
             plot.setRangeValueFormat(new Format() {
                 private DecimalFormat format = new DecimalFormat("#.###");
-                private int count = 0;
 
                 @Override
                 public StringBuffer format(Object object, StringBuffer buffer, FieldPosition field) {
-                    // Skip the first one
-                    if (count++ == 0)
-                        return buffer;
-                    double value = (Double) object;
-                    int position = count;
-                    int dateCount = dates.size();
-                    if (dateCount > maxDomainStep) {
-                        int fieldsToDisplay = dateCount / 4;
-                        if (position % fieldsToDisplay == 0) {
-                            return format.format(value, buffer, field);
-                        } else
-                            return buffer;
-                    }
-                    return format.format(value, buffer, field);
+                    return format.format(object, buffer, field);
                 }
 
                 @Override

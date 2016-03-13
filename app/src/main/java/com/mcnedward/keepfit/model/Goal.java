@@ -12,8 +12,9 @@ public class Goal extends BaseEntity {
     private double stepAmount;
     private double stepGoal;
     private boolean isGoalOfDay;
-    private String createdOn;
     private Unit unit;
+    private String createdOn;
+    private long historyId;
 
     public Goal() {
         super();
@@ -45,6 +46,7 @@ public class Goal extends BaseEntity {
 
     public void setStepAmount(double stepAmount) {
         this.stepAmount = stepAmount;
+        // Ensure that the step amount is always at least equal to the total steps for the day
         if (this.stepAmount > stepGoal)
             this.stepAmount = stepGoal;
         if (this.stepAmount < 0)
@@ -71,18 +73,6 @@ public class Goal extends BaseEntity {
         this.isGoalOfDay = isGoalOfDay;
     }
 
-    public String getCreatedOn() {
-        return createdOn;
-    }
-
-    public int getCreatedOnDateNumber() {
-        return Dates.getDateAsNumber(createdOn);
-    }
-
-    public void setCreatedOn(String createdOn) {
-        this.createdOn = createdOn;
-    }
-
     public int getUnitId() {
         return unit.id;
     }
@@ -97,6 +87,26 @@ public class Goal extends BaseEntity {
 
     public void setUnit(int unitId) {
         this.unit = Unit.getById(unitId);
+    }
+
+    public String getCreatedOn() {
+        return createdOn;
+    }
+
+    public int getCreatedOnDateNumber() {
+        return Dates.getDateAsNumber(createdOn);
+    }
+
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public long getHistoryId() {
+        return historyId;
+    }
+
+    public void setHistoryId(long historyId) {
+        this.historyId = historyId;
     }
 
     @Override

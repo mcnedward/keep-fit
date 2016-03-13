@@ -83,6 +83,22 @@
                 custom:setting_checkable="false"
                 custom:setting_description="@string/tab_layout_description"
                 custom:setting_title="@string/statistics_view" />
+
+            <com.mcnedward.keepfit.view.SettingView
+                android:id="@+id/settings_populate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                custom:setting_checkable="false"
+                custom:setting_description="@string/populate_description"
+                custom:setting_title="@string/populate" />
+
+            <com.mcnedward.keepfit.view.SettingView
+                android:id="@+id/settings_reset_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                custom:setting_checkable="false"
+                custom:setting_description="@string/reset_description"
+                custom:setting_title="@string/reset" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

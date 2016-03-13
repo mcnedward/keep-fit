@@ -33,7 +33,7 @@ public abstract class Repository<T extends BaseEntity> implements IRepository<T>
         open();
     }
 
-    public T get(int id) {
+    public T get(long id) {
         List<T> dataList = read(WHERE_ID_CLAUSE, new String[]{String.valueOf(id)}, null, null, null);
         return !dataList.isEmpty() ? dataList.get(0) : null;
     }

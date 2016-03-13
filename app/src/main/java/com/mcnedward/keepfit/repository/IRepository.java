@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface IRepository<T> {
 
-    T get(int id);
+    T get(long id);
 
     T get(String... args);
 

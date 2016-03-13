@@ -10,8 +10,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import com.mcnedward.keepfit.R;
+import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.view.SettingView;
@@ -23,12 +25,14 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "SettingsActivity";
 
     public static Unit UNIT;
-
+    private GoalRepository goalRepository;
     private NumberPicker picker;
     private SettingView viewTestMode;
     private SettingView viewEditMode;
     private SettingView viewTabLayout;
     private SettingView viewStatistics;
+    private SettingView viewReset;
+    private SettingView viewPopulate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +54,14 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+        goalRepository = new GoalRepository(this);
         initializeNumberPicker();
         initializeTestModeSetting();
         initializeEditModeSetting();
         initializeTabLayoutSetting();
         initializeStatisticsSetting();
+        initializeResetSetting();
+        initializePopulateSetting();
     }
 
     private void initializeNumberPicker() {
@@ -124,6 +131,29 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Extension.startSettingsStatisticsActivity(activity);
+            }
+        });
+    }
+
+    private void initializePopulateSetting() {
+        viewPopulate = (SettingView) findViewById(R.id.settings_populate);
+        final Activity activity = this;
+        viewPopulate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goalRepository.populateTestData();
+                Toast.makeText(activity, "Test date created!", Toast.LENGTH_SHORT);
+            }
+        });
+    }
+
+    private void initializeResetSetting() {
+        viewReset = (SettingView) findViewById(R.id.settings_reset_view);
+        final Activity activity = this;
+        viewReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Extension.startSettingsResetActivity(activity);
             }
         });
     }

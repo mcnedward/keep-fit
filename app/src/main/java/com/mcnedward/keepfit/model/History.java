@@ -7,51 +7,44 @@ import java.util.List;
  */
 public class History extends BaseEntity {
 
-    private String date;
-    private List<Goal> goals;
+    private String createdOn;
+    private double totalStepsForDay;
+    private long goalOfDayId;
 
     public History() {
 
     }
 
-    public History(String date) {
-        this.date = date;
+    public History(String createdOn) {
+        this.createdOn = createdOn;
     }
 
-    public History(String date, List<Goal> goals) {
-        this(date);
-        this.goals = goals;
+    public History(String createdOn, int goalOfDayId) {
+        this(createdOn);
+        this.goalOfDayId = goalOfDayId;
     }
 
-    public History(String date, Goal goal) {
-        this(date);
-        addGoal(goal);
+    public String getCreatedOn() {
+        return createdOn;
     }
 
-    public void addGoal(Goal goal) {
-        goals.add(goal);
+    public void setCreatedOn(String createdOn) {
+        this.createdOn = createdOn;
     }
 
-    public Goal getGoalOfDay() {
-        for (Goal goal : goals)
-            if (goal.isGoalOfDay())
-                return goal;
-        return null;
+    public double getTotalStepsForDay() {
+        return totalStepsForDay;
     }
 
-    public String getDate() {
-        return date;
+    public void setTotalStepsForDay(double totalStepsForDay) {
+        this.totalStepsForDay = totalStepsForDay;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public long getGoalOfDayId() {
+        return goalOfDayId;
     }
 
-    public List<Goal> getGoals() {
-        return goals;
-    }
-
-    public void setGoals(List<Goal> goals) {
-        this.goals = goals;
+    public void setGoalOfDayId(long goalOfDayId) {
+        this.goalOfDayId = goalOfDayId;
     }
 }
