@@ -13,8 +13,6 @@ import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.enums.Action;
 
-import java.io.Serializable;
-
 /**
  * Created by Edward on 2/23/2016.
  */
@@ -65,13 +63,25 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void updateGoalOfDayActionReceived(Goal goal);
 
-    protected abstract void updateGoalAmountActionReceived(Goal goal);
+    protected void updateGoalAmountActionReceived(Goal goal) {
 
-    protected abstract void testModeSwitchActionReceived(boolean isTestMode, String date);
+    }
 
-    protected abstract void editModeSwitchActionReceived(boolean isEditMode);
+    protected void testModeSwitchActionReceived(boolean isTestMode, String date) {
 
-    protected abstract void calendarChangeActionReceived(String date);
+    }
+
+    protected void editModeSwitchActionReceived(boolean isEditMode) {
+
+    }
+
+    protected void calendarChangeActionReceived(String date) {
+
+    }
+
+    protected void notifyAlgorithmRunning(boolean running) {
+
+    }
 
     private void unRegisterReceivers() {
         getActivity().unregisterReceiver(receiver);
@@ -86,6 +96,7 @@ public abstract class BaseFragment extends Fragment {
         getActivity().registerReceiver(receiver, new IntentFilter(Action.TEST_MODE_SWITCH.title));
         getActivity().registerReceiver(receiver, new IntentFilter(Action.EDIT_MODE_SWITCH.title));
         getActivity().registerReceiver(receiver, new IntentFilter(Action.CALENDER_CHANGE.title));
+        getActivity().registerReceiver(receiver, new IntentFilter(Action.ALGORITHM_RUNNING.title));
     }
 
     public void setPauseReceiver(boolean pauseReceiver) {
@@ -126,6 +137,11 @@ public abstract class BaseFragment extends Fragment {
                 case CALENDER_CHANGE: {
                     String date = intent.getStringExtra("date");
                     calendarChangeActionReceived(date);
+                    break;
+                }
+                case ALGORITHM_RUNNING: {
+                    boolean running = intent.getBooleanExtra("running", false);
+                    notifyAlgorithmRunning(running);
                     break;
                 }
             }

@@ -75,7 +75,6 @@ public class EdwardAlgorithm extends BaseAlgorithm {
         currentZGravity = zGravity;
         double inclinationAngle = calculateInclinationAngle(zGravity);
 
-        Log.d(TAG, "Inclination angle: " + Math.abs(inclinationAngle));
         if (!waitForStep) {
             if (Math.abs(inclinationAngle) > THRESHOLD) {
                 waitForStep = true;

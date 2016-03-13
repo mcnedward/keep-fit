@@ -102,6 +102,7 @@ public class Extension {
         Intent intent = new Intent(activity, AlgorithmService.class);
         intent.putExtra(Settings.RUNNING_ALGORITHM.name(), running);
         activity.startService(intent);
+        broadcastAlgorithmRunning(running, activity);
     }
 
     public static void restartApplication(final Activity activity) {
@@ -171,6 +172,13 @@ public class Extension {
         Intent intent = new Intent(Action.ALGORITHM_CHANGE.title);
         intent.putExtra("started", started);
         intent.putExtra("action", Action.ALGORITHM_CHANGE.id);
+        context.sendBroadcast(intent);
+    }
+
+    public static void broadcastAlgorithmRunning(boolean running, Context context) {
+        Intent intent = new Intent(Action.ALGORITHM_RUNNING.title);
+        intent.putExtra("running", running);
+        intent.putExtra("action", Action.ALGORITHM_RUNNING.id);
         context.sendBroadcast(intent);
     }
 

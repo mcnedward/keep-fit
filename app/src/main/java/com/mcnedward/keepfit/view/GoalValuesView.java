@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -18,9 +19,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
+import com.mcnedward.keepfit.algorithm.AlgorithmService;
+import com.mcnedward.keepfit.algorithm.IAlgorithm;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IGoalRepository;
+import com.mcnedward.keepfit.thread.BaseThread;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.enums.Unit;
 import com.mcnedward.keepfit.utils.exceptions.EntityDoesNotExistException;
@@ -47,11 +51,14 @@ public class GoalValuesView extends LinearLayout {
 
     // Edit Mode stuff
     private EditText editGoalOfDayStepAmount;
+    private TextView txtAlgorithmStepAmount;
     private EditText editGoalOfDayAmount;
     private TextView txtGoalOfDaySlash;
     private Spinner spinGoalOfDayUnit;
     private LinearLayout stepContainer;
     private ColorStateList textColors;
+
+    private GoalAlgorithmThread algorithmThread;
 
     public GoalValuesView(Context context) {
         super(context);
@@ -67,13 +74,15 @@ public class GoalValuesView extends LinearLayout {
         inflate(context, R.layout.view_goal_values, this);
         this.context = context;
         goalRepository = new GoalRepository(context);
+        algorithmThread = new GoalAlgorithmThread();
+        AlgorithmService.setGoalValuesView(this);
 
         txtGoalOfDayStepGoal = (TextView) findViewById(R.id.goal_of_day_step_goal);
         txtGoalOfDayUnit = (TextView) findViewById(R.id.goal_of_day_unit);
         textColors = txtGoalOfDayUnit.getTextColors();
 
         initializeEditModeViews();
-        initializeEditGoalOfDayStepAmount();
+        initializeGoalOfDayStepAmount();
         initializeStepCountButtons();
     }
 
@@ -127,7 +136,7 @@ public class GoalValuesView extends LinearLayout {
         stepContainer = (LinearLayout) findViewById(R.id.step_container);
     }
 
-    private void initializeEditGoalOfDayStepAmount() {
+    private void initializeGoalOfDayStepAmount() {
         editGoalOfDayStepAmount = (EditText) findViewById(R.id.goal_of_day_step_amount);
         editGoalOfDayStepAmount.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -146,6 +155,8 @@ public class GoalValuesView extends LinearLayout {
                 return false;
             }
         });
+
+        txtAlgorithmStepAmount = (TextView) findViewById(R.id.algorithm_goal_of_day_step_amount);
     }
 
     private void initializeStepCountButtons() {
@@ -243,6 +254,67 @@ public class GoalValuesView extends LinearLayout {
 
     public void setSpinValue(Spinner spinValue) {
         this.spinValue = spinValue;
+    }
+
+    public void notifyAlgorithmRunning(boolean running) {
+        if (running) {
+            algorithmThread.startThread();
+        } else {
+            algorithmThread.pauseThread();
+        }
+    }
+
+    public class GoalAlgorithmThread extends BaseThread {
+
+        private boolean algorithmRunning, needsToShow;
+
+        @Override
+        protected void doRunAction() {
+            // Sleep for 100 milliseconds
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    // Update UI here
+                    IAlgorithm algorithm = AlgorithmService.getAlgorithm();
+                    if (algorithm == null) return;
+                    if (algorithmRunning) {
+                        if (needsToShow) {
+                            txtAlgorithmStepAmount.setVisibility(VISIBLE);
+                            editGoalOfDayStepAmount.setVisibility(GONE);
+                            needsToShow = false;
+                        }
+                        txtAlgorithmStepAmount.setText(String.valueOf(algorithm.getStepCount()));
+                    } else {
+                        txtAlgorithmStepAmount.setVisibility(GONE);
+                        editGoalOfDayStepAmount.setVisibility(VISIBLE);
+                    }
+                }
+            });
+        }
+
+        @Override
+        protected void doStartAction() {
+            algorithmRunning = true;
+            needsToShow = true;
+        }
+
+        @Override
+        public void pauseThread() {
+            algorithmRunning = false;
+            needsToShow = true;
+        }
+
+        @Override
+        protected void doStopAction() {
+            algorithmRunning = false;
+        }
+
     }
 
 }

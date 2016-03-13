@@ -9,7 +9,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.mcnedward.keepfit.listener.AlgorithmListener;
+import com.mcnedward.keepfit.thread.BaseThread;
 import com.mcnedward.keepfit.utils.enums.Settings;
+import com.mcnedward.keepfit.view.GoalValuesView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +24,10 @@ public class AlgorithmService extends Service {
 
     protected static final int RATE = 10000;
     private IStepDetector stepDetector;
-    private IAlgorithm edwardAlgorithm;
+    private static IAlgorithm EDWARD_ALGORITHM;
     private SensorManager sensorManager;
     private AlgorithmThread thread;
+    private static GoalValuesView GOAL_VALUES_VIEW;
 
     private List<AlgorithmListener> listeners;
 
@@ -32,8 +35,8 @@ public class AlgorithmService extends Service {
     public void onCreate() {
         Log.d(TAG, "onCreate!");
         stepDetector = new StepDetector(this);
-        edwardAlgorithm = new EdwardAlgorithm();
-        stepDetector.registerAlgorithm(edwardAlgorithm);
+        EDWARD_ALGORITHM = new EdwardAlgorithm();
+        stepDetector.registerAlgorithm(EDWARD_ALGORITHM);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         thread = new AlgorithmThread();
         listeners = new ArrayList<>();
@@ -43,11 +46,13 @@ public class AlgorithmService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand!");
 
-        boolean runAlgorithm = intent.getBooleanExtra(Settings.RUNNING_ALGORITHM.name(), false);
-        if (runAlgorithm)
-            thread.startAlgorithm();
-        else
-            thread.stopAlgorithm();
+        if (intent != null) {
+            boolean runAlgorithm = intent.getBooleanExtra(Settings.RUNNING_ALGORITHM.name(), false);
+            if (runAlgorithm)
+                thread.startThread();
+            else
+                thread.pauseThread();
+        }
 
         return START_STICKY;
     }
@@ -62,7 +67,8 @@ public class AlgorithmService extends Service {
     public void onDestroy() {
         Log.d(TAG, "Destroying Algorithm Service!");
 
-        thread.stopAlgorithm();
+        thread.stopThread();
+        sensorManager.flush(stepDetector);
         boolean retry = false;
         while (retry) {
             try {
@@ -76,58 +82,47 @@ public class AlgorithmService extends Service {
         stopSelf();
     }
 
-    private void notifyAlgorithmStarted() {
-        for (AlgorithmListener listener : listeners)
-            listener.notifyAlgorithmStarted();
+    public static void setGoalValuesView(GoalValuesView view) {
+        if (GOAL_VALUES_VIEW == null)
+            GOAL_VALUES_VIEW = view;
     }
 
-    private void notifyAlgorithmStopped() {
-        for (AlgorithmListener listener : listeners)
-            listener.notifyAlgorithmStopped();
+    public static IAlgorithm getAlgorithm() {
+        return EDWARD_ALGORITHM;
     }
 
-    final class AlgorithmThread extends Thread {
+    final class AlgorithmThread extends BaseThread {
 
-        private boolean started, running, calculate;
-
-        public AlgorithmThread() {
-            started = false;
-            running = false;
-        }
+        private boolean notifyGoalValuesView;
 
         @Override
-        public void run() {
-            while (running) {
-                // Start the algorithm
-                if (calculate) {
-                    // Calculate the algorithm
-
-                }
+        public void doRunAction() {
+            // Start the algorithm
+            if (notifyGoalValuesView) {
+                // Calculate the algorithm
+                notifyGoalValuesView = false;
+                GOAL_VALUES_VIEW.notifyAlgorithmRunning(true);
             }
         }
 
         @Override
-        public void start() {
-            running = true;
-            started = true;
-            super.start();
-        }
-
-        public void startAlgorithm() {
+        public void doStartAction() {
             Log.d(TAG, "Starting Algorithm Service!");
-            if (!started)
-                start();
-            calculate = true;
+            notifyGoalValuesView = true;
             sensorManager.registerListener(stepDetector, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), RATE);
             sensorManager.registerListener(stepDetector, sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY), RATE);
         }
 
-        public void stopAlgorithm() {
+        @Override
+        public void pauseThread() {
+            notifyGoalValuesView = false;
+        }
+
+        @Override
+        public void doStopAction() {
             Log.d(TAG, "Stopping Algorithm Service!");
             sensorManager.unregisterListener(stepDetector);
             sensorManager.flush(stepDetector);
-            running = false;
-
         }
 
     }

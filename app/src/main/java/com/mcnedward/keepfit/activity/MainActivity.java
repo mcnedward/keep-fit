@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -164,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_algorithm) {
             if (shownAlgorithmMessage()) {
                 boolean running = settings.getBoolean(Settings.RUNNING_ALGORITHM.name(), false);
-                setAlgorithmRunning(!running);
+                notifyAlgorithmChanged(!running);
             }
         }
         return super.onOptionsItemSelected(item);
@@ -190,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         Extension.setAlgorithmRunning(runningAlgorithm, this);
     }
 
-    private void setAlgorithmRunning(boolean running) {
+    private void notifyAlgorithmChanged(boolean running) {
         editor.putBoolean(Settings.RUNNING_ALGORITHM.name(), running);
         editor.commit();
         checkAlgorithm();
@@ -220,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 case ALGORITHM_CHANGE: {
                     boolean started = intent.getBooleanExtra("started", false);
-                    setAlgorithmRunning(started);
+                    notifyAlgorithmChanged(started);
                     break;
                 }
             }

@@ -77,16 +77,6 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     }
 
     @Override
-    protected void testModeSwitchActionReceived(boolean isEditMode, String date) {
-
-    }
-
-    @Override
-    protected void editModeSwitchActionReceived(boolean isEditMode) {
-
-    }
-
-    @Override
     protected void calendarChangeActionReceived(String date) {
         loader.forceLoad();
     }

@@ -54,7 +54,21 @@ public class Goal extends BaseEntity {
     }
 
     public boolean isGoalReached() {
-        return stepAmount == stepGoal;
+        boolean goalReached = stepAmount == stepGoal;
+        if (goalReached && !switchColors)
+            switchColors = true;
+        return goalReached;
+    }
+
+    // This is to ensure the progress bar color is only changed when the goal has just been reached, or the goal was at the reached status, but then some steps were removed.
+    private boolean switchColors;
+
+    public boolean switchColorsBack() {
+        return switchColors;
+    }
+
+    public void setSwitchColors(boolean switchColors) {
+        this.switchColors = switchColors;
     }
 
     public double getStepGoal() {

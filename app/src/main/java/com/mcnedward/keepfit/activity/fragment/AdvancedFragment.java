@@ -154,19 +154,4 @@ public abstract class AdvancedFragment extends BaseFragment implements android.s
     protected void updateGoalAmountActionReceived(Goal goal) {
         loader.forceLoad();
     }
-
-    @Override
-    protected void testModeSwitchActionReceived(boolean isTestMode, String date) {
-
-    }
-
-    @Override
-    protected void editModeSwitchActionReceived(boolean isEditMode) {
-
-    }
-
-    @Override
-    protected void calendarChangeActionReceived(String date) {
-
-    }
 }

@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -196,12 +197,14 @@ public class GoalOfDayFragment extends BaseFragment {
                 progressBar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.circle_progress_complete));
                 progressBarColorChanged = true;
             }
-        } else {
+        } else if (!goal.isGoalReached() && goal.switchColorsBack()){
             txtGoalOfDayName.setTextColor(textColors);
             editGoalOfDayName.setTextColor(textColors);
 
             progressBar.setProgressDrawable(ContextCompat.getDrawable(context, R.drawable.circle_progress));
             progressBarColorChanged = false;
+
+            goal.setSwitchColors(false);
         }
 
         progressBar.setMax((int) goalOfDay.getStepGoal());
@@ -266,16 +269,12 @@ public class GoalOfDayFragment extends BaseFragment {
 
     @Override
     protected void deleteGoalActionReceived(Goal goal) {
+        checkForGoalOfDay();
     }
 
     @Override
     protected void updateGoalOfDayActionReceived(Goal goal) {
         updateGoalOfDay(goal);
-    }
-
-    @Override
-    protected void updateGoalAmountActionReceived(Goal goal) {
-
     }
 
     @Override
@@ -293,4 +292,9 @@ public class GoalOfDayFragment extends BaseFragment {
         toggleCalendarChange(date);
     }
 
+    @Override
+    protected void notifyAlgorithmRunning(boolean running) {
+        Log.d(TAG, "running: " + running);
+        goalValuesView.notifyAlgorithmRunning(running);
+    }
 }
