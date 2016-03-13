@@ -159,6 +159,13 @@ public class Extension {
         context.sendBroadcast(intent);
     }
 
+    public static void broadcastAlgorithmChange(boolean started, Context context) {
+        Intent intent = new Intent(Action.ALGORITHM_CHANGE.title);
+        intent.putExtra("started", started);
+        intent.putExtra("action", Action.ALGORITHM_CHANGE.id);
+        context.sendBroadcast(intent);
+    }
+
     /*****
      * Notifications
      *****/

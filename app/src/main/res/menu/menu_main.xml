@@ -4,17 +4,27 @@
     tools:context=".activity.MainActivity">
 
     <item
-        android:id="@+id/action_calendar"
-        android:icon="@android:drawable/ic_menu_my_calendar"
-        android:title="@string/action_calendar"
-        android:visible="false"
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_build_black_24dp"
+        android:orderInCategory="300"
+        android:title="@string/action_settings"
+        app:showAsAction="collapseActionView|ifRoom" />
+
+
+    <item
+        android:id="@+id/action_algorithm"
+        android:orderInCategory="200"
+        android:title="@string/action_algorithm"
+        android:icon="@drawable/ic_directions_run_black_24dp"
+        android:checkable="true"
         app:showAsAction="collapseActionView|ifRoom" />
 
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="200"
-        android:icon="@android:drawable/ic_menu_manage"
-        app:showAsAction="collapseActionView|ifRoom"/>
+        android:id="@+id/action_calendar"
+        android:icon="@drawable/ic_event_note_black_24dp"
+        android:orderInCategory="100"
+        android:title="@string/action_calendar"
+        android:visible="false"
+        app:showAsAction="collapseActionView|ifRoom" />
 
 </menu>

@@ -7,14 +7,12 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.mcnedward.keepfit.R;
-import com.mcnedward.keepfit.model.FragmentCode;
 import com.mcnedward.keepfit.model.Statistic;
 import com.mcnedward.keepfit.utils.Extension;
-import com.mcnedward.keepfit.utils.listener.SettingChangedListener;
+import com.mcnedward.keepfit.listener.SettingChangedListener;
 
 /**
  * Created by Edward on 3/8/2016.

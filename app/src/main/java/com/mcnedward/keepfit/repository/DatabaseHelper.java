@@ -115,6 +115,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    public static void resetData(Context context) {
+        DatabaseHelper helper = getInstance(context);
+        SQLiteDatabase database = helper.getWritableDatabase();
+
+        database.execSQL(DROP_FRAGMENT_CODES_TABLE);
+        database.execSQL(DROP_STATISTICS_TABLE);
+
+        database.execSQL(createFragmentCodeTable);
+        database.execSQL(getPopulateFragmentCodeTable());
+        database.execSQL(createStatisticsTable);
+        database.execSQL(getPopulateStatisticsTableQuery());
+
+        helper.close();
+    }
+
     public static void resetDatabase(Context context) {
         DatabaseHelper helper = getInstance(context);
         SQLiteDatabase database = helper.getWritableDatabase();

@@ -8,7 +8,7 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.model.Statistic;
 import com.mcnedward.keepfit.repository.IStatisticRepository;
 import com.mcnedward.keepfit.repository.StatisticRepository;
-import com.mcnedward.keepfit.utils.listener.SettingChangedListener;
+import com.mcnedward.keepfit.listener.SettingChangedListener;
 
 import java.util.ArrayList;
 import java.util.List;
