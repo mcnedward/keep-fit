@@ -20,8 +20,10 @@ import com.mcnedward.keepfit.activity.SettingsActivity;
 import com.mcnedward.keepfit.activity.SettingsResetActivity;
 import com.mcnedward.keepfit.activity.SettingsStatisticsActivity;
 import com.mcnedward.keepfit.activity.SettingsTabLayoutActivity;
+import com.mcnedward.keepfit.algorithm.AlgorithmService;
 import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.utils.enums.Action;
+import com.mcnedward.keepfit.utils.enums.Settings;
 
 /**
  * Created by Edward on 1/31/2016.
@@ -94,6 +96,12 @@ public class Extension {
     public static void startSettingsResetActivity(final Activity activity) {
         Intent intent = new Intent(activity, SettingsResetActivity.class);
         activity.startActivity(intent);
+    }
+
+    public static void setAlgorithmRunning(boolean running, final Activity activity) {
+        Intent intent = new Intent(activity, AlgorithmService.class);
+        intent.putExtra(Settings.RUNNING_ALGORITHM.name(), running);
+        activity.startService(intent);
     }
 
     public static void restartApplication(final Activity activity) {

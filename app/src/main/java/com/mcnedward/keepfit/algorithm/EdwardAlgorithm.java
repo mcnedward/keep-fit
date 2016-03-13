@@ -9,7 +9,6 @@ import java.util.List;
  * Created by Edward on 3/13/2016.
  */
 public class EdwardAlgorithm extends BaseAlgorithm {
-
     private final static String TAG = "EdwardAlgorithm";
 
     private static String NAME = "Edward Algorithm";

@@ -15,7 +15,6 @@
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,6 +30,10 @@
             android:parentActivityName=".activity.SettingsActivity"/>
         <activity android:name=".activity.SettingsResetActivity"
             android:parentActivityName=".activity.SettingsActivity"/>
+
+        <service android:name=".algorithm.AlgorithmService"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

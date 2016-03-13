@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             algorithmItem.setIcon(ContextCompat.getDrawable(this, R.drawable.ic_directions_run_black_24dp));
         }
-        editor.commit();
+        Extension.setAlgorithmRunning(runningAlgorithm, this);
     }
 
     private void setAlgorithmRunning(boolean running) {

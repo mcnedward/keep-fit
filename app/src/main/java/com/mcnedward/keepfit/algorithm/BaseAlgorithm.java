@@ -27,7 +27,6 @@ public abstract class BaseAlgorithm implements IAlgorithm {
     @Override
     public void notifySensorDataReceived(AccelerationData ad) {
         accelerationData = ad;
-        double acceleration = ad.getAcceleration();
         if (runAlgorithm)
             handleSensorData(ad);
     }

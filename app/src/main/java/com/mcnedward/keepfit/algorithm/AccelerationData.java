@@ -8,14 +8,14 @@ public class AccelerationData {
     private final double x;
     private final double y;
     private final double z;
-    private Double acceleration;
+    private double acceleration;
     private final long timeStamp;
 
     public AccelerationData(double x, double y, double z, long timeStamp) {
-        this(x, y, z, null, timeStamp);
+        this(x, y, z, 0, timeStamp);
     }
 
-    public AccelerationData(double x, double y, double z, Double acceleration, long timeStamp) {
+    public AccelerationData(double x, double y, double z, double acceleration, long timeStamp) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -43,7 +43,7 @@ public class AccelerationData {
         return acceleration;
     }
 
-    public void setAcceleration(Double acceleration) {
+    public void setAcceleration(double acceleration) {
         this.acceleration = acceleration;
     }
 
