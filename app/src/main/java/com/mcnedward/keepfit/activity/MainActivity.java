@@ -25,6 +25,7 @@ import com.mcnedward.keepfit.R;
 import com.mcnedward.keepfit.activity.fragment.BaseFragment;
 import com.mcnedward.keepfit.algorithm.AlgorithmService;
 import com.mcnedward.keepfit.model.FragmentCode;
+import com.mcnedward.keepfit.model.Goal;
 import com.mcnedward.keepfit.repository.FragmentCodeRepository;
 import com.mcnedward.keepfit.repository.GoalRepository;
 import com.mcnedward.keepfit.repository.IFragmentCodeRepository;
@@ -33,6 +34,7 @@ import com.mcnedward.keepfit.utils.Dates;
 import com.mcnedward.keepfit.utils.Extension;
 import com.mcnedward.keepfit.utils.enums.Action;
 import com.mcnedward.keepfit.utils.enums.Settings;
+import com.mcnedward.keepfit.utils.exceptions.EntityAlreadyExistsException;
 
 import java.util.Calendar;
 import java.util.List;
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             registerReceiver(receiver, new IntentFilter(Action.TEST_MODE_SWITCH.title));
             registerReceiver(receiver, new IntentFilter(Action.EDIT_MODE_SWITCH.title));
             registerReceiver(receiver, new IntentFilter(Action.TAB_ORDER_CHANGE.title));
-            registerReceiver(receiver, new IntentFilter(Action.ALGORITHM_CHANGE.title));
+            registerReceiver(receiver, new IntentFilter(Action.ALGORITHM_ALLOWED.title));
         }
         if (IS_IN_SETTINGS) {
             IS_IN_SETTINGS = false;
@@ -216,8 +218,18 @@ public class MainActivity extends AppCompatActivity {
                     IS_EDIT_MODE = intent.getBooleanExtra("isEditMode", false);
                     break;
                 }
-                case ALGORITHM_CHANGE: {
+                case ALGORITHM_ALLOWED: {
                     boolean started = intent.getBooleanExtra("started", false);
+                    Goal goalOfDay = goalRepository.getGoalOfDay();
+                    if (goalOfDay == null) {
+                        goalOfDay = new Goal("Your Goal", 1000);
+                        try {
+                            goalRepository.save(goalOfDay);
+                            Extension.broadcastUpdateGoalOfDay(goalOfDay, getApplicationContext());
+                        } catch (EntityAlreadyExistsException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     notifyAlgorithmChanged(started);
                     break;
                 }

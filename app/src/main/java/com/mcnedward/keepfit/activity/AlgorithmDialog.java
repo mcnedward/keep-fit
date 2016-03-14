@@ -1,6 +1,5 @@
 package com.mcnedward.keepfit.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,7 +43,7 @@ public class AlgorithmDialog extends DialogFragment {
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putBoolean(Settings.SHOWN_ALGORITHM_MESSAGE.name(), true);
                         editor.commit();
-                        Extension.broadcastAlgorithmChange(true, getContext());
+                        Extension.broadcastAlgorithmAllowed(true, getContext());
                     }
                 })
                 .setNegativeButton(R.string.algorithm_negative_text, new DialogInterface.OnClickListener() {

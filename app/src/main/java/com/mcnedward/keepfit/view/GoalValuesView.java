@@ -219,6 +219,7 @@ public class GoalValuesView extends LinearLayout {
     }
 
     private void updateGoalOfDayStepAmount(double amount) {
+        if (goal == null) return;
         goal.setStepAmount(amount);
         try {
             goalRepository.update(goal);
@@ -316,10 +317,10 @@ public class GoalValuesView extends LinearLayout {
                             imgDecrement.setVisibility(GONE);
                             needsToShow = false;
                         }
+                        if (goal == null) return;
 
                         double algorithmStepCount = algorithm.getStepCount();
                         changeStepAmount(algorithmStepCount);
-
                         txtAlgorithmStepAmount.setText(String.valueOf(goal.getStepAmount()));
                     } else {
                         txtAlgorithmStepAmount.setVisibility(GONE);

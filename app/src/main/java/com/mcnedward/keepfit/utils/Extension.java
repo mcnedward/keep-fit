@@ -168,10 +168,10 @@ public class Extension {
         context.sendBroadcast(intent);
     }
 
-    public static void broadcastAlgorithmChange(boolean started, Context context) {
-        Intent intent = new Intent(Action.ALGORITHM_CHANGE.title);
+    public static void broadcastAlgorithmAllowed(boolean started, Context context) {
+        Intent intent = new Intent(Action.ALGORITHM_ALLOWED.title);
         intent.putExtra("started", started);
-        intent.putExtra("action", Action.ALGORITHM_CHANGE.id);
+        intent.putExtra("action", Action.ALGORITHM_ALLOWED.id);
         context.sendBroadcast(intent);
     }
 

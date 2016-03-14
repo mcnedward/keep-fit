@@ -69,6 +69,7 @@ public class GoalsFragment extends BaseFragment implements LoaderManager.LoaderC
     @Override
     protected void updateGoalOfDayActionReceived(Goal goal) {
         adapter.notifyDataSetChanged(true);
+        txtMessage.setVisibility(View.GONE);
     }
 
     @Override

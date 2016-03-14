@@ -22,13 +22,12 @@ public class Goal extends BaseEntity {
     }
 
     public Goal(String name, int stepGoal) {
-        this();
-        this.name = name;
-        this.stepGoal = stepGoal;
+        this(name, stepGoal, Unit.STEP);
     }
 
     public Goal(String name, int stepGoal, Unit unit) {
-        this(name, stepGoal);
+        this.name = name;
+        this.stepGoal = stepGoal;
         this.unit = unit;
     }
 

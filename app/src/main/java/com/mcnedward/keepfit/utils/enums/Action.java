@@ -14,7 +14,7 @@ public enum Action {
     TAB_ORDER_CHANGE(8, "tabOrderChange"),
     ADD_GOAL_POPUP(9, "addGoalPopup"),
     GOAL_REACHED(10, "goalReached"),
-    ALGORITHM_CHANGE(11, "algorithmChange"),
+    ALGORITHM_ALLOWED(11, "algorithmChange"),
     ALGORITHM_RUNNING(12, "algorithmRunning");
 
     public int id;
