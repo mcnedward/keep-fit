@@ -72,11 +72,11 @@ public class StatisticView extends LinearLayout {
         });
     }
 
-    public void setAsPercentage(int percentage) {
+    public void setAsPercentage(double percentage) {
         txtSlash.setVisibility(GONE);
-        txtGoalAmount.setText(String.valueOf(percentage) + "%");
+        txtGoalAmount.setText(Unit.format(percentage) + "%");
         progressBar.setMax(100);
-        progressBar.setProgress(percentage);
+        progressBar.setProgress((int) percentage);
         isPercentage = true;
     }
 

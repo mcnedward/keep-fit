@@ -98,12 +98,14 @@ public class GoalRepository extends Repository<Goal> implements IGoalRepository 
     public void setGoalOfDay(Goal goal) {
         goal.setIsGoalOfDay(true);
         Goal currentGoalOfDay = getGoalOfDay();
-        currentGoalOfDay.setIsGoalOfDay(false);
-        History history = historyRepository.getHistoryForCurrentDate();
-        history.setGoalOfDayId(goal.getId());
         try {
+            if (currentGoalOfDay != null) {
+                currentGoalOfDay.setIsGoalOfDay(false);
+                super.update(currentGoalOfDay);
+            }
+            History history = historyRepository.getHistoryForCurrentDate();
+            history.setGoalOfDayId(goal.getId());
             historyRepository.update(history);
-            super.update(currentGoalOfDay);
             super.update(goal);
         } catch (EntityDoesNotExistException e) {
             e.printStackTrace();

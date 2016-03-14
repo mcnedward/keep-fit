@@ -22,7 +22,6 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 
 import com.mcnedward.keepfit.R;
-import com.mcnedward.keepfit.activity.dialog.AlgorithmDialog;
 import com.mcnedward.keepfit.activity.fragment.BaseFragment;
 import com.mcnedward.keepfit.algorithm.AlgorithmService;
 import com.mcnedward.keepfit.model.FragmentCode;

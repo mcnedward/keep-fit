@@ -139,6 +139,7 @@ public class GoalOfDayFragment extends BaseFragment {
                     InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+                Extension.broadcastUpdateGoalOfDay(goalOfDay, context);
                 return true;
             }
         });}

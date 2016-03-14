@@ -50,7 +50,7 @@ public class HistoryRepository extends Repository<History> implements IHistoryRe
 
     @Override
     public List<Long> getGoalOfDayIds() {
-        List<History> histories = readDistinct(null, null, DatabaseHelper.H_CREATED_ON, null, DatabaseHelper.H_CREATED_ON + " ASC", null);
+        List<History> histories = readDistinct(null, null, null, null, DatabaseHelper.H_CREATED_ON + " ASC", null);
         List<Long> goalOfDayIds = new ArrayList<>();
         for (History h : histories)
             goalOfDayIds.add(h.getGoalOfDayId());
@@ -63,7 +63,7 @@ public class HistoryRepository extends Repository<History> implements IHistoryRe
         String previousDate = Dates.getDateFromRange(dateRange, Dates.DATABASE_DATE);
         List<History> histories = read(DatabaseHelper.H_CREATED_ON + " BETWEEN ? AND ?",
                 new String[]{previousDate, currentDate},
-                DatabaseHelper.H_CREATED_ON, null, DatabaseHelper.H_CREATED_ON);
+                null, null, DatabaseHelper.H_CREATED_ON);
         List<Long> goalOfDayIds = new ArrayList<>();
         for (History h : histories)
             goalOfDayIds.add(h.getGoalOfDayId());

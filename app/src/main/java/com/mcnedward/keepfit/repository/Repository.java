@@ -175,6 +175,7 @@ public abstract class Repository<T extends BaseEntity> implements IRepository<T>
      * @return A list of data from the table
      */
     protected List<T> read(String whereClause, String[] whereArgs, String groupBy, String having, String orderBy) {
+        if (!database.isOpen()) return new ArrayList<>();
         List<T> data = new ArrayList<>();
         Cursor cursor = null;
         try {

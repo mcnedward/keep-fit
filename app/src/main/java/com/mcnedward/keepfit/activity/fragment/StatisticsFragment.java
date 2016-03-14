@@ -102,7 +102,7 @@ public class StatisticsFragment extends AdvancedFragment implements android.supp
         double averageStepAmount = 0;
         double averageGoalAmount = 0;
         int goalsCompleted = 0;
-        int percentage = 0;
+        double percentage = 0;
         if (!goals.isEmpty()) {
             for (Goal goal : goals) {
                 double stepAmount = Unit.convert(goal.getUnit(), unit, goal.getStepAmount());
@@ -117,7 +117,7 @@ public class StatisticsFragment extends AdvancedFragment implements android.supp
             averageStepAmount /= goals.size();
             averageGoalAmount /= goals.size();
             if (goals.size() > 0)
-                percentage = (goalsCompleted / goals.size()) * 100;
+                percentage = ((double)goalsCompleted / goals.size()) * 100;
         }
         viewAverage.updateNumbers(averageStepAmount, averageGoalAmount, unit);
         viewMinimum.updateNumbers(averageStepAmount, averageGoalAmount, unit);

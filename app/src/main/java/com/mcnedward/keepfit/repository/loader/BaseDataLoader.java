@@ -33,7 +33,6 @@ public abstract class BaseDataLoader<T, E extends List<T>> extends AsyncTaskLoad
     @Override
     public void deliverResult(E dataList) {
         if (isReset()) {
-            emptyDataList(dataList);
             return;
         }
         mDataList = dataList;
@@ -52,28 +51,16 @@ public abstract class BaseDataLoader<T, E extends List<T>> extends AsyncTaskLoad
 
     @Override
     public void onCanceled(E dataList) {
-        if (dataList != null && dataList.size() > 0)
-            emptyDataList(dataList);
+        mDataList = null;
     }
 
     @Override
     protected void onReset() {
-        super.onReset();
         // Ensure the loader is stopped
-        onStopLoading();
-        if (mDataList != null && mDataList.size() > 0) {
-            emptyDataList(mDataList);
-        }
         mDataList = null;
     }
 
     protected abstract E buildDataList();
-
-    private void emptyDataList(E dataList) {
-        Log.d(TAG, "Emptying data list...");
-        for (int i = 0; i < dataList.size(); i++)
-            dataList.remove(i);
-    }
 
     protected class InsertTask<T> extends DataChangeTask<T, Void, Void> {
 
